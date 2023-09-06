@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/tests/Unit Test/UI/PanPan.WebApp.Tests/bin
+/src/Building Blocks/Core/Core/bin
+/src/Building Blocks/Core/Extensions/bin
+/src/Building Blocks/Core/Http/bin
+/src/Building Blocks/Core/Logs/bin
+/src/Building Blocks/Services/Api.Core/bin
+/src/Building Blocks/Services/Api.Data/bin
+/src/Building Blocks/Services/ApiService/bin
+/src/Building Blocks/Services/Swagger/bin
+/src/Building Blocks/Services/Api.Core/obj

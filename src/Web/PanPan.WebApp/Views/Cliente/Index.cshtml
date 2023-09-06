@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ClienteViewModel>
+
+
+<form class="row g-3">
+    <div class="col-md-6">
+        <label for="inputEmail4" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="inputEmail4">
+    </div>
+    <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="inputPassword4">
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Pesquisar</button>
+        <a type="button" class="btn btn-primary" asp-controller="Cliente" asp-action="New">Novo</a>
+    </div>
+</form>
+
+
+<table class="table table-light  table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">CNPJ</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Representante</th>
+            <th scope="col">e-mail</th>
+            <th scope="col">Telefone</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var candidate in Model)
+        {
+            <tr>
+                <th scope="row">@candidate.Cnpj</th>
+                <td>@candidate.NomeFantasia</td>
+                <td>@candidate.NomeRepresentante</td>
+                <td>@candidate.Email</td>
+                <td>@candidate.Telefone</td>
+                <td>
+                    <button type="button" class="btn btn-primary">Primary</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger">Danger</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info">Info</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

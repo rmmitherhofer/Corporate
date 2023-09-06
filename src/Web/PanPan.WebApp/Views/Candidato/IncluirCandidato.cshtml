@@ -1,0 +1,27 @@
+﻿@using PanPan.WebApp.Enums;
+@using PanPan.WebApp.Extensions;
+@model CandidatoViewModel
+
+<form asp-controller="Candidato" asp-action="IncluirCandidato" method="post" class="row g-3">
+    <partial name="Partial/_Candidato" model="Model" />
+    <partial name="Partial/_Endereco" model="Model" />
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <a type="button" class="btn btn-secundary" asp-controller="Candidato" asp-action="Index">Voltar</a>
+    </div>
+</form>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            BuscaCep();
+        });
+    </script>
+
+}
+

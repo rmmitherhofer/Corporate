@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CandidatoViewModel>
+
+
+<form class="row g-3">
+    <div class="col-md-6">
+        <label for="inputEmail4" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="inputEmail4">
+    </div>
+    <div class="col-md-6">
+        <label for="inputPassword4" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="inputPassword4">
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Pesquisar</button>
+        <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="IncluirCandidato">Novo</a>
+    </div>
+</form>
+
+
+<table class="table table-light  table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Telefone</th>
+            <th scope="col">Celular</th>
+            <th scope="col">Celular</th>
+            <th scope="col">E-mail</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var candidato in Model)
+        {
+            <tr>
+                <th scope="row">@candidato.Codigo</th>
+                <td>@candidato.Nome</td>
+                <td>@candidato.Telefone</td>
+                <td>@candidato.Celular</td>
+                <td>@candidato.CelularAlternativo</td>
+                <td>@candidato.Email</td>
+                <td>
+                    <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="AlterarCandidato" asp-route-id="@candidato.Id">Editar</a>
+                    @* <a type="button" class="btn btn-dark" asp-controller="Candidato" asp-action="Remover" asp-route-id="@candidato.Id">Black-list</a> *@
+                    <a type="button" class="btn btn-danger" asp-controller="Candidato" asp-action="RemoverCandidato" asp-route-id="@candidato.Id">Remover</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

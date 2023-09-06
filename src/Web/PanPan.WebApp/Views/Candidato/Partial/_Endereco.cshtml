@@ -1,0 +1,87 @@
+﻿@using PanPan.WebApp.Extensions;
+@model CandidatoViewModel
+
+<div class="col-md-6">
+    <label for="txt-cep" class="form-label">CEP</label>
+    <input asp-for="Endereco.Cep" type="text" name="Endereco.Cep" class="form-control" id="txt-cep" data-mask="00000-000">
+</div>
+<div class="col-md-6">
+    <label for="txt-logradouro" class="form-label">Logradouro</label>
+    <input asp-for="Endereco.Logradouro" type="text" name="Endereco.Logradouro" class="form-control" id="txt-logradouro" maxlength="150">
+</div>
+<div class="col-md-6">
+    <label for="txt-numero" class="form-label">Numero</label>
+    <input asp-for="Endereco.Numero" type="text" name="Endereco.Numero" class="form-control" id="txt-numero" maxlength="10">
+</div>
+<div class="col-md-6">
+    <label for="txt-complemento" class="form-label">Complemento</label>
+    <input asp-for="Endereco.Complemento" type="text" name="Endereco.Complemento" class="form-control" id="txt-complemento" maxlength="60">
+</div>
+<div class="col-md-6">
+    <label for="txt-bairro" class="form-label">Bairro</label>
+    <input asp-for="Endereco.Bairro" type="text" name="Endereco.Bairro" class="form-control" id="txt-bairro" maxlength="120">
+</div>
+<div class="col-md-6">
+    <label for="slct-estado" class="form-label">Estado</label>
+    <select asp-for="Endereco.Estado" name="Endereco.Estado" id="slct-estado" class="form-select" aria-label="Estado" onchange="buscaCidades(this.value, 'slct-cidade', '@(Model is not null ? "reload" : "load")')">
+        <option>Open this select menu</option>
+        @{
+            if (Model is not null)
+                @Html.Raw(this.SelectOptionsEstados(Model.Endereco.Estado))
+            else
+                @Html.Raw(this.SelectOptionsEstados())
+        }
+    </select>
+</div>
+
+<div class="col-md-6">
+    <label for="slct-estado" class="form-label">Cidade</label>
+    <select asp-for="Endereco.Cidade" name="Endereco.Cidade" id="slct-cidade" class="form-select" aria-label="Cidade">
+        <option>Open this select menu</option>
+        @{
+            if (Model is not null)
+                @Html.Raw(this.SelectOptionsCidades(Model.Endereco.Estado, Model.Endereco.Cidade))
+            else
+                @Html.Raw(this.SelectOptionsCidades())
+        }
+    </select>
+</div>
+
+<div class="col-md-6">
+    <label for="slct-tipo-domicilio" class="form-label">Tipo</label>
+    <select asp-for="Endereco.TipoDomicilio" name="Endereco.TipoDomicilio" id="slct-tipo-domicilio" class="form-select" aria-label="Tipo domicilio">
+        <option>Open this select menu</option>
+        @{
+            if (Model is not null)
+                @Html.Raw(this.SelectOptionsTipoDomicilio(Model.Endereco.TipoDomicilio))
+            else
+                @Html.Raw(this.SelectOptionsTipoDomicilio())
+        }
+    </select>
+</div>
+
+<div class="col-md-6">
+    <label for="slct-domicilio" class="form-label">Domicilio</label>
+    <select asp-for="Endereco.Domicilio" name="Endereco.Domicilio" id="slct-domicilio" class="form-select" aria-label="Domicilio">
+        <option>Open this select menu</option>
+        @{
+            if (Model is not null)
+                @Html.Raw(this.SelectOptionsDomicilio(Model.Endereco.Domicilio))
+            else
+                @Html.Raw(this.SelectOptionsDomicilio())
+        }
+    </select>
+</div>
+
+
+
+<div class="col-md-6">
+    <label for="txt-mora-com" class="form-label">Mora com</label>
+    <input asp-for="Endereco.MoraCom" type="text" name="Endereco.MoraCom" class="form-control" id="txt-mora-com" maxlength="150">
+</div>
+
+<script src="~/js/cidades.js" asp-append-version="true"></script>
+<script src="~/js/cep.js" asp-append-version="true"></script>
+
+
+

@@ -1,0 +1,20 @@
+﻿@model VagaViewModel
+
+<form asp-controller="Vaga" asp-action="New" method="post" class="row g-3">
+    <input asp-for="Id" type="hidden" />
+    <div class="col-md-6">
+        <label for="txt-nome" class="form-label">Nome</label>
+        <input asp-for="Nome" type="text" class="form-control" id="txt-nome">
+    </div>
+    <div class="col-md-6">
+        <label for="txt-descricao" class="form-label">Descricao</label>
+        <input asp-for="Descricao" type="text" class="form-control" id="txt-descricao">
+    </div>
+    <div class="col-md-6">
+        <label for="txt-cliente" class="form-label">Cliente</label>
+        <input asp-for="ClienteId" type="text" class="form-control" id="txt-cliente">
+    </div> 
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </div>
+</form>

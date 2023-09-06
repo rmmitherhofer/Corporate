@@ -1,0 +1,41 @@
+﻿@using Extensions;
+@using PanPan.WebApp.Enums;
+@model IEnumerable<FormacaoViewModel>
+
+<table class="table table-light  table-striped table-hover">
+    <thead>
+        <tr>            
+            <th scope="col">Formacao</th>
+            <th scope="col">Instituicao</th>
+            <th scope="col">Descricao</th>
+            <th scope="col">Status</th>
+            <th scope="col">Inicio</th>
+            <th scope="col">Conclusao</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var formacao in Model)
+        {
+            <tr>               
+                @if (formacao.Tipo == TipoFormacao.Ensino)
+                {
+                    <td>@formacao.Ensino.Value.Descricao()</td>
+                }
+                else
+                {
+                    <td>@formacao.Curso.Value.Descricao()</td>
+                }
+                <td>@formacao.NomeInstituicao</td>
+                <th scope="row">@formacao.Descricao</th>
+                <td>@formacao.Status.Descricao()</td>
+                <td>@formacao.DataInicio</td>
+                <td>@formacao.DataFim</td>
+                <td>
+                    <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="AlterarFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id">Editar</a>
+                    <a type="button" class="btn btn-danger" asp-controller="Candidato" asp-action="RemoverFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id">Remover</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

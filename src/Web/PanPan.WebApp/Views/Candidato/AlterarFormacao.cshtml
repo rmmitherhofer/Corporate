@@ -1,0 +1,15 @@
+﻿@using PanPan.WebApp.Enums;
+@using PanPan.WebApp.Extensions;
+@model FormacaoViewModel
+
+<form asp-controller="Candidato" asp-action="AlterarFormacao" method="post" class="row g-3">
+    <input asp-for="CandidatoId" type="hidden" />
+    
+    <partial name="Partial/_Formacao" model="Model" />
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Alterar</button>
+        <a type="button" class="btn btn-secundary" asp-controller="Candidato" asp-action="AlterarCandidato" asp-route-id="@Model.CandidatoId">Voltar</a>
+    </div>
+</form>
+

@@ -1,0 +1,12 @@
+﻿@using PanPan.WebApp.Enums;
+@using PanPan.WebApp.Extensions;
+@model ExperienciaViewModel
+
+<form asp-controller="Candidato" asp-action="AlterarExperiencia" method="post" class="row g-3">
+    <input asp-for="CandidatoId" type="hidden" />
+    <partial name="Partial/_Experiencia" model="Model" />
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Alterar</button>
+        <a type="button" class="btn btn-secundary" asp-controller="Candidato" asp-action="AlterarCandidato" asp-route-id="@Model.CandidatoId">Voltar</a>
+    </div>
+</form>

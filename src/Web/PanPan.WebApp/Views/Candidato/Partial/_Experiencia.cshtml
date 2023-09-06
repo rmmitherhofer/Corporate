@@ -1,0 +1,66 @@
+﻿@using PanPan.WebApp.Extensions;
+@model ExperienciaViewModel
+
+<div class="col-md-6">
+    <label for="txt-empresa" class="form-label">Empresa</label>
+    <input asp-for="Empresa" type="text" name="Empresa" class="form-control" id="txt-empresa" maxlength="350">
+</div>
+<div class="col-md-6">
+    <label for="txt-cargo" class="form-label">Cargo</label>
+    <input asp-for="Cargo" type="text" name="Cargo" class="form-control" id="txt-cargo" maxlength="350">
+</div>
+<div class="col-md-6">
+    <label for="txt-atividade" class="form-label">Atividade</label>
+    <textarea asp-for="Atividade" name="Atividade" class="form-control" id="txt-atividade" rows="10" maxlength="2000"></textarea>
+</div>
+<div class="col-md-6">
+    <label for="slct-regime-contratacao" class="form-label">Regime de contratacao</label>
+    <select asp-for="RegimeContratacao" name="RegimeContratacao" id="slct-regime-contratacao" class="form-select" aria-label="Regime de contratacao">
+        <option>Open this select menu</option>
+        @{
+            if (Model is not null)
+                @Html.Raw(this.SelectOptionsRegimeContratacao(Model.RegimeContratacao))
+            else
+                @Html.Raw(this.SelectOptionsRegimeContratacao())
+        }
+    </select>
+</div>
+<div class="col-md-6">
+    <label for="txt-habilidade" class="form-label">Habilidade</label>
+    <input asp-for="Habilidade" type="text" name="Habilidade" class="form-control" id="txt-habilidade">
+</div>
+<div class="col-md-6">
+    <label for="txt-ultimo-salario" class="form-label">Ultimo salario</label>
+    <input asp-for="UltimoSalario" type="text" name="UltimoSalario" class="form-control" id="txt-ultimo-salario" maxlength="17" onkeyup="mascaraMoeda(this, event)" />
+</div>
+<div class="col-md-6">
+    <label for="txt-data-inicio" class="form-label">Inicio</label>
+    <input asp-for="DataInicio" type="text" name="DataInicio" class="form-control" id="txt-data-inicio" data-mask="00/0000">
+</div>
+<div class="col-md-6">
+    <label for="txt-data-fim" class="form-label">Conclusao</label>
+    <input asp-for="DataFim" type="text" name="DataFim" class="form-control" id="txt-data-fim" data-mask="00/0000">
+</div>
+
+<div class="col-md-6">
+    <label for="slct-status" class="form-label">Status</label>
+    <select asp-for="Status" name="Status" id="slct-status" class="form-select" aria-label="Status">
+        <option>Open this select menu</option>
+        @{
+            if (Model is not null)
+                @Html.Raw(this.SelectOptionsStatusExperiencia(Model.Status))
+            else
+                @Html.Raw(this.SelectOptionsStatusExperiencia())
+        }
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="txt-motivo-desligamento" class="form-label">Motivo do desligamento</label>
+    <textarea asp-for="MotivoDesligamento" name="MotivoDesligamento" class="form-control" id="txt-motivo-desligamento" rows="10" maxlength="300"></textarea>
+</div>
+
+<div class="mb-3">
+    <label for="txt-observacoes" class="form-label">Observacoes</label>
+    <textarea asp-for="Observacoes" name="Observacoes" class="form-control" id="txt-observacoes" rows="10" maxlength="2000"></textarea>
+</div>

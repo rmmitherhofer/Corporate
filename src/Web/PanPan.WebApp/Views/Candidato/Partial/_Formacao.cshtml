@@ -1,0 +1,92 @@
+﻿@using PanPan.WebApp.Enums;
+@using PanPan.WebApp.Extensions;
+@model FormacaoViewModel
+
+<div class="col-md-6">
+    <label for="txt-nome" class="form-label">Instituicao</label>
+    <input asp-for="NomeInstituicao" type="text" name="NomeInstituicao" class="form-control" id="txt-nome" maxlength="350">
+</div>
+<div class="col-md-6">
+    <label for="txt-descricacao" class="form-label">Descricao</label>
+    <input asp-for="Descricao" type="text" name="Descricao" class="form-control" id="txt-descricacao" maxlength="350">
+</div>
+<legend class="col-form-label col-sm-2 pt-0">Tipo de formacao</legend>
+<div class="col-sm-10">
+    <div class="form-check">
+        <input asp-for="Tipo" class="form-check-input" type="radio" name="Tipo" id="radio-tipo-formacao-ensino" value="@TipoFormacao.Ensino">
+        <label class="form-check-label" for="radio-tipo-formacao-ensino">
+            Ensino
+        </label>
+    </div>
+    <div class="form-check">
+        <input asp-for="Tipo" class="form-check-input" type="radio" name="Tipo" id="radio-tipo-formacao-curso" value="@TipoFormacao.Curso">
+        <label class="form-check-label" for="radio-tipo-formacao-curso">
+            Curso
+        </label>
+    </div>
+</div>
+<div id="tab-radio-tipo-formacao-ensino" class="ai-form-tab-content" ai-form-tab="radio-tipo-formacao-ensino">
+    <div class="col-md-6">
+        <label for="slct-ensino" class="form-label">Tipo de ensino</label>
+        <select asp-for="Ensino" name="Ensino" id="slct-ensino" class="form-select" aria-label="Ensino">
+            <option>Open this select menu</option>
+            @{
+                if (Model is not null)
+                    @Html.Raw(this.SelectOptionsEnsino(Model.Ensino))
+                else
+                    @Html.Raw(this.SelectOptionsEnsino())
+            }
+        </select>
+    </div>
+</div>
+
+<div id="tab-radio-tipo-formacao-curso" class="ai-form-tab-content" ai-form-tab="radio-tipo-formacao-curso">
+    <div class="col-md-6">
+        <label for="slct-curso" class="form-label">Curso</label>
+        <select asp-for="Curso" name="Curso" id="slct-curso" class="form-select" aria-label="Curso">
+            <option>Open this select menu</option>
+            @{
+                if (Model is not null)
+                    @Html.Raw(this.SelectOptionsCurso(Model.Curso))
+                else
+                    @Html.Raw(this.SelectOptionsCurso())
+            }
+        </select>
+    </div>
+</div>
+<div class="col-md-6">
+    <label for="txt-data-inicio" class="form-label">Inicio</label>
+    <input asp-for="DataInicio" type="text" name="DataInicio" class="form-control" id="txt-data-inicio" data-mask="00/0000">
+</div>
+<div class="col-md-6">
+    <label for="txt-data-fim" class="form-label">Conclusao</label>
+    <input asp-for="DataFim" type="text" name="DataFim" class="form-control" id="txt-data-fim" data-mask="00/0000">
+</div>
+
+<div id="tab-radio-tipo-formacao-ensino" class="ai-form-tab-content" ai-form-tab="radio-tipo-formacao-ensino">
+    <div class="col-md-6">
+        <label for="slct-periodo" class="form-label">Periodo</label>
+        <select asp-for="Periodo" name="Periodo" id="slct-periodo" class="form-select" aria-label="Periodo">
+            <option>Open this select menu</option>
+            @{
+                if (Model is not null)
+                    @Html.Raw(this.SelectOptionsPeriodoFormacao(Model.Periodo))
+                else
+                    @Html.Raw(this.SelectOptionsPeriodoFormacao())
+            }
+        </select>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <label for="slct-status" class="form-label">Status</label>
+    <select asp-for="Status" name="Status" id="slct-status" class="form-select" aria-label="Status">
+        <option>Open this select menu</option>
+        @{
+            if (Model is not null)
+                @Html.Raw(this.SelectOptionsStatusFormacao(Model.Status))
+            else
+                @Html.Raw(this.SelectOptionsStatusFormacao())
+        }
+    </select>
+</div>

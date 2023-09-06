@@ -1,0 +1,31 @@
+﻿@using Extensions;
+@model IEnumerable<ExperienciaViewModel>
+
+<table class="table table-light  table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Empresa</th>
+            <th scope="col">Cargo</th>
+            <th scope="col">Status</th>
+            <th scope="col">Inicio</th>
+            <th scope="col">Conclusao</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var experiencia in Model)
+        {
+            <tr>
+                <th scope="row">@experiencia.Empresa</th>
+                <td>@experiencia.Cargo</td>
+                <td>@experiencia.Status.Descricao()</td>
+                <td>@experiencia.DataInicio</td>
+                <td>@experiencia.DataFim</td>
+                <td>
+                    <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="AlterarExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id">Editar</a>
+                    <a type="button" class="btn btn-danger" asp-controller="Candidato" asp-action="RemoverExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id">Remover</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
