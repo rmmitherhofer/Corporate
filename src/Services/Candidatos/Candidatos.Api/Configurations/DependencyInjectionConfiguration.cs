@@ -1,4 +1,5 @@
-﻿using Candidatos.Business.Factories;
+﻿using Candidatos.Api.Configurations.AutoMapper;
+using Candidatos.Business.Factories;
 using Candidatos.Business.Interfaces.Repositories;
 using Candidatos.Data.Repositories;
 
@@ -18,6 +19,13 @@ public static class DependencyInjectionConfiguration
     {
         services
             .AddScoped<IParecerPdfFactory, ParecerPdfFactory>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(typeof(FilterRequestToFilterProfile));
 
         return services;
     }

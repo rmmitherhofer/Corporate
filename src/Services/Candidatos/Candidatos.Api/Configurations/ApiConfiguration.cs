@@ -13,6 +13,7 @@ public static class ApiConfiguration
 
         services.AddRepositories();
         services.AddFactories();
+        services.AddAutoMapper();
         services.AddDbContext(configuration);
 
         return services;

@@ -1,4 +1,4 @@
-﻿namespace Api.Service.Models.Response;
+﻿namespace Api.Service.Models.Responses;
 
 public class ApiErrorResponse
 {

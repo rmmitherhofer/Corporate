@@ -1,5 +1,5 @@
 ﻿using Api.Service.Models;
-using Api.Service.Models.Response;
+using Api.Service.Models.Responses;
 using Logs.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

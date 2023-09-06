@@ -1,8 +1,12 @@
 ﻿using Api.Service.Controllers;
+using AutoMapper;
 using Candidatos.Api.DTO.Request;
+using Candidatos.Api.DTO.Responses;
+using Candidatos.Business.Filters;
 using Candidatos.Business.Interfaces.Repositories;
 using Candidatos.Business.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Candidatos.Api.Controllers;
 
@@ -12,11 +16,13 @@ public class CandidatoController : MainController
 {
     private readonly ILogger<CandidatoController> _logger;
     private readonly ICandidatoRepository _candidatoRepository;
+    private readonly IMapper _mapper;
 
-    public CandidatoController(ILogger<CandidatoController> logger, ICandidatoRepository candidatoRepository)
+    public CandidatoController(ILogger<CandidatoController> logger, ICandidatoRepository candidatoRepository, IMapper mapper)
     {
         _logger = logger;
         _candidatoRepository = candidatoRepository;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -25,6 +31,17 @@ public class CandidatoController : MainController
         var candidatos = await _candidatoRepository.ObterTodos();
 
         return CustonResponse(candidatos.OrderBy(c => c.Codigo));
+    }
+
+    [HttpGet("paginado")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatoPaginatedResponse))]
+    public async Task<IActionResult> ObterPaginado([FromQuery]CandidatoFilterRequest request)
+    {
+        var (candidatos, pageCount, totalRecords) = await _candidatoRepository.ObterPaginado(_mapper.Map<CandidatoFilter>(request));
+
+        CandidatoPaginatedResponse response = new(totalRecords, request.PageNumber, pageCount, candidatos);
+
+        return CustonResponse(response);
     }
 
     [HttpGet("{id}")]

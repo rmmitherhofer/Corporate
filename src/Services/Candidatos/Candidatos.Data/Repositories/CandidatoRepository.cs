@@ -1,6 +1,9 @@
 ﻿using Api.Core;
+using Candidatos.Business.Filters;
 using Candidatos.Business.Interfaces.Repositories;
 using Candidatos.Business.Models;
+using Candidatos.Data.Extensions;
+using Api.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Candidatos.Data.Repositories;
@@ -13,6 +16,22 @@ public class CandidatoRepository : ICandidatoRepository
 
     public IUnitOfWork UnitOfWork => _context;
 
+    public async Task<(IEnumerable<Candidato> candidatos, int pageCount, int totalRecords)> ObterPaginado(CandidatoFilter filter)
+    {
+        var query = _context.Candidatos.Filter(filter);
+
+        var totalRecords = await query.CountAsync();
+
+        int pageCount = filter.GetPageCount(totalRecords);
+
+        var candidatos = await query
+            .OrderBy(filter.OrderBy)
+            .Page(filter.PageNumber, filter.PageSize)
+            .AsNoTracking()
+            .ToListAsync();
+
+        return (candidatos, pageCount, totalRecords);
+    }
     public async Task<IEnumerable<Candidato>> ObterTodos()
     {
         var candidatos = await _context.Candidatos
