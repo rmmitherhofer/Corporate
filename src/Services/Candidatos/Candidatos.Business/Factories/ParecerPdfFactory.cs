@@ -18,7 +18,6 @@ public class ParecerPdfFactory : IParecerPdfFactory
     private readonly TemplatePdfFactory _template;
     private readonly ArtefatosRHF _rhf;
     private readonly bool _incluirBorda = false;
-    const int _fullBorder = Rectangle.LEFT_BORDER | Rectangle.TOP_BORDER | Rectangle.RIGHT_BORDER | Rectangle.BOTTOM_BORDER;
     const float _margemTabela = 90f;
     const float _tamanhoFonteTitulo = 19f;
     const float _tamanhoFonteSubTitulo = 10f;
@@ -123,7 +122,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
     {
         const int maxColunas = 1;
 
-        var ensinos = formacoes.Where(f => f.Tipo == Enums.TipoFormacao.Ensino)
+        var ensinos = formacoes.Where(f => f.Tipo == TipoFormacao.Ensino)
             .OrderByDescending(f => f.DataInicio)
             .ThenByDescending(f => f.DataFim)
             .ThenByDescending(f => f.Ensino);
@@ -168,7 +167,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
     private void TabelaCursosComplementarees(Document document, IEnumerable<Formacao> formacoes)
     {
         const int maxColunas = 1;
-        var cursos = formacoes.Where(f => f.Tipo == Enums.TipoFormacao.Curso)
+        var cursos = formacoes.Where(f => f.Tipo == TipoFormacao.Curso)
             .OrderByDescending(f => f.DataInicio)
             .ThenByDescending(f => f.DataFim);
 
@@ -232,7 +231,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         bool usarBorda = false;
 
-        foreach (var experiencia in experiencias.OrderBy(f => f.Status).ThenByDescending(f => f.DataFim))
+        foreach (var experiencia in experiencias.OrderByDescending(e => e.DataInicio).ThenByDescending(e => e.DataFim))
         {
             PdfPTable tableContent = new(maxColunas)
             {

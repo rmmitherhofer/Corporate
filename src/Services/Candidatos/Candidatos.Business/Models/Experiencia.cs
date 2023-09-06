@@ -32,7 +32,8 @@ public class Experiencia : Entity
         string? habilidade,
         decimal? ultimoSalario,
         DateTime? dataFim,
-        string? motivoDesligamento)
+        string? motivoDesligamento,
+        StatusExperiencia status)
     {
         CandidatoId = candidatoId;
         Empresa = empresa.Trim();
@@ -41,19 +42,28 @@ public class Experiencia : Entity
         UltimoSalario = ultimoSalario;
         RegimeContratacao = regimeContratacao;
         Atividade = atividade?.Trim();
-        IncluirPeriodo(dataInicio, dataFim);
+        IncluirPeriodo(dataInicio, dataFim, status);
         IncluirMotivoDesligamento(motivoDesligamento);
         Observacoes = observacoes?.Trim();
     }
-    public void Alterar(string cargo, string? atividade, RegimeContratacao regimeContratacao, DateTime dataInicio, DateTime? dataFim, string? motivoDesligamento, string? observacoes, string? habilidade,
-        decimal? ultimoSalario)
+    public void Alterar(string cargo, 
+        string? atividade, 
+        RegimeContratacao regimeContratacao, 
+        DateTime dataInicio, 
+        DateTime? dataFim, 
+        string? motivoDesligamento, 
+        string? observacoes, 
+        string? habilidade,
+        decimal? ultimoSalario,
+        StatusExperiencia status
+        )
     {
         Cargo = cargo.Trim();
         Atividade = atividade?.Trim();
         Habilidade = habilidade?.Trim();
         UltimoSalario = ultimoSalario;
         RegimeContratacao = regimeContratacao;
-        IncluirPeriodo(dataInicio, dataFim);
+        IncluirPeriodo(dataInicio, dataFim, status);
         IncluirMotivoDesligamento(motivoDesligamento);
         Observacoes = observacoes?.Trim();
     }
@@ -61,13 +71,11 @@ public class Experiencia : Entity
     {
         MotivoDesligamento = motivoDesligamento?.Trim();
     }
-    private void IncluirPeriodo(DateTime dataInicio, DateTime? dataFim)
+    private void IncluirPeriodo(DateTime dataInicio, DateTime? dataFim, StatusExperiencia status)
     {
         DataInicio = dataInicio;
 
         DataFim = dataFim;
-
-        Status = StatusExperiencia.Atual;
 
         if (DataFim.HasValue)
         {
@@ -75,8 +83,10 @@ public class Experiencia : Entity
 
             if (DataFim.Value.Date > DateTime.Now.Date) throw new ArgumentOutOfRangeException(nameof(DataFim), "A data de desligamento, deve ser menor ou igual a data atual");
 
-            Status = StatusExperiencia.Desligado;
-        }
+            Status = status;
 
+            return;
+        }
+        Status = StatusExperiencia.Atual;
     }
 }

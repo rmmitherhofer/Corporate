@@ -64,8 +64,10 @@ public class ExperienciaViewModel
     public string Cargo { get; set; }
     public string? Atividade { get; set; }
     public RegimeContratacao RegimeContratacao { get; set; }
-    public string DataInicio { get; set; }
-    public string? DataFim { get; set; }
+    public string DataInicioString { get; set; }
+    public string? DataFimString { get; set; }
+    public DateTime DataInicio { get; set; }
+    public DateTime? DataFim { get; set; }
     public StatusExperiencia Status { get; set; }
     public string? MotivoDesligamento { get; set; }
     public string? Observacoes { get; set; }
@@ -81,8 +83,10 @@ public class FormacaoViewModel
     public DateTime? DataAlteracao { get; set; }
     public string NomeInstituicao { get; set; }
     public string? Descricao { get; set; }
-    public string? DataInicio { get; set; }
-    public string? DataFim { get; set; }
+    public string? DataInicioString { get; set; }
+    public string? DataFimString { get; set; }
+    public DateTime? DataInicio { get; set; }
+    public DateTime? DataFim { get; set; }
     public TipoFormacao Tipo { get; set; }
     public Ensino? Ensino { get; set; }
     public Curso? Curso { get; set; }

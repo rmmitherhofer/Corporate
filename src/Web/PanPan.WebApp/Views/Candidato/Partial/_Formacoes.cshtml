@@ -4,7 +4,7 @@
 
 <table class="table table-light  table-striped table-hover">
     <thead>
-        <tr>            
+        <tr>
             <th scope="col">Formacao</th>
             <th scope="col">Instituicao</th>
             <th scope="col">Descricao</th>
@@ -15,9 +15,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var formacao in Model)
+        @foreach (var formacao in Model.OrderByDescending(f => f.DataInicio).ThenByDescending(f => f.DataFim))
         {
-            <tr>               
+            <tr>
                 @if (formacao.Tipo == TipoFormacao.Ensino)
                 {
                     <td>@formacao.Ensino.Value.Descricao()</td>
@@ -29,8 +29,8 @@
                 <td>@formacao.NomeInstituicao</td>
                 <th scope="row">@formacao.Descricao</th>
                 <td>@formacao.Status.Descricao()</td>
-                <td>@formacao.DataInicio</td>
-                <td>@formacao.DataFim</td>
+                <td>@formacao.DataInicioString</td>
+                <td>@formacao.DataFimString</td>
                 <td>
                     <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="AlterarFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id">Editar</a>
                     <a type="button" class="btn btn-danger" asp-controller="Candidato" asp-action="RemoverFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id">Remover</a>

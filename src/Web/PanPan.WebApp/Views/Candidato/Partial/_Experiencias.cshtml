@@ -13,14 +13,14 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var experiencia in Model)
+        @foreach (var experiencia in Model.OrderByDescending(e => e.DataInicio).ThenByDescending(e => e.DataFim))
         {
             <tr>
                 <th scope="row">@experiencia.Empresa</th>
                 <td>@experiencia.Cargo</td>
                 <td>@experiencia.Status.Descricao()</td>
-                <td>@experiencia.DataInicio</td>
-                <td>@experiencia.DataFim</td>
+                <td>@experiencia.DataInicioString</td>
+                <td>@experiencia.DataFimString</td>
                 <td>
                     <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="AlterarExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id">Editar</a>
                     <a type="button" class="btn btn-danger" asp-controller="Candidato" asp-action="RemoverExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id">Remover</a>

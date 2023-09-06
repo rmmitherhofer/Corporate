@@ -24,7 +24,7 @@ public class CandidatoController : MainController
     {
         var candidatos = await _candidatoRepository.ObterTodos();
 
-        return CustonResponse(candidatos);
+        return CustonResponse(candidatos.OrderBy(c => c.Codigo));
     }
 
     [HttpGet("{id}")]
@@ -183,7 +183,8 @@ public class CandidatoController : MainController
             request.Habilidade,
             request.UltimoSalario,
             request.DataFim,
-            request.MotivoDesligamento);
+            request.MotivoDesligamento,
+            request.Status);
 
         _candidatoRepository.Adicionar(experiencia);
 
@@ -203,7 +204,16 @@ public class CandidatoController : MainController
 
         if (experiencia is null) return CustonResponse();
 
-        experiencia.Alterar(request.Cargo, request.Atividade, request.RegimeContratacao, request.DataInicio, request.DataFim, request.MotivoDesligamento, request.Observacoes, request.Habilidade, request.UltimoSalario);
+        experiencia.Alterar(request.Cargo,
+            request.Atividade,
+            request.RegimeContratacao,
+            request.DataInicio,
+            request.DataFim,
+            request.MotivoDesligamento,
+            request.Observacoes,
+            request.Habilidade,
+            request.UltimoSalario,
+            request.Status);
 
         _candidatoRepository.Atualizar(experiencia);
 
