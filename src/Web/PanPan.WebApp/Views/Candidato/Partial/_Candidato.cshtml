@@ -3,52 +3,84 @@
 @model CandidatoViewModel
 
 <input asp-for="Id" type="hidden" />
-<div class="col-md-6">
-    <label for="txt-nome" class="form-label">Nome</label>
-    <input asp-for="Nome" type="text" class="form-control" id="txt-nome" maxlength="350">
-</div>
-<div class="col-sm-10">
-    <div class="form-check">
-        <input asp-for="Sexo" class="form-check-input" type="radio" name="Sexo" id="radio-sexo-masculino" value="@Sexo.Masculino">
-        <label class="form-check-label" for="radio-sexo-masculino">
-            Masculino
-        </label>
+
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <label for="txt-nome" class="label">Nome</label>
+            <div class="control">
+                <input id="txt-nome" asp-for="Nome" type="text" name="Nome" class="input" placeholder="Nome Sobrenome" maxlength="150">
+            </div>
+        </div>
     </div>
-    <div class="form-check">
-        <input asp-for="Sexo" class="form-check-input" type="radio" name="Sexo" id="radio-sexo-feminino" value="@Sexo.Feminino">
-        <label class="form-check-label" for="radio-sexo-feminino">
-            Feminino
-        </label>
+    <div class="column">
+        <div class="field">
+            <div class="control">
+                <label class="radio">
+                    <input id="radio-sexo-masculino" asp-for="Sexo" type="radio" name="Sexo" value="@Sexo.Masculino">
+                    Masculino
+                </label>
+                <label class="radio">
+                    <input id="radio-sexo-feminino" asp-for="Sexo" type="radio" name="Sexo" value="@Sexo.Feminino">
+                    Feminino
+                </label>
+            </div>
+        </div>
     </div>
 </div>
-<div class="col-md-6">
-    <label for="txt-telefone" class="form-label">Telefone</label>
-    <input asp-for="Telefone" type="text" name="Telefone" id="txt-telefone" class="form-control" data-mask="(00) 0000-0000">
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <label for="txt-email" class="label">Email</label>
+            <div class="control">
+                <input id="txt-email" asp-for="Email" type="email" name="Email" class="input" placeholder="email@domain.com">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+    </div>
 </div>
-<div class="col-md-6">
-    <label for="txt-celular" class="form-label">Celular</label>
-    <input asp-for="Celular" type="text" name="Celular" id="txt-celular" class="form-control" data-mask="(00) 90000-0000">
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <label for="txt-telefone" class="label">Telefone</label>
+            <div class="control">
+                <input id="txt-telefone" asp-for="Telefone" type="text" name="Telefone" class="input" placeholder="(00) 0000-0000" data-mask="(00) 0000-0000">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="field">
+            <label for="txt-celular" class="label">Celular</label>
+            <div class="control">
+                <input id="txt-celular" asp-for="Celular" type="text" name="Celular" class="input" placeholder="(00) 90000-0000" data-mask="(00) 00000-0000">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="field">
+            <label for="txt-celular-alternativo" class="label">Celular alternativo</label>
+            <div class="control">
+                <input id="txt-celular-alternativo" asp-for="CelularAlternativo" type="text" name="CelularAlternativo" class="input" placeholder="(00) 90000-0000" data-mask="(00) 00000-0000">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="field">
+            <label for="slct-recrutado-por" class="label">Recrutado Por</label>
+            <div class="control">
+                <div>
+                    <select id="slct-recrutado-por" asp-for="RecrutadoPor" name="RecrutadoPor" class="selectize" placeholder="Selecione">
+                        <option></option>
+                        @{
+                            if (Model is not null)
+                                @Html.Raw(this.SelectOptionsFontesRecrutamento(Model.RecrutadoPor))
+                            else
+                                @Html.Raw(this.SelectOptionsFontesRecrutamento())
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="col-md-6">
-    <label for="txt-celular-alternativo" class="form-label">Celular</label>
-    <input asp-for="CelularAlternativo" type="text" name="CelularAlternativo" id="txt-celular-alternativo" class="form-control" data-mask="(00) 90000-0000">
-</div>
-<div class="col-md-6">
-    <label for="txt-email" class="form-label">E-mail</label>
-    <input asp-for="Email" type="email" name="Email" id="txt-email" class="form-control" maxlength="254">
-</div>
-<div class="col-md-6">
-    <label for="slct-recrutado-por" class="form-label">Recrutado Por</label>
-    <select asp-for="RecrutadoPor" name="RecrutadoPor" id="slct-recrutado-por" class="form-select" aria-label="Recrutado Por">
-        <option>Open this select menu</option>
-        @{
-            if (Model is not null)
-                @Html.Raw(this.SelectOptionsFontesRecrutamento(Model.RecrutadoPor))
-            else
-                @Html.Raw(this.SelectOptionsFontesRecrutamento())
-        }
-    </select>
-</div>
-
-
-

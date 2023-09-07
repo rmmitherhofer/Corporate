@@ -24,7 +24,8 @@ public class ExperienciaMapping : IEntityTypeConfiguration<Experiencia>
         builder.Property(e => e.Atividade)
             .HasColumnType("varchar(2048)");
 
-        builder.Property(e => e.Habilidade);
+        builder.Property(e => e.Habilidade)
+            .HasColumnType("varchar(300)");
 
         builder.Property(e => e.RegimeContratacao)
             .IsRequired();

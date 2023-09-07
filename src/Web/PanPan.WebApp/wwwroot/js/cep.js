@@ -39,7 +39,6 @@
                     //Consulta o webservice viacep.com.br/
                     $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?",
                         function (dados) {
-
                             if (!("erro" in dados)) {
                                 //Atualiza os campos com os valores da consulta.
                                 $("#txt-logradouro").val(dados.logradouro);
@@ -52,7 +51,11 @@
                                 function setSelectedValue(selectObj, valueToSet) {
                                     for (var i = 0; i < selectObj.options.length; i++) {
                                         if (selectObj.options[i].value == valueToSet) {
-                                            selectObj.options[i].selected = true;
+                                            debugger;
+                                            selectObj.options[i].setAttribute('selected', 'selected');
+                                            var select2 = document.getElementById('select2-slct-estado-container');
+                                            select2.setAttribute('title', selectObj.options[i].text);
+                                            select2.innerHTML = selectObj.options[i].text;
                                             return;
                                         }
                                     }

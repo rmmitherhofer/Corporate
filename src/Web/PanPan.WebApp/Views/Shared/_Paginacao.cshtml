@@ -1,0 +1,110 @@
+﻿@model PageViewModel
+
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    @{
+        string urlbase = Url.ActionContext.HttpContext.Request.Path + "?pagenumber=";
+
+        if (Model.BackPage is not null)
+        {
+            <a href="@(urlbase + Model.BackPage)" class="pagination-previous">Anterior</a>
+        }
+        else
+        {
+            <a class="pagination-previous is-disabled">Anterior</a>
+        }
+
+        if (Model.NextPage is not null)
+        {
+            <a href="@(urlbase + Model.NextPage)" class="pagination-next">Proxima</a>
+        }
+        else
+        {
+            <a class="pagination-next is-disabled">Proxima</a>
+        }
+
+        <ul class="pagination-list">
+
+            @if (Model.BackPage is not null)
+            {
+                <li>
+                    <a href="@(urlbase + 1)" class="pagination-link" aria-label="Goto page 1">1</a>
+                </li>
+                <li>
+                    <span class="pagination-ellipsis">&hellip;</span>
+                </li>
+            }
+
+            @if (Model.PageCount == 1)
+            {
+                <li>
+                    <a href="@(urlbase + Model.PageNumber)" class="pagination-link is-current" aria-label="Page @Model.PageNumber" aria-current="page">@Model.PageNumber</a>
+                </li>
+            }
+            else
+            {
+                @if (Model.PageNumber == 1)
+                {
+                    <li>
+                        <a href="@(urlbase + Model.PageNumber)" class="pagination-link is-current" aria-label="Page @Model.PageNumber" aria-current="page">@Model.PageNumber</a>
+                    </li>
+
+                    <li>
+                        <a href="@(urlbase + Model.NextPage)" class="pagination-link" aria-label="Goto page @Model.NextPage">@Model.NextPage</a>
+                    </li>
+
+                    @if (Model.PageCount > 2)
+                    {
+                        <li>
+                            <a href="@(urlbase + (Model.NextPage + 1))" class="pagination-link" aria-label="Goto page @(Model.NextPage + 1)">@(Model.NextPage + 1)</a>
+                        </li>
+                    }
+
+                }
+                else
+                {
+                    @if (Model.PageNumber == Model.PageCount)
+                    {
+                        @if (Model.PageCount > 2)
+                        {
+                            <li>
+                                <a href="@(urlbase + (Model.BackPage - 1))" class="pagination-link" aria-label="Goto page @(Model.BackPage - 1)">@(Model.BackPage - 1)</a>
+                            </li>
+                        }
+
+                        <li>
+                            <a href="@(urlbase + Model.BackPage)" class="pagination-link" aria-label="Goto page @Model.BackPage">@Model.BackPage</a>
+                        </li>
+
+
+                        <li>
+                            <a href="@(urlbase + Model.PageNumber)" class="pagination-link is-current" aria-label="Page @Model.PageNumber" aria-current="page">@Model.PageNumber</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="@(urlbase + Model.BackPage)" class="pagination-link" aria-label="Goto page @Model.BackPage">@Model.BackPage</a>
+                        </li>
+
+                        <li>
+                            <a href="@(urlbase + Model.PageNumber)" class="pagination-link is-current" aria-label="Page @Model.PageNumber" aria-current="page">@Model.PageNumber</a>
+                        </li>
+
+                        <li>
+                            <a href="@(urlbase + Model.NextPage)" class="pagination-link" aria-label="Goto page @Model.NextPage">@Model.NextPage</a>
+                        </li>
+                    }
+                }
+            }
+            @if (Model.NextPage is not null)
+            {
+                <li>
+                    <span class="pagination-ellipsis">&hellip;</span>
+                </li>
+                <li>
+                    <a href="@(urlbase + Model.PageCount)" class="pagination-link" aria-label="Goto page @Model.PageCount">@Model.PageCount</a>
+                </li>
+            }
+        </ul>
+    }
+</nav>

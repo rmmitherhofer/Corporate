@@ -106,12 +106,13 @@ public class ParecerPdfFactory : IParecerPdfFactory
         string[] valoresLinhaQuatro = { candidato.Endereco.Cidade, candidato.Endereco.Estado, candidato.Endereco.Cep };
         int[] colspanLinhQuatro = { 2, 1, 1 };
 
-        if (string.IsNullOrEmpty(candidato.Endereco.Complemento))
+        if (string.IsNullOrEmpty(candidato.Endereco.Cep))
         {
             titulosLinhaQuatro = new string[] { "Cidade", "UF" };
             valoresLinhaQuatro = new string[] { candidato.Endereco.Cidade, candidato.Endereco.Estado };
-            colspanLinhQuatro = new int[] { 3, 1 };
+            colspanLinhQuatro = new int[] { 2, 2 };
         }
+
         LinhaComBottomBorder(ref table, titulosLinhaQuatro, valoresLinhaQuatro, colspanLinhQuatro, _incluirBorda);
         #endregion
 
@@ -155,7 +156,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
             };
 
             #region Linha 1
-            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando ? $" - {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}" };
+            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando ? $" - {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}" };
             int[] colspanLinhaUm = { maxColunas };
             LinhaTabelaSemBorda(ref tableContent, valoresLinhaUm, colspanLinhaUm);
             #endregion

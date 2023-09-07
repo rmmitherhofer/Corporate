@@ -9,6 +9,10 @@ public class MappingResponseToViewModelProfile : Profile
 {
     public MappingResponseToViewModelProfile()
     {
+        CreateMap<PaginatedResponse, PageViewModel>();
+
+        CreateMap<CandidatosPaginatedResponse, CandidatosViewModel>();
+
         CreateMap<CandidatoResponse, CandidatoViewModel>()
             .ForMember(d => d.DataNascimento, o => o.MapFrom(s => s.DataNascimento.HasValue ? s.DataNascimento.Value.ToString("dd/MM/yyyy") : null));
 

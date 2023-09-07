@@ -1,41 +1,52 @@
 ﻿@using Extensions;
 @using PanPan.WebApp.Enums;
-@model IEnumerable<FormacaoViewModel>
+@model CandidatoViewModel
 
-<table class="table table-light  table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Formacao</th>
-            <th scope="col">Instituicao</th>
-            <th scope="col">Descricao</th>
-            <th scope="col">Status</th>
-            <th scope="col">Inicio</th>
-            <th scope="col">Conclusao</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var formacao in Model.OrderByDescending(f => f.DataInicio).ThenByDescending(f => f.DataFim))
-        {
+<div class="box">
+    <div class="buttons">
+        <a type="button" asp-controller="Candidato" asp-action="IncluirFormacao" asp-route-id="@Model.Id" class="button is-primary">
+            <span class="icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </span>
+        </a>
+    </div>
+    <table class="table is-fullwidth">
+        <thead>
             <tr>
-                @if (formacao.Tipo == TipoFormacao.Ensino)
-                {
-                    <td>@formacao.Ensino.Value.Descricao()</td>
-                }
-                else
-                {
-                    <td>@formacao.Curso.Value.Descricao()</td>
-                }
-                <td>@formacao.NomeInstituicao</td>
-                <th scope="row">@formacao.Descricao</th>
-                <td>@formacao.Status.Descricao()</td>
-                <td>@formacao.DataInicioString</td>
-                <td>@formacao.DataFimString</td>
-                <td>
-                    <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="AlterarFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id">Editar</a>
-                    <a type="button" class="btn btn-danger" asp-controller="Candidato" asp-action="RemoverFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id">Remover</a>
-                </td>
+                <th>Formacao</th>
+                <th>Instituicao</th>
+                <th>Descricao</th>
+                <th>Status</th>
+                <th>Inicio</th>
+                <th>Conclusao</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var formacao in Model.Formacoes.OrderByDescending(f => f.DataInicio).ThenByDescending(f => f.DataFim))
+            {
+                <tr>
+                    @if (formacao.Tipo == TipoFormacao.Ensino)
+                    {
+                        <td>@formacao.Ensino.Value.Descricao()</td>
+                    }
+                    else
+                    {
+                        <td>@formacao.Curso.Value.Descricao()</td>
+                    }
+                    <td>@formacao.NomeInstituicao</td>
+                    <th scope="row">@formacao.Descricao</th>
+                    <td>@formacao.Status.Descricao()</td>
+                    <td>@formacao.DataInicioString</td>
+                    <td>@formacao.DataFimString</td>
+                    <td>
+                        <div class="buttons">
+                            <a type="button" asp-controller="Candidato" asp-action="AlterarFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id" class="button is-success is-outlined"><i class="fa-solid fa-pencil"></i></a>
+                            <a type="button" asp-controller="Candidato" asp-action="RemoverFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id" class="button is-danger is-outlined"><i class="fa-solid fa-xmark"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

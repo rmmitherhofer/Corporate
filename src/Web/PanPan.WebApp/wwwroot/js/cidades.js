@@ -5765,11 +5765,21 @@ var json_cidades =
 // FIM DO .js
 
 function buscaCidades(e, idSelectCidade, tipoload, cidadeSelecionada) {
-
     if (tipoload == undefined) return;
 
-    document.querySelector("#" + idSelectCidade).innerHTML = '';
-    var cidade_select = document.querySelector("#" + idSelectCidade);
+    var session = document.getElementById('sec-cidade');
+
+    session.querySelector('select').remove();
+    session.querySelector('div').remove();
+
+    let cidade_select = document.createElement('select');
+    cidade_select.setAttribute('id', idSelectCidade);
+    cidade_select.setAttribute('name', 'Cidade');
+    cidade_select.setAttribute('placeholder', 'Selecione');
+
+
+    //document.querySelector("#" + idSelectCidade).innerHTML = '';
+    //var cidade_select = document.querySelector("#" + idSelectCidade);
 
     var num_estados = json_cidades.estados.length;
     var j_index = -1;
@@ -5806,7 +5816,10 @@ function buscaCidades(e, idSelectCidade, tipoload, cidadeSelecionada) {
     var options = {
         searchable: true
     };
-    //NiceSelect.bind(document.getElementById(idSelectCidade), options);
+
+    session.appendChild(cidade_select);
+
+    $(cidade_select).selectize();
 }
 
 

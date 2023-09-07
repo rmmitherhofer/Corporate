@@ -2,6 +2,31 @@
 
 namespace PanPan.WebApp.Models;
 
+public abstract class PageViewModel
+{
+    public int TotalRecords { get; set; }
+    public int PageSize { get; set; } = 100;
+    public int PageNumber { get; set; } = 1;
+    public int PageCount { get; set; }
+    public int? BackPage { get; set; }
+    public int? NextPage { get; set; }
+}
+public class CandidatosViewModel : PageViewModel    
+{
+    public int? Codigo { get; set; }
+    public string? Nome { get; set; }
+    public string? Email { get; set; }
+    public string? Telefone { get; set; }
+    public string? Celular { get; set; }
+    public string? CelularAlternativo { get; set; }
+    public string? Bairro { get; set; }
+    public string? Cidade { get; set; }
+    public string? Estado { get; set; }
+    public Sexo? Sexo { get; set; }
+    public StatusCandidato? Status { get; set; }
+
+    public IEnumerable<CandidatoViewModel> Candidatos { get; set; }
+}
 public class CandidatoViewModel
 {
     public Guid Id { get; set; }

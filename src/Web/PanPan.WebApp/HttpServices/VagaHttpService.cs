@@ -4,6 +4,12 @@ using PanPan.WebApp.Models.Request;
 
 namespace PanPan.WebApp.HttpServices;
 
+public interface IVagaHttpService
+{
+    Task<IEnumerable<VagaViewModel>> ObterTodos();
+    Task Adicionar(AddVagaRequest request);
+    Task Alterar(UpdateVagaRequest request);
+}
 public class VagaHttpService : MainHttpService, IVagaHttpService
 {
     public VagaHttpService(HttpClient httpClient) : base(httpClient) { }

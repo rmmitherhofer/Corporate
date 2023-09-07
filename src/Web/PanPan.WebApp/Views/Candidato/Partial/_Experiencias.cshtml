@@ -1,31 +1,42 @@
 ﻿@using Extensions;
-@model IEnumerable<ExperienciaViewModel>
+@model CandidatoViewModel
 
-<table class="table table-light  table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Empresa</th>
-            <th scope="col">Cargo</th>
-            <th scope="col">Status</th>
-            <th scope="col">Inicio</th>
-            <th scope="col">Conclusao</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var experiencia in Model.OrderByDescending(e => e.DataInicio).ThenByDescending(e => e.DataFim))
-        {
+<div class="box">
+    <div class="buttons">
+        <a type="button" asp-controller="Candidato" asp-action="IncluirExperiencia" asp-route-id="@Model.Id" class="button is-primary">
+            <span class="icon">
+                <i class="fa-solid fa-briefcase"></i>
+            </span>
+        </a>
+    </div>
+    <table class="table is-fullwidth">
+        <thead>
             <tr>
-                <th scope="row">@experiencia.Empresa</th>
-                <td>@experiencia.Cargo</td>
-                <td>@experiencia.Status.Descricao()</td>
-                <td>@experiencia.DataInicioString</td>
-                <td>@experiencia.DataFimString</td>
-                <td>
-                    <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="AlterarExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id">Editar</a>
-                    <a type="button" class="btn btn-danger" asp-controller="Candidato" asp-action="RemoverExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id">Remover</a>
-                </td>
+                <th>Empresa</th>
+                <th>Cargo</th>
+                <th>Status</th>
+                <th>Inicio</th>
+                <th>Conclusao</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var experiencia in Model.Experiencias.OrderByDescending(e => e.DataInicio).ThenByDescending(e => e.DataFim))
+            {
+                <tr>
+                    <th scope="row">@experiencia.Empresa</th>
+                    <td>@experiencia.Cargo</td>
+                    <td>@experiencia.Status.Descricao()</td>
+                    <td>@experiencia.DataInicioString</td>
+                    <td>@experiencia.DataFimString</td>
+                    <td>
+                        <div class="buttons">
+                            <a type="button" asp-controller="Candidato" asp-action="AlterarExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id" class="button is-success is-outlined"><i class="fa-solid fa-pencil"></i></a>
+                            <a type="button" asp-controller="Candidato" asp-action="RemoverExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id" class="button is-danger is-outlined"><i class="fa-solid fa-xmark"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

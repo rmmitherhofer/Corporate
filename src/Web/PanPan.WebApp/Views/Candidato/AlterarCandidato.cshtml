@@ -2,104 +2,215 @@
 @model CandidatoViewModel
 
 <form asp-controller="Candidato" asp-action="AlterarCandidato" method="post" class="row g-3">
-    <div class="col-md-6">
-        <label for="txt-codigo" class="form-label">Codigo</label>
-        <input asp-for="Codigo" type="number" name="Codigo" class="form-control" id="txt-codigo" readonly>
-    </div>
-    <div class="col-md-6">
-        <label for="txt-apelido" class="form-label">Apelido</label>
-        <input asp-for="Apelido" type="text" name="Apelido" class="form-control" id="txt-apelido" maxlength="35">
-    </div>
+    <div class="box">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-codigo" class="label">Codigo</label>
+                    <div class="control">
+                        <input id="txt-codigo" asp-for="Codigo" type="number" name="Codigo" class="input" placeholder="00000" maxlength="35" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="slct-status" class="label">Status</label>
+                    <div class="control">
+                        <div>
+                            <select id="slct-status" asp-for="Status" name="Status" class="selectize" placeholder="Selecione">
+                                <option></option>
+                                @{
+                                    if (Model is not null)
+                                        @Html.Raw(this.SelectOptionsStatusCandidato(Model.Status))
+                                    else
+                                        @Html.Raw(this.SelectOptionsStatusCandidato())
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <partial name="Partial/_Candidato" model="Model" />
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-apelido" class="label">Apelido</label>
+                    <div class="control">
+                        <input id="txt-apelido" asp-for="Apelido" type="text" name="Apelido" class="input" placeholder="Apelido" maxlength="35">
+                    </div>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>
 
-    <div class="col-md-6">
-        <label for="txt-data-nascimento" class="form-label">Data de nascimento</label>
-        <input asp-for="DataNascimento" type="text" name="DataNascimento" id="txt-data-nascimento" class="form-control" data-mask="00/00/0000">
-    </div>
-    <div class="col-md-6">
-        <label for="txt-idade" class="form-label">Idade</label>
-        <input asp-for="Idade" type="number" name="Idade" id="txt-idade" class="form-control">
-    </div>
-    <div class="col-md-6">
-        <label for="txt-naturalidade" class="form-label">Naturalidade</label>
-        <input asp-for="Naturalidade" type="text" name="Naturalidade" id="txt-naturalidade" class="form-control" maxlength="150">
-    </div>
+        <partial name="Partial/_Candidato" model="Model" />
 
-    <div class="col-md-6">
-        <label for="slct-estado-civil" class="form-label">Estado Civil</label>
-        <select asp-for="StatusCivil" name="StatusCivil" id="slct-estado-civil" class="form-select" aria-label="Estado civil">
-            <option>Open this select menu</option>
-            @{
-                if (Model is not null)
-                    @Html.Raw(this.SelectOptionsEstadoCivil(Model.StatusCivil))
-                else
-                    @Html.Raw(this.SelectOptionsEstadoCivil())
-            }
-        </select>
-    </div>
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-data-nascimento" class="label">Data de nascimento</label>
+                    <div class="control">
+                        <input id="txt-data-nascimento" asp-for="DataNascimento" type="text" name="DataNascimento" class="input" placeholder="00/00/0000" data-mask="00/00/0000">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-idade" class="label">Idade</label>
+                    <div class="control">
+                        <input id="txt-idade" asp-for="Idade" type="number" name="Idade" class="input" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-naturalidade" class="label">Naturalidade</label>
+                    <div class="control">
+                        <input id="txt-naturalidade" asp-for="Naturalidade" type="text" name="Naturalidade" class="input" placeholder="Cidade-UF" maxlength="150">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-md-6">
-        <label for="txt-idiomas" class="form-label">Idiomas</label>
-        <input asp-for="Idiomas" type="text" name="Idiomas" id="txt-idiomas" class="form-control" maxlength="150">
-    </div>
-    <div class="col-md-6">
-        <label for="txt-conhecimentos" class="form-label">Conhecimentos</label>
-        <input asp-for="Conhecimentos" type="text" name="Conhecimentos" id="txt-conhecimentos" class="form-control" maxlength="1024">
-    </div>
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="slct-estado-civil" class="label">Estado civil</label>
+                    <div class="control">
+                        <div>
+                            <select id="slct-estado-civil" asp-for="StatusCivil" name="StatusCivil" class="selectize" placeholder="Selecione">
+                                <option></option>
+                                @{
+                                    if (Model is not null)
+                                        @Html.Raw(this.SelectOptionsEstadoCivil(Model.StatusCivil))
+                                    else
+                                        @Html.Raw(this.SelectOptionsEstadoCivil())
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-quantidade-filhos" class="label">Quantidade de filhos</label>
+                    <div class="control">
+                        <input id="txt-quantidade-filhos" asp-for="QuantidadeFilhos" type="number" name="QuantidadeFilhos" class="input" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-quantidade-filhos" class="label">Idade dos filhos</label>
+                    <div class="control">
+                        <input id="txt-quantidade-filhos" asp-for="IdadeFilhos" type="text" name="IdadeFilhos" class="input" placeholder="0, 0 e 0 anos" maxlength="30">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-md-6">
-        <label for="txt-pretensao-salarial" class="form-label">Pretensao salarial</label>
-        <input asp-for="PretensaoSalarial" type="text" name="PretensaoSalarial" id="txt-pretensao-salarial" class="form-control" maxlength="17" onkeyup="mascaraMoeda(this, event)">
-    </div>
-    <div class="col-md-6">
-        <label for="txt-quantidade-filhos" class="form-label">Quantidade de filhos</label>
-        <input asp-for="QuantidadeFilhos" type="number" name="QuantidadeFilhos" id="txt-quantidade-filhos" class="form-control">
-    </div>
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-conhecimentos" class="label">Conhecimentos</label>
+                    <div class="control">
+                        <input id="txt-conhecimentos" asp-for="Conhecimentos" type="text" name="Conhecimentos" class="input" placeholder="Conhecimentos" maxlength="1024">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-idiomas" class="label">Idiomas</label>
+                    <div class="control">
+                        <input id="txt-idiomas" asp-for="Idiomas" type="text" name="Idiomas" class="input" placeholder="Ingles avancado, espanhol basico..." maxlength="150">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-pretensao-salarial" class="label">Pretensao salarial</label>
+                    <div class="control has-icons-left">
+                        <input id="txt-pretensao-salarial" asp-for="PretensaoSalarial" type="text" name="PretensaoSalarial" class="input" placeholder="00.000,00" maxlength="17" onkeyup="mascaraMoeda(this, event)">
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-brazilian-real-sign"></i>
+                        </span>
+                    </div>
 
-    <div class="col-md-6">
-        <label for="txt-idade-filhos" class="form-label">Idade dos filhos</label>
-        <input asp-for="IdadeFilhos" type="text" name="IdadeFilhos" id="txt-idade-filhos" class="form-control" maxlength="30">
+                </div>
+            </div>
+        </div>
     </div>
 
     <partial name="Partial/_Endereco" model="Model" />
 
-    <div class="col-md-6">
-        <label for="txt-relato-candidato" class="form-label">Relato do candidato</label>
-        <input asp-for="RelatoCandidato" type="text" name="RelatoCandidato" id="txt-relato-candidato" class="form-control" maxlength="1024">
+    <div class="box">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-relato-candidato" class="label">Relato do candidato</label>
+                    <div class="control">
+                        <input id="txt-relato-candidato" asp-for="RelatoCandidato" type="text" name="RelatoCandidato" class="input" placeholder="Relato do candidato" maxlength="1024">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-relato-entrevistador" class="label">Relato do entrevistador</label>
+                    <div class="control">
+                        <input id="txt-relato-entrevistador" asp-for="RelatoEntrevistador" type="text" name="RelatoEntrevistador" class="input" placeholder="Relato do entrevistador" maxlength="1024">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-comentarios" class="label">Comentarios</label>
+                    <div class="control">
+                        <textarea id="txt-comentarios" asp-for="Comentarios" name="Comentarios" class="textarea" placeholder="Comentarios" maxlength="4000"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="col-md-6">
-        <label for="txt-relato-entrevistador" class="form-label">Relato do entrevistador</label>
-        <input asp-for="RelatoEntrevistador" type="text" name="RelatoEntrevistador" id="txt-relato-entrevistador" class="form-control" maxlength="1024">
-    </div>    
-
-    <div class="mb-3">
-        <label for="txt-comentarios" class="form-label">Comentarios</label>
-        <textarea asp-for="Comentarios" name="Comentarios" class="form-control" id="txt-comentarios" rows="10" maxlength="4000"></textarea>
+    <div class="columns">
+        <div class="column is-offset-10">
+            <div class="field is-grouped">
+                <div class="control">
+                    <button type="submit" class="button is-success">
+                        <span class="icon">
+                            <i class="fa-solid fa-user-pen"></i>
+                        </span>
+                        <span>Alterar</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <a type="button" asp-controller="Candidato" asp-action="Index" class="button is-info is-light">
+                        <span class="icon">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </span>
+                        <span>Voltar</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="col-md-6">
-        <label for="slct-status" class="form-label">Status</label>
-        <select asp-for="Status" name="Status" id="slct-status" class="form-select" aria-label="Status">
-            <option>Open this select menu</option>
-            @{
-                if (Model is not null)
-                    @Html.Raw(this.SelectOptionsStatusCandidato(Model.Status))
-                else
-                    @Html.Raw(this.SelectOptionsStatusCandidato())
-            }
-        </select>
-    </div>
 
-    <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="IncluirFormacao" asp-route-id="@Model.Id">Formacao</a>
-    <partial name="Partial/_Formacoes" model="Model.Formacoes" />
-    <a type="button" class="btn btn-primary" asp-controller="Candidato" asp-action="IncluirExperiencia" asp-route-id="@Model.Id">Experiencia profissional</a>
-    <partial name="Partial/_Experiencias" model="Model.Experiencias" />
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary">Alterar</button>
-        <a type="button" class="btn btn-secundary" asp-controller="Candidato" asp-action="Index">Voltar</a>
-        <button type="button" class="btn btn-info" onclick="gerarParecer('@Model.Id')">Gerar parecer</button>
+
+    <partial name="Partial/_Formacoes" model="Model" />
+
+    <partial name="Partial/_Experiencias" model="Model" />
+
+    <div class="buttons">
+        <button type="button" class="button is-primary" onclick="gerarParecer('@Model.Id')">
+            <span class="icon">
+                <i class="fa-solid fa-file-pdf"></i>
+            </span>
+            <span>Gerar parecer</span>
+        </button>
     </div>
 </form>
 
@@ -115,6 +226,7 @@
     <script>
         $(document).ready(function () {
             BuscaCep();
+            $('.selectize').selectize();
         });
     </script>
 

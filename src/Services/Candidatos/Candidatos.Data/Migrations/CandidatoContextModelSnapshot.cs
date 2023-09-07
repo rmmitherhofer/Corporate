@@ -146,7 +146,7 @@ namespace Candidatos.Data.Migrations
                         .HasColumnType("varchar(150)");
 
                     b.Property<string>("Habilidade")
-                        .HasColumnType("varchar(150)");
+                        .HasColumnType("varchar(300)");
 
                     b.Property<string>("MotivoDesligamento")
                         .HasColumnType("varchar(300)");

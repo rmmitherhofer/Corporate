@@ -21,12 +21,23 @@ public class CandidatoController : Controller
 
     [HttpGet]
     [Route("")]
-    [Route("index")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] CandidatosViewModel request)
     {
-        var response = await _candidatoHttpService.ObterTodos();
+        var response = await _candidatoHttpService.ObterPaginado(request);
 
-        var model = _mapper.Map<IEnumerable<CandidatoViewModel>>(response);
+        var model = _mapper.Map<CandidatosViewModel>(response);
+
+        model.Status = request.Status;
+        model.Nome = request.Nome;
+        model.Estado = request.Estado;
+        model.Codigo = request.Codigo;
+        model.Bairro = request.Bairro;
+        model.Cidade = request.Cidade;
+        model.Celular = request.Celular;
+        model.CelularAlternativo = request.CelularAlternativo;
+        model.Telefone = request.Telefone;
+        model.Email = request.Email;
+        model.Sexo = request.Sexo;
 
         return View(model);
     }

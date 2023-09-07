@@ -34,12 +34,12 @@ public class CandidatoController : MainController
     }
 
     [HttpGet("paginado")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatoPaginatedResponse))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatosPaginatedResponse))]
     public async Task<IActionResult> ObterPaginado([FromQuery]CandidatoFilterRequest request)
     {
         var (candidatos, pageCount, totalRecords) = await _candidatoRepository.ObterPaginado(_mapper.Map<CandidatoFilter>(request));
 
-        CandidatoPaginatedResponse response = new(totalRecords, request.PageNumber, pageCount, candidatos);
+        CandidatosPaginatedResponse response = new(totalRecords, request.PageNumber, pageCount, candidatos);
 
         return CustonResponse(response);
     }

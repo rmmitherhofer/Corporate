@@ -31,8 +31,8 @@ public abstract class PaginatedResponse : Response
         if (pageNumber > 1)
             BackPage = pageNumber - 1;
 
-        if (PageSize > 0 && pageNumber != pageCount)
-            NextPage = pageSize + 1;
+        if (pageCount > 0 && pageNumber != pageCount)
+            NextPage = pageNumber + 1;
 
         PageNumber = pageNumber;
         PageCount = pageCount;

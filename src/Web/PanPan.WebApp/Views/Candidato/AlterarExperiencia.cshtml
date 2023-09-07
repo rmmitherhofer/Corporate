@@ -5,8 +5,27 @@
 <form asp-controller="Candidato" asp-action="AlterarExperiencia" method="post" class="row g-3">
     <input asp-for="CandidatoId" type="hidden" />
     <partial name="Partial/_Experiencia" model="Model" />
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary">Alterar</button>
-        <a type="button" class="btn btn-secundary" asp-controller="Candidato" asp-action="AlterarCandidato" asp-route-id="@Model.CandidatoId">Voltar</a>
+
+    <div class="columns">
+        <div class="column is-offset-10">
+            <div class="field is-grouped">
+                <div class="control">
+                    <button type="submit" class="button is-success">
+                        <span class="icon">
+                            <i class="fa-solid fa-pencil"></i>
+                        </span>
+                        <span>Alterar</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <a type="button" asp-controller="Candidato" asp-action="AlterarCandidato" asp-route-id="@Model.CandidatoId" class="button is-info is-light">
+                        <span class="icon">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </span>
+                        <span>Voltar</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
