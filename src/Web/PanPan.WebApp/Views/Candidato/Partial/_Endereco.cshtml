@@ -2,7 +2,7 @@
 @model CandidatoViewModel
 
 
-<div class="box">
+<div class="box endereco">
     <div class="columns">
         <div class="column">
             <div class="field">
@@ -60,9 +60,9 @@
                             <option></option>
                             @{
                                 if (Model is not null)
-                                    @Html.Raw(this.SelectOptionsEstados(Model.Endereco.Estado))
+                                        @Html.Raw(this.SelectOptionsEstados(Model.Endereco.Estado))
                                 else
-                                    @Html.Raw(this.SelectOptionsEstados())
+                                        @Html.Raw(this.SelectOptionsEstados())
                             }
                         </select>
                     </div>
@@ -78,9 +78,9 @@
                             <option></option>
                             @{
                                 if (Model is not null)
-                                    @Html.Raw(this.SelectOptionsCidades(Model.Endereco.Estado, Model.Endereco.Cidade))
+                                        @Html.Raw(this.SelectOptionsCidades(Model.Endereco.Estado, Model.Endereco.Cidade))
                                 else
-                                    @Html.Raw(this.SelectOptionsCidades())
+                                        @Html.Raw(this.SelectOptionsCidades())
                             }
                         </select>
                     </div>
@@ -109,9 +109,9 @@
                             <option></option>
                             @{
                                 if (Model is not null)
-                                    @Html.Raw(this.SelectOptionsTipoDomicilio(Model.Endereco.TipoDomicilio))
+                                        @Html.Raw(this.SelectOptionsTipoDomicilio(Model.Endereco.TipoDomicilio))
                                 else
-                                    @Html.Raw(this.SelectOptionsTipoDomicilio())
+                                        @Html.Raw(this.SelectOptionsTipoDomicilio())
                             }
                         </select>
                     </div>
@@ -127,9 +127,9 @@
                             <option></option>
                             @{
                                 if (Model is not null)
-                                    @Html.Raw(this.SelectOptionsDomicilio(Model.Endereco.Domicilio))
+                                        @Html.Raw(this.SelectOptionsDomicilio(Model.Endereco.Domicilio))
                                 else
-                                    @Html.Raw(this.SelectOptionsDomicilio())
+                                        @Html.Raw(this.SelectOptionsDomicilio())
                             }
                         </select>
                     </div>
@@ -142,10 +142,4 @@
 <script src="~/js/cidades.js" asp-append-version="true"></script>
 <script src="~/js/cep.js" asp-append-version="true"></script>
 
-<script>
-    $(document).ready(function () {
-        $('.js-example-basic-single').select2();
-    });
-</script>
-
-
+@section Scripts {}

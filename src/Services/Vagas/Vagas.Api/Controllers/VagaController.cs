@@ -1,5 +1,6 @@
 ﻿using Api.Service.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Notifications.Interfaces;
 using Vagas.Api.Dto.Request;
 using Vagas.Business.Interfaces.Repositories;
 using Vagas.Business.Models;
@@ -13,16 +14,16 @@ public class VagaController : MainController
     private readonly ILogger<VagaController> _logger;
     private readonly IVagaRepository _vagaRepository;
 
-    public VagaController(ILogger<VagaController> logger, IVagaRepository vagaRepository)
+    public VagaController(INotificationHandler notification, ILogger<VagaController> logger, IVagaRepository vagaRepository) : base(notification)
     {
         _logger = logger;
         _vagaRepository = vagaRepository;
     }
     [HttpGet]
-    public async Task<IActionResult> Get() => CustonResponse(await _vagaRepository.ObterTodos());
+    public async Task<IActionResult> Get() => CustomResponse(await _vagaRepository.ObterTodos());
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id) => CustonResponse(await _vagaRepository.ObterPorId(id));
+    public async Task<IActionResult> Get(Guid id) => CustomResponse(await _vagaRepository.ObterPorId(id));
 
     [HttpPost]
     public async Task<IActionResult> Post(AddVagaRequest request)
@@ -34,7 +35,7 @@ public class VagaController : MainController
         if (!await _vagaRepository.UnitOfWork.Commit())
             return BadRequest("Error");
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpPut("{id}")]
@@ -42,7 +43,7 @@ public class VagaController : MainController
     {
         var vaga = await _vagaRepository.ObterPorId(id);
 
-        if (vaga is null) return CustonResponse();
+        if (vaga is null) return CustomResponse();
 
         vaga.Atualizar(request.Nome, request.Descricao);
 
@@ -51,7 +52,7 @@ public class VagaController : MainController
         if (!await _vagaRepository.UnitOfWork.Commit())
             return BadRequest("Error");
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpDelete("{id}")]
@@ -59,13 +60,13 @@ public class VagaController : MainController
     {
         var vaga = await _vagaRepository.ObterPorId(id);
 
-        if (vaga is null) return CustonResponse();
+        if (vaga is null) return CustomResponse();
 
         _vagaRepository.Remover(vaga);
 
         if (!await _vagaRepository.UnitOfWork.Commit())
             return BadRequest("Error");
 
-        return CustonResponse();
+        return CustomResponse();
     }
 }

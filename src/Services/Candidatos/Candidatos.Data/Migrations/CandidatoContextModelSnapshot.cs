@@ -33,6 +33,9 @@ namespace Candidatos.Data.Migrations
                     b.Property<string>("Apelido")
                         .HasColumnType("varchar(35)");
 
+                    b.Property<string>("CNH")
+                        .HasColumnType("varchar(150)");
+
                     b.Property<string>("Celular")
                         .HasColumnType("varchar(15)");
 

@@ -5,7 +5,6 @@
     ViewData["Title"] = "Candidatos";
 }
 
-
 <form asp-controller="Candidato" asp-action="Index" method="get" class="">
     <div class="box">
         <div class="columns">
@@ -21,7 +20,7 @@
                 <div class="field">
                     <label for="txt-email" class="label">Email</label>
                     <div class="control">
-                        <input id="txt-email" asp-for="Email" type="text" name="Email" class="input" placeholder="email@domain.com">
+                        <input id="txt-email" asp-for="Email" type="text" name="Email" class="input email-helper" placeholder="email@domain.com">
                     </div>
                 </div>
             </div>
@@ -65,7 +64,7 @@
                 <div class="field">
                     <label for="slct-estado" class="label">Estado</label>
                     <div class="control">
-                        <div>
+                        <div id="sec-estado">
                             <select id="slct-estado" asp-for="Estado" name="Estado" class="selectize" placeholder="Selecione" onchange="buscaCidades(this.value, 'slct-cidade', '@(Model is not null ? "reload" : "load")')">
                                 <option></option>
                                 @{
@@ -100,11 +99,13 @@
         </div>
     </div>
 
-    <partial name="Partial/_Candidatos" model="Model" />
+    <div class="table-content">
+        <partial name="Partial/_Candidatos" model="Model" />
+    </div>
 
 </form>
 <script src="~/js/cidades.js" asp-append-version="true"></script>
-
+<script src="~/js/views/candidato/index.js"></script>
 <script>
     $(function () {
         $('.selectize').selectize();

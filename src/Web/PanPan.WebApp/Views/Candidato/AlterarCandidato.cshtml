@@ -113,6 +113,34 @@
         <div class="columns">
             <div class="column">
                 <div class="field">
+                    <label for="slct-cnh" class="label">CNH</label>
+                    <div class="control">
+                        <div>
+                            <select id="slct-cnh" asp-for="CNH" name="CNH" class="selectize" placeholder="Selecione">
+                                <option></option>
+                                <option value="Nao possui">Nao possui</option>
+                                <option value="A">A</option>
+                                <option value="A e B">A e B</option>
+                                <option value="A, B e C">A, B e C</option>
+                                <option value="A, B, C e D">A, B, C e D</option>
+                                <option value="A, B, C, D e E">A, B, C, D e E</option>
+                                <option value="B">B</option>
+                                <option value="B e C">B e C</option>
+                                <option value="B, C e D">B, C e D</option>
+                                <option value="B, C, D e E">B, C, D e E</option>
+                                <option value="C">C</option>
+                                <option value="C e D">C e D</option>
+                                <option value="C, D e E">C, D e E</option>
+                                <option value="D">D</option>
+                                <option value="D e E">D e E</option>
+                                <option value="E">E</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
                     <label for="txt-conhecimentos" class="label">Conhecimentos</label>
                     <div class="control">
                         <input id="txt-conhecimentos" asp-for="Conhecimentos" type="text" name="Conhecimentos" class="input" placeholder="Conhecimentos" maxlength="1024">

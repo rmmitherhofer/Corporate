@@ -30,8 +30,10 @@ public class UpdateCandidatoRequest : CandidatoRequest
     public int QuantidadeFilhos { get; set; }
     public string? IdadeFilhos { get; set; }
 
-    public string? RelatoCandidato { get; private set; }
-    public string? RelatoEntrevistador { get; private set; }
+    public string? RelatoCandidato { get; set; }
+    public string? RelatoEntrevistador { get; set; }
+
+    public string? CNH { get; set; }
 }
 
 public class GetCandidatoRequest

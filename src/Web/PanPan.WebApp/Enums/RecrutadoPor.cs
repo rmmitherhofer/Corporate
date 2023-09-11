@@ -10,10 +10,16 @@ public enum RecrutadoPor
     VagasPontoCom = 2,
     [Description("InfoJobs")]
     InfoJobs = 3,
-    [Description("e-mail")]
+    [Description("Entrou em contato - e-mail")]
     Email = 4,
-    [Description("BNC")]
+    [Description("BNE")]
     BancoNacionalDeCurriculos = 5,
     [Description("Burh")]
-    Burh = 6
+    Burh = 6,
+    [Description("Entrou em contato - WhatsApp")]
+    WhatsApp = 7,
+    [Description("Empregos.com")]
+    EmpregosPontoCom = 8,
+    [Description("Linkedin")]
+    Linkedin = 9,
 }

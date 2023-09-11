@@ -1,4 +1,4 @@
-﻿namespace Core.Exceptions;
+﻿namespace Exceptions;
 
 public class DomainException : Exception
 {

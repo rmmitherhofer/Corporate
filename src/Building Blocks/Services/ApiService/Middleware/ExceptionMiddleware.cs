@@ -1,9 +1,10 @@
-﻿using Api.Service.Models;
-using Api.Service.Models.Responses;
+﻿using Exceptions;
 using Logs.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Notifications.Messages;
+using Responses;
 using System.Diagnostics;
 using System.Net;
 
@@ -29,6 +30,19 @@ public class ExceptionMiddleware
         try
         {
             await _next(context);
+        }
+        catch (DomainException ex)
+        {
+            var notifications = new List<Notification> { new(ex.GetType().Name, ex.GetType().Name, ex.Message, ex?.StackTrace!) };
+            HandleRequestException(context, new ValidationResponse(notifications), HttpStatusCode.BadRequest);
+        }
+        catch (CustomHttpRequestException ex)
+        {
+            HandleRequestException(context, ex, HttpStatusCode.BadGateway);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            HandleRequestException(context, ex, HttpStatusCode.Unauthorized);
         }
         catch (Exception ex)
         {
@@ -56,7 +70,21 @@ public class ExceptionMiddleware
 
         context.Response.StatusCode = (int)statusCode;
         context.Response.ContentType = "application/json";
-        ApiError error = new(statusCode, exception.Message);
-        context.Response.WriteAsync(JsonConvert.SerializeObject(new ApiErrorResponse { Error = error }));
+
+        var notifications = new List<Notification> { new(exception.GetType().Name, exception.GetType().Name, exception.Message, exception?.StackTrace!) };
+
+        ErrorResponse error = new(statusCode, notifications);
+
+        context.Response.WriteAsync(JsonConvert.SerializeObject(error));
+    }
+
+    private void HandleRequestException(HttpContext context, ValidationResponse response, HttpStatusCode statusCode)
+    {
+        foreach (var validation in response.Validations)
+            _logger.LogWarn($"Descrição: {validation.Key} - detalhe : {validation.Value}");
+
+        context.Response.StatusCode = (int)statusCode;
+        context.Response.ContentType = "application/json";
+        context.Response.WriteAsync(JsonConvert.SerializeObject(response));
     }
 }

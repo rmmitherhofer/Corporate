@@ -1,5 +1,5 @@
-﻿using Api.Service.Models.Responses;
-using Candidatos.Business.Models;
+﻿using Candidatos.Business.Models;
+using Responses;
 
 namespace Candidatos.Api.DTO.Responses;
 

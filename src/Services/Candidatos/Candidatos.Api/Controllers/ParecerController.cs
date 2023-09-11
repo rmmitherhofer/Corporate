@@ -2,6 +2,7 @@
 using Candidatos.Business.Factories;
 using Candidatos.Business.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Notifications.Interfaces;
 
 namespace Candidatos.Api.Controllers;
 
@@ -13,7 +14,7 @@ public class ParecerController : MainController
     private readonly ICandidatoRepository _candidatoRepository;
     private readonly IParecerPdfFactory _parecerPdfFactory;
 
-    public ParecerController(ILogger<CandidatoController> logger, ICandidatoRepository candidatoRepository, IParecerPdfFactory parecerPdfFactory)
+    public ParecerController(INotificationHandler notification,  ILogger<CandidatoController> logger, ICandidatoRepository candidatoRepository, IParecerPdfFactory parecerPdfFactory) : base(notification)
     {
         _logger = logger;
         _candidatoRepository = candidatoRepository;
@@ -27,6 +28,6 @@ public class ParecerController : MainController
 
         var pdf = _parecerPdfFactory.Gerar(candidato);
 
-        return CustonResponse(pdf);
+        return CustomResponse(pdf);
     }
 }

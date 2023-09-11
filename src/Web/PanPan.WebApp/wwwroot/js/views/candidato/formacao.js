@@ -1,7 +1,12 @@
 ﻿
 $(document).ready(function () {
+    debugger;
+
+    $('.selectize').selectize();
+
     const radio = $("[type='radio'][checked='checked']")
     radio.map(function () {
+        debugger;
         let radioItem = $(this);
         radioItem.parent().addClass("active");
         let id = radioItem.attr("id");

@@ -62,7 +62,9 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
     private void TabelaDadosPessoais(Document document, Candidato candidato)
     {
+        bool ehMasculino = candidato.Sexo == Sexo.Masculino;
         const int maxColunas = 4;
+
         PdfPTable table = new(maxColunas)
         {
             TotalWidth = document.PageSize.Width - _margemTabela,
@@ -78,7 +80,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         #region Linha 2
         string[] titulosLinhaDois = { "Idade", "Estado civil", "Possui filhos", "Pretensão salarial" };
-        string[] valoresLinhaDois = { $"{candidato.Idade} anos", candidato.StatusCivil.Value.Descricao(), candidato.QuantidadeFilhos > 0 ? "Sim" : "Não", candidato.PretensaoSalarial == "0" ? "Aceita o proposto" : $"R$ {candidato.PretensaoSalarial}" };
+        string[] valoresLinhaDois = { $"{candidato.Idade} anos", $"{(ehMasculino ? candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "o") : candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "a"))}", candidato.QuantidadeFilhos > 0 ? "Sim" : "Não", candidato.PretensaoSalarial == "0" ? "Aceita o proposto" : $"R$ {candidato.PretensaoSalarial}" };
         int[] colspanLinhaDois = { 1, 1, 1, 1 };
         LinhaComTopBorder(ref table, titulosLinhaDois, valoresLinhaDois, colspanLinhaDois, _incluirBorda);
         #endregion
@@ -296,19 +298,23 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         var texto = $"{(ehMasculino ? "Ele" : "Ela")} é natural de {candidato?.Naturalidade}, ";
         texto += $"reside em {candidato?.Endereco?.Cidade}-{candidato?.Endereco?.Estado} {(string.IsNullOrEmpty(candidato.Endereco.MoraCom) ? string.Empty : $"com {candidato.Endereco.MoraCom}")}. ";
-        texto += $"{(ehMasculino ? candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "o") : candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "a"))} e {(candidato?.QuantidadeFilhos == 0 ? "não possui filhos" : $"possui {candidato.QuantidadeFilhos} {(candidato.QuantidadeFilhos > 1 ? "filhos" : "filho")} de {candidato.IdadeFilhos}")}.";
+        texto += $"{(ehMasculino ? candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "o") : candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "a"))} e {(candidato?.QuantidadeFilhos == 0 ? "não possui filhos" : $"possui {candidato.QuantidadeFilhos} {(candidato.QuantidadeFilhos > 1 ? "filhos" : "filho")}{(string.IsNullOrEmpty(candidato.IdadeFilhos) ? string.Empty :  $" de {candidato.IdadeFilhos}")}")}.";
 
         Paragrafo(ref document, texto);
 
         texto = string.Empty;
 
         if (ensino is not null)
-            texto = $"{(ensino?.Status == StatusFormacao.Cursando ? $"Esta cursando o {ensino.Ensino?.Descricao()?.ToLower()}" : $"Tem o {ensino.Ensino?.Descricao()?.ToLower()} {((int)ensino.Ensino.Value > (int)Ensino.Medio ? $"em {ensino.Descricao.ToLower()}" : string.Empty)} {ensino.Status.Descricao()?.ToLower()}")}. ";
+            texto = $"{(ensino?.Status == StatusFormacao.Cursando
+            ? $"Esta cursando o {ensino.Ensino?.Descricao()?.ToLower()}"
+            : $"Tem o {ensino.Ensino?.Descricao()?.ToLower()}")} " +
+            $"{((int)ensino.Ensino.Value > (int)Ensino.Medio ? $"em {ensino.Descricao.ToLower()}" : string.Empty)}" +
+            $"{(ensino.Status == StatusFormacao.Concluido ?  ensino.Status.Descricao()?.ToLower() : string.Empty)}.";
 
         var cursos = candidato?.Formacoes?.Where(f => f.Tipo == TipoFormacao.Curso).ToList();
 
         if (cursos!.Any())
-            texto += "Possui alguns cursos voltado a área de ";
+            texto += " Possui alguns cursos voltado a área de ";
 
         for (int i = 0; i < cursos.Count; i++)
         {

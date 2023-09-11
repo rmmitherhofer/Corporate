@@ -45,6 +45,7 @@ public class Candidato : Entity, IAggregateRoot
     public string? RelatoCandidato { get; private set; }
     public string? RelatoEntrevistador { get; private set; }
     public string? Comentarios { get; private set; }
+    public string? CNH { get; private set; }
 
     protected Candidato() { }
 
@@ -104,6 +105,8 @@ public class Candidato : Entity, IAggregateRoot
         RelatoCandidato = relatosCandidato?.Trim();
         RelatoEntrevistador =  relatosEntrevistador?.Trim();
     }
+
+    public void AtribuirCNH(string? cnh) => CNH = cnh?.Trim();
     public void AlterarStatus(StatusCandidato status) => Status = status;
     public void IncluirTag(string tag)
     {

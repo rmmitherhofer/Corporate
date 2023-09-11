@@ -5,18 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>@ViewData["Title"] - Pan Pan</title>
-@*     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" /> *@
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
           integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
-    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
-    @* <link rel="stylesheet" href="~/PanPan.WebApp.styles.css" asp-append-version="true" /> *@
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/email-autocomplete/0.1.3/jquery.email-autocomplete.min.js"
+            integrity="sha512-AE3nR98rCKU/haD4uyb9XPp63EU/12KFF9otKlDknHrURFFk8UEkaLXeg6DQvANY3qpzzyqlj5yuyhLV39jntw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer">
+    </script>
 </head>
 
 
@@ -44,7 +51,7 @@
 
                 <a class="navbar-item" asp-area="" asp-controller="Candidato" asp-action="Index">
                     Candidatos
-                </a>                
+                </a>
             </div>
 
             <div class="navbar-end">
@@ -75,18 +82,16 @@
         </div>
     </footer>
 
-   
-    @* <script src="~/lib/alisowski/popperjs-core/lib/popper.min.js" asp-append-version="true"></script> *@
-    
-    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script> *@
-    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
             integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
             crossorigin="anonymous"
             referrerpolicy="no-referrer"></script>
     <script src="~/js/ai.min.js" asp-append-version="true"></script>
+    <script src="~/js/email-helper.js" asp-append-version="true"></script>
+    <script src="~/js/common.js"></script>
+    <script src="~/js/httpclient.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/formacao.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

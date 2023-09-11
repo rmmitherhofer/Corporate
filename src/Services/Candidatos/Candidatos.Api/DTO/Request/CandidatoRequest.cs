@@ -32,6 +32,7 @@ public class UpdateCandidatoRequest : CandidatoRequest
 
     public string? RelatoCandidato { get; set; }
     public string? RelatoEntrevistador { get; set; }
+    public string? CNH { get; set; }
 }
 
 public class EnderecoRequest

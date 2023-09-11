@@ -1,6 +1,7 @@
 ﻿using Api.Service.Controllers;
 using Candidatos.Business.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Notifications.Interfaces;
 
 namespace Candidatos.Api.Controllers;
 
@@ -11,7 +12,7 @@ public class HistoricoController : MainController
     private readonly ILogger<CandidatoController> _logger;
     private readonly ICandidatoRepository _candidatoRepository;
 
-    public HistoricoController(ILogger<CandidatoController> logger, ICandidatoRepository candidatoRepository)
+    public HistoricoController(INotificationHandler notification, ILogger<CandidatoController> logger, ICandidatoRepository candidatoRepository) : base(notification)
     {
         _logger = logger;
         _candidatoRepository = candidatoRepository;

@@ -32,7 +32,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
     public async Task<CandidatosPaginatedResponse> ObterPaginado(CandidatosViewModel request)
     {
-        var uri = $"api/v1/candidato/paginado?PageNumber={request.PageNumber}&PageSize={request.PageSize}";
+        var uri = $"api/v1/candidato/paginado?PageNumber={request.PageNumber}&PageSize={request.PageSize}&OrderBy={request.OrderBy}";
 
         if (!string.IsNullOrEmpty(request.Nome))
             uri += $"&Nome={request.Nome}";

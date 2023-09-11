@@ -35,6 +35,7 @@ public class CandidatoResponse
     public string? RelatoCandidato { get; set; }
     public string? RelatoEntrevistador { get; set; }
     public string? Comentarios { get; set; }
+    public string? CNH { get; set; }
     public StatusCandidato Status { get; set; }
     public List<string>? Tags { get; set; }
     public EnderecoResponse? Endereco { get; set; }

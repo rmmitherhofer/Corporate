@@ -5,11 +5,12 @@ namespace PanPan.WebApp.Models;
 public abstract class PageViewModel
 {
     public int TotalRecords { get; set; }
-    public int PageSize { get; set; } = 100;
+    public int PageSize { get; set; } = 10;
     public int PageNumber { get; set; } = 1;
     public int PageCount { get; set; }
     public int? BackPage { get; set; }
     public int? NextPage { get; set; }
+    public string OrderBy { get; set; } = "codigo";
 }
 public class CandidatosViewModel : PageViewModel    
 {
@@ -25,7 +26,8 @@ public class CandidatosViewModel : PageViewModel
     public Sexo? Sexo { get; set; }
     public StatusCandidato? Status { get; set; }
 
-    public IEnumerable<CandidatoViewModel> Candidatos { get; set; }
+    public IEnumerable<CandidatoViewModel> Candidatos { get; set; } = new List<CandidatoViewModel>();
+    
 }
 public class CandidatoViewModel
 {
@@ -62,6 +64,7 @@ public class CandidatoViewModel
     public string? RelatoEntrevistador { get; set; }
     public string? Comentarios { get; set; }
     public StatusCandidato Status { get; set; }
+    public string? CNH { get; set; }
     public List<string>? Tags { get; set; }
     public EnderecoViewModel? Endereco { get; set; }
     public IEnumerable<ExperienciaViewModel>? Experiencias { get; set; }

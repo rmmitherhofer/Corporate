@@ -36,6 +36,7 @@ function recuperarBytes(data) {
     for (var i = 0; i < len; i++) {
         bytes[i] = binary_string.charCodeAt(i);
     }
+
     let bytess = new Uint8Array(bytes);
     let blob = new Blob([bytess], { type: 'application/pdf' });
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Notifications.Configurations;
 using Swagger.Configurations;
 using System.Text.Json.Serialization;
 
@@ -22,6 +23,8 @@ public static class ApiConfiguration
 
         services.AddControllers(options => options.EnableEndpointRouting = false)
             .AddJsonOptions(options => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
+
+        services.AddNotificationConfig();
 
         services.AddEndpointsApiExplorer();
 

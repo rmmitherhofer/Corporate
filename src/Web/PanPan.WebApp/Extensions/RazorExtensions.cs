@@ -335,6 +335,6 @@ public static class RazorExtensions
         return sb.ToString();
     }
 
-    private static EstadosViewModel ObterEstados() 
+    public static EstadosViewModel ObterEstados() 
         => FilesExtensions.JsonToObject<EstadosViewModel>(BaseDirectory + "cidades-brasil.json");
 }

@@ -1,8 +1,11 @@
 ﻿using Api.Core;
+using Azure.Core;
 using Candidatos.Business.Models;
 using FluentValidation.Results;
 using Logs.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Notifications.Interfaces;
+using Notifications.Messages;
 
 namespace Candidatos.Data;
 
@@ -11,7 +14,12 @@ public class CandidatoContext : DbContext, IUnitOfWork
     private const string DataCadastro = nameof(DataCadastro);
     private const string DataAlteracao = nameof(DataAlteracao);
 
-    public CandidatoContext(DbContextOptions<CandidatoContext> options) : base(options) { }
+    private readonly INotificationHandler _notification;
+
+    public CandidatoContext(DbContextOptions<CandidatoContext> options, INotificationHandler notification) : base(options)
+    {
+        _notification = notification;
+    }
 
     public DbSet<Candidato> Candidatos { get; set; }
     public DbSet<Formacao> Formacoes { get; set; }
@@ -56,14 +64,21 @@ public class CandidatoContext : DbContext, IUnitOfWork
                 entry.Property(DataAlteracao).CurrentValue = DateTime.Now;
             }
         }
+
+        var sucesso = false;
+
         try
         {
-            return await base.SaveChangesAsync() > 0;
+            if (_notification.HasNotifications()) return sucesso;
+
+            sucesso =  await base.SaveChangesAsync() > 0;
         }
         catch (Exception ex)
         {
+            _notification.Notify(new Notification(ex.GetType().Name, "SQL-Server", ex.Message));
             ConsoleLog.LogFail(ex.Message);
-            throw;
         }
+
+        return sucesso;
     }
 }

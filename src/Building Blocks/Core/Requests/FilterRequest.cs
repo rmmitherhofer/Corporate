@@ -1,4 +1,4 @@
-﻿namespace Candidatos.Api.DTO.Request;
+﻿namespace Requests;
 
 public abstract class FilterRequest : Request
 {

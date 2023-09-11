@@ -2,6 +2,7 @@
 using AutoMapper;
 using Candidatos.Api.DTO.Request;
 using Candidatos.Business.Filters;
+using Requests;
 
 namespace Candidatos.Api.Configurations.AutoMapper;
 

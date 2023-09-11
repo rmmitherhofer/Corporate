@@ -5772,14 +5772,7 @@ function buscaCidades(e, idSelectCidade, tipoload, cidadeSelecionada) {
     session.querySelector('select').remove();
     session.querySelector('div').remove();
 
-    let cidade_select = document.createElement('select');
-    cidade_select.setAttribute('id', idSelectCidade);
-    cidade_select.setAttribute('name', 'Cidade');
-    cidade_select.setAttribute('placeholder', 'Selecione');
-
-
-    //document.querySelector("#" + idSelectCidade).innerHTML = '';
-    //var cidade_select = document.querySelector("#" + idSelectCidade);
+    var cidadeSelect = criarSelect(idSelectCidade, 'Endereco.Cidade');
 
     var num_estados = json_cidades.estados.length;
     var j_index = -1;
@@ -5792,10 +5785,6 @@ function buscaCidades(e, idSelectCidade, tipoload, cidadeSelecionada) {
     }
 
     if (j_index != -1) {
-        var cid_opts = document.createElement('option');
-        cid_opts.setAttribute('data-display', "")
-        cidade_select.appendChild(cid_opts);
-
         // aqui eu percorro todas as cidades e crio os OPTIONS
         json_cidades.estados[j_index].cidades.forEach(function (cidade) {
             var cid_opts = document.createElement('option');
@@ -5805,7 +5794,7 @@ function buscaCidades(e, idSelectCidade, tipoload, cidadeSelecionada) {
                 cid_opts.setAttribute('selected', 'selected');
 
             cid_opts.innerHTML = cidade;
-            cidade_select.appendChild(cid_opts);
+            cidadeSelect.appendChild(cid_opts);
         });
     }
     $("#" + idSelectCidade).removeAttr("disabled");
@@ -5817,9 +5806,47 @@ function buscaCidades(e, idSelectCidade, tipoload, cidadeSelecionada) {
         searchable: true
     };
 
-    session.appendChild(cidade_select);
+    session.appendChild(cidadeSelect);
 
-    $(cidade_select).selectize();
+    $(cidadeSelect).selectize();
 }
 
+function atribuirEstados(selectId, tipoload, optionSelected) {
 
+    if (tipoload == undefined) return;
+
+    var session = document.getElementById('sec-estado');
+
+    session.querySelector('select').remove();
+    session.querySelector('div').remove();
+
+
+    let estadoSelect = criarSelect(selectId, 'Endereco.Estado');
+    json_cidades.estados.forEach(function (estado) {
+        var option = document.createElement('option');
+        option.setAttribute('value', estado.sigla);
+
+        if (optionSelected === estado.sigla)
+            option.setAttribute('selected', 'selected');
+
+        option.innerHTML = estado.nome;
+        estadoSelect.appendChild(option);
+    });
+
+    session.appendChild(estadoSelect);
+
+    $(estadoSelect).selectize();
+}
+
+function criarSelect(id, name ) {
+    let select = document.createElement('select');
+    select.setAttribute('id', id);
+    select.setAttribute('name', name);
+    select.setAttribute('placeholder', 'Selecione');
+
+    var option = document.createElement('option');
+    option.setAttribute('data-display', "")
+    select.appendChild(option);
+
+    return select;
+}

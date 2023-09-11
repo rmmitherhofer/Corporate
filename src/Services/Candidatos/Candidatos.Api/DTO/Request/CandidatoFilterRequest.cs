@@ -1,4 +1,5 @@
 ﻿using Candidatos.Business.Enums;
+using Requests;
 
 namespace Candidatos.Api.DTO.Request;
 

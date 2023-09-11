@@ -1,4 +1,4 @@
-﻿namespace Api.Service.Models.Responses;
+﻿namespace Responses;
 public abstract class PaginatedResponse : Response
 {
     /// <summary>

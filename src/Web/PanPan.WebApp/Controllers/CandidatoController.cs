@@ -21,7 +21,20 @@ public class CandidatoController : Controller
 
     [HttpGet]
     [Route("")]
-    public async Task<IActionResult> Index([FromQuery] CandidatosViewModel request)
+    public async Task<IActionResult> Index(string nome)
+    {
+        var response = await _candidatoHttpService.ObterPaginado(new() { Nome = nome });
+
+        var model = _mapper.Map<CandidatosViewModel>(response);
+
+        model.Nome = nome;
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [Route("")]
+    public async Task<IActionResult> Index(CandidatosViewModel request)
     {
         var response = await _candidatoHttpService.ObterPaginado(request);
 
@@ -38,8 +51,9 @@ public class CandidatoController : Controller
         model.Telefone = request.Telefone;
         model.Email = request.Email;
         model.Sexo = request.Sexo;
+        model.OrderBy = request.OrderBy;
 
-        return View(model);
+        return PartialView("Partial/_Candidatos", model);
     }
 
     #region Candidato
@@ -58,7 +72,7 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Incluir(request);
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index), new {nome = request.Nome});
     }
     [HttpGet]
     [Route("alterar/{id}")]
@@ -189,7 +203,7 @@ public class CandidatoController : Controller
     [Route("{id}/gerar-parecer")]
     public async Task<IActionResult> GerarParecer(Guid id)
     {
-        var pdf =  await _candidatoHttpService.GerarParecer(id);
+        var pdf = await _candidatoHttpService.GerarParecer(id);
 
         return new JsonResult(pdf);
     }

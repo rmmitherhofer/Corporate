@@ -1,4 +1,4 @@
-﻿using Core.Exceptions;
+﻿using Exceptions;
 using System.Text.RegularExpressions;
 
 namespace Core.ValueObjects;

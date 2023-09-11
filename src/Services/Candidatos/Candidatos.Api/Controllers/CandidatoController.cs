@@ -6,6 +6,7 @@ using Candidatos.Business.Filters;
 using Candidatos.Business.Interfaces.Repositories;
 using Candidatos.Business.Models;
 using Microsoft.AspNetCore.Mvc;
+using Notifications.Interfaces;
 using System.Net;
 
 namespace Candidatos.Api.Controllers;
@@ -18,7 +19,10 @@ public class CandidatoController : MainController
     private readonly ICandidatoRepository _candidatoRepository;
     private readonly IMapper _mapper;
 
-    public CandidatoController(ILogger<CandidatoController> logger, ICandidatoRepository candidatoRepository, IMapper mapper)
+    public CandidatoController(ILogger<CandidatoController> logger,
+        INotificationHandler notification,
+        ICandidatoRepository candidatoRepository,
+        IMapper mapper) : base(notification)
     {
         _logger = logger;
         _candidatoRepository = candidatoRepository;
@@ -30,22 +34,23 @@ public class CandidatoController : MainController
     {
         var candidatos = await _candidatoRepository.ObterTodos();
 
-        return CustonResponse(candidatos.OrderBy(c => c.Codigo));
+        return CustomResponse(candidatos.OrderBy(c => c.Codigo));
     }
 
     [HttpGet("paginado")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatosPaginatedResponse))]
-    public async Task<IActionResult> ObterPaginado([FromQuery]CandidatoFilterRequest request)
+    public async Task<IActionResult> ObterPaginado([FromQuery] CandidatoFilterRequest request)
     {
         var (candidatos, pageCount, totalRecords) = await _candidatoRepository.ObterPaginado(_mapper.Map<CandidatoFilter>(request));
 
         CandidatosPaginatedResponse response = new(totalRecords, request.PageNumber, pageCount, candidatos);
 
-        return CustonResponse(response);
+        return CustomResponse(response);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> ObterCandidadoPorId(Guid id) => CustonResponse(await _candidatoRepository.ObterPorId(id));
+    public async Task<IActionResult> ObterCandidadoPorId(Guid id)
+        => CustomResponse(await _candidatoRepository.ObterPorId(id));
 
     [HttpPost]
     public async Task<IActionResult> IncluirCandidato(AddCandidatoRequest request)
@@ -65,10 +70,9 @@ public class CandidatoController : MainController
 
         _candidatoRepository.Adicionar(candidato);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpPut("{id}")]
@@ -76,7 +80,7 @@ public class CandidatoController : MainController
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         candidato.AtribuirNome(request.Nome);
 
@@ -94,6 +98,8 @@ public class CandidatoController : MainController
 
         candidato.AlterarStatus(request.Status);
 
+        candidato.AtribuirCNH(request.CNH);
+
         candidato?.AlterarEndereco(
             new(request.Endereco.Logradouro,
             request.Endereco.Numero,
@@ -108,10 +114,9 @@ public class CandidatoController : MainController
 
         _candidatoRepository.Atualizar(candidato);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpDelete("{id}")]
@@ -121,10 +126,9 @@ public class CandidatoController : MainController
 
         _candidatoRepository.Remover(candidato);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpPost("{id}/formacao")]
@@ -132,16 +136,15 @@ public class CandidatoController : MainController
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         Formacao formacao = new(candidato.Id, request.NomeInstituicao, request.DataInicio, request.DataFim, request.Tipo, request.Status, request.Curso, request.Descricao, request.Ensino, request.Periodo);
 
         _candidatoRepository.Adicionar(formacao);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpPut("{id}/formacao/{formacaoId}")]
@@ -149,38 +152,37 @@ public class CandidatoController : MainController
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         var formacao = candidato.Formacoes.Where(f => f.Id == formacaoId).FirstOrDefault();
 
-        if (formacao is null) return CustonResponse();
+        if (formacao is null) return CustomResponse();
 
         formacao.Alterar(request.DataInicio, request.DataFim, request.Status, request.Curso, request.Descricao, request.Ensino, request.Periodo);
 
         _candidatoRepository.Atualizar(formacao);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
+
     [HttpDelete("{id}/formacao/{formacaoId}")]
     public async Task<IActionResult> DeleteFormacao(Guid id, Guid formacaoId)
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         var formacao = candidato.Formacoes.Where(f => f.Id == formacaoId).FirstOrDefault();
 
-        if (formacao is null) return CustonResponse();
+        if (formacao is null) return CustomResponse();
 
         _candidatoRepository.Remover(formacao);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();            
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpPost("{id}/experiencia")]
@@ -188,7 +190,7 @@ public class CandidatoController : MainController
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         Experiencia experiencia = new(candidato.Id,
             request.Empresa,
@@ -205,21 +207,20 @@ public class CandidatoController : MainController
 
         _candidatoRepository.Adicionar(experiencia);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
     [HttpPut("{id}/experiencia/{experienciaId}")]
     public async Task<IActionResult> AlterarExperiencia(Guid id, Guid experienciaId, UpdateExperienciaRequest request)
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         var experiencia = candidato.Experiencias.Where(f => f.Id == experienciaId).FirstOrDefault();
 
-        if (experiencia is null) return CustonResponse();
+        if (experiencia is null) return CustomResponse();
 
         experiencia.Alterar(request.Cargo,
             request.Atividade,
@@ -234,28 +235,26 @@ public class CandidatoController : MainController
 
         _candidatoRepository.Atualizar(experiencia);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
     [HttpDelete("{id}/experiencia/{experienciaId}")]
     public async Task<IActionResult> RemoverExperiencia(Guid id, Guid experienciaId)
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         var experiencia = candidato.Experiencias.Where(f => f.Id == experienciaId).FirstOrDefault();
 
-        if (experiencia is null) return CustonResponse();
+        if (experiencia is null) return CustomResponse();
 
         _candidatoRepository.Remover(experiencia);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpPut("{id}/tag")]
@@ -263,16 +262,15 @@ public class CandidatoController : MainController
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         candidato.IncluirTag(request);
 
         _candidatoRepository.Atualizar(candidato);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
     [HttpDelete("{id}/tag")]
@@ -280,16 +278,15 @@ public class CandidatoController : MainController
     {
         var candidato = await _candidatoRepository.ObterPorId(id);
 
-        if (candidato is null) return CustonResponse();
+        if (candidato is null) return CustomResponse();
 
         candidato.RemoverTag(request);
 
         _candidatoRepository.Atualizar(candidato);
 
-        if (!await _candidatoRepository.UnitOfWork.Commit())
-            return BadRequest("Error");
+        await _candidatoRepository.UnitOfWork.Commit();
 
-        return CustonResponse();
+        return CustomResponse();
     }
 
 }

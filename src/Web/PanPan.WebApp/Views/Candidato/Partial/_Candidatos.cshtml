@@ -5,12 +5,12 @@
             <div class="field is-grouped">
                 <div class="control has-icons-left">
                     <div class="select">
-                        <select id="slct-ordernar" placeholder="Selecione">
+                        <select id="slct-ordernar" asp-for="OrderBy" name="OrderBy" placeholder="Selecione">
                             <option>Selecione</option>
-                            <option value="">Nome crescente</option>
-                            <option value="">Nome decrescente</option>
-                            <option value="">Codigo crescente</option>
-                            <option value="">Codigo decrescente</option>
+                            <option value="codigo">Codigo crescente</option>
+                            <option value="-codigo">Codigo decrescente</option>
+                            <option value="nome">Nome crescente</option>
+                            <option value="-nome">Nome decrescente</option>
                         </select>
                     </div>
                     <span class="icon is-left">
@@ -21,17 +21,12 @@
                     <div class="select">
                         <select id="slct-exibir" asp-for="PageSize" name="PageSize" placeholder="Selecione">
                             <option>Selecione</option>
-                            <option value="1">1 por pagina</option>
-                            <option value="5">5 por pagina</option>
-                            <option selected value="10">10 por pagina</option>
+                            <option value="10">10 por pagina</option>
                             <option value="20">20 por pagina</option>
                             <option value="30">30 por pagina</option>
                             <option value="40">40 por pagina</option>
                             <option value="50">50 por pagina</option>
                             <option value="100">100 por pagina</option>
-                            <option value="200">200 por pagina</option>
-                            <option value="300">300 por pagina</option>
-                            <option value="400">400 por pagina</option>
                         </select>
                     </div>
                     <span class="icon is-left">
@@ -39,7 +34,10 @@
                     </span>
                 </div>
                 <div class="control">
-                    <button type="submit" class="button is-info"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button id="btn-find" type="button" class="button is-info"><i class="fa-solid fa-magnifying-glass search"></i></button>
+                </div>
+                <div class="control">
+                    <button id="btn-clear" type="button" class="button is-info is-light clear"><i class="fa-solid fa-eraser"></i></button>
                 </div>
                 <div class="control">
                     <a type="button" asp-controller="Candidato" asp-action="IncluirCandidato" class="button is-primary"><i class="fa-solid fa-user-plus"></i></a>
