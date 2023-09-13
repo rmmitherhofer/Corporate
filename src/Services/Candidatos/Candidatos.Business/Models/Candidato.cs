@@ -1,5 +1,6 @@
 ﻿using Candidatos.Business.Enums;
 using Core.DomainObjects;
+using Exceptions;
 
 namespace Candidatos.Business.Models;
 
@@ -20,17 +21,16 @@ public class Candidato : Entity, IAggregateRoot
 
     public string? PretensaoSalarial { get; private set; }
     public int QuantidadeFilhos { get; private set; }
-    public string? IdadeFilhos { get; private set; } 
+    public string? IdadeFilhos { get; private set; }
 
     private List<Formacao>? _formacoes;
     public IReadOnlyCollection<Formacao>? Formacoes => _formacoes?.AsReadOnly();
 
     public string? Idiomas { get; private set; }
     public string? Conhecimentos { get; private set; }
+    public RecrutadoPor? RecrutadoPor { get; private set; }
 
-    public RecrutadoPor? RecrutadoPor { get; private set; }    
-    
-   
+
     public StatusCandidato Status { get; private set; }
     public List<string>? Tags { get; private set; }
     public Endereco? Endereco { get; private set; }
@@ -68,14 +68,17 @@ public class Candidato : Entity, IAggregateRoot
     }
     public void AtribuirNome(string nome)
     {
-        if (string.IsNullOrEmpty(nome)) throw new ArgumentNullException(nameof(nome));
+        if (string.IsNullOrEmpty(nome)) throw new DomainException("O nome do candidato precisa ser informado.");
+
+        if (nome.Split(" ").Length <= 1) throw new DomainException("O nome e sobrenome devem ser informados.");
+
         Nome = nome.Trim();
     }
     public void AlterarApelido(string? apelido) => Apelido = apelido?.Trim();
     public void AtribuirDadosContato(string? telefone, string? celular, string? celularAlternativo, string? emails)
     {
         if (string.IsNullOrEmpty(telefone) && string.IsNullOrEmpty(celular) && string.IsNullOrEmpty(celularAlternativo) && string.IsNullOrEmpty(emails))
-            throw new ArgumentNullException("", "Ao menos um dado de contato e obrigatorio");
+            throw new DomainException("Ao menos um dado de contato entre telefone, celular, celular alternativo ou e-mail precisa ser preenchido");
 
         Telefone = telefone?.Trim();
         Celular = celular?.Trim();
@@ -103,7 +106,7 @@ public class Candidato : Entity, IAggregateRoot
     public void IncluirRelatos(string? relatosCandidato, string? relatosEntrevistador)
     {
         RelatoCandidato = relatosCandidato?.Trim();
-        RelatoEntrevistador =  relatosEntrevistador?.Trim();
+        RelatoEntrevistador = relatosEntrevistador?.Trim();
     }
 
     public void AtribuirCNH(string? cnh) => CNH = cnh?.Trim();
@@ -129,10 +132,11 @@ public class Candidato : Entity, IAggregateRoot
     private int IdadeEmAnos(int? anos)
     {
         if (DataNascimento is null)
-            if (!anos.HasValue || anos.Value <= 0)
-                throw new ArgumentException(nameof(anos), "A Idade ou a data de nascimento precisa ser preenchida.");
-            else
-                return anos.Value;
+        {
+            return !anos.HasValue || anos.Value <= 0
+                ? throw new DomainException("A Idade ou a data de nascimento precisa ser preenchida.")
+                : anos.Value;
+        }
 
         var now = DateTime.Now;
 

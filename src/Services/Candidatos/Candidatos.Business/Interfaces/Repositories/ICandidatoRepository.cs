@@ -7,6 +7,12 @@ namespace Candidatos.Business.Interfaces.Repositories;
 public interface ICandidatoRepository : IRepository<Candidato>
 {
     public Task<(IEnumerable<Candidato> candidatos, int pageCount, int totalRecords)> ObterPaginado(CandidatoFilter filter);
+
+    Task<IEnumerable<Formacao>?> ObterFormacoesPorCandidatoId(Guid candidatoId);
+    Task<Formacao?> ObterFormacaoPorId(Guid id);
+    Task<IEnumerable<Experiencia>?> ObterExperienciasPorCandidatoId(Guid candidatoId);
+    Task<Experiencia?> ObterExperienciaPorId(Guid id);
+
     public void Adicionar(Formacao formacao);
     public void Atualizar(Formacao formacao);
     public void Remover(Formacao formacao);

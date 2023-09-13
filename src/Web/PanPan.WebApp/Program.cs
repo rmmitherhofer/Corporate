@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpServices(builder.Configuration);
+builder.Services.Resolve();
 builder.Services.AddAutoMapper();
 
 var app = builder.Build();

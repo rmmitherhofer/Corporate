@@ -1,0 +1,13 @@
+﻿@using Notifications.Messages;
+@model IEnumerable<Notification>
+
+@if (Model.Any())
+{
+    <div class="notification is-warning is-light">
+        <button class="delete"></button>
+        @foreach (var notification in Model)
+        {
+            <p><strong>@notification.Key</strong> - @notification.Value</p>
+        }
+    </div>
+}

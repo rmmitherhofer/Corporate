@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Reflection.Emit;
 
 namespace Notifications.Messages;
 
@@ -70,7 +71,7 @@ public class Notification : Message
         Timestamp = DateTime.Now;
         Level = level;
         Key = key;
-        Value = value;        
+        Value = value;
     }
     /// <summary>
     /// Construtor

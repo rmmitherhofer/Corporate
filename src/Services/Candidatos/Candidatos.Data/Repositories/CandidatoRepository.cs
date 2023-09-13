@@ -48,6 +48,14 @@ public class CandidatoRepository : ICandidatoRepository
             .Where(c => c.Id == id)
             .FirstOrDefaultAsync();
 
+    public async Task<IEnumerable<Formacao>?> ObterFormacoesPorCandidatoId(Guid candidatoId) => await _context.Formacoes.Where(c => c.CandidatoId == candidatoId).ToListAsync();
+
+    public async Task<Formacao?> ObterFormacaoPorId(Guid id) => await _context.Formacoes.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+    public async Task<IEnumerable<Experiencia>?> ObterExperienciasPorCandidatoId(Guid candidatoId) => await _context.Experiencias.Where(c => c.CandidatoId == candidatoId).ToListAsync();
+
+    public async Task<Experiencia?> ObterExperienciaPorId(Guid id) => await _context.Experiencias.Where(c => c.Id == id).FirstOrDefaultAsync();
+
     public void Adicionar(Candidato candidato) => _context.Candidatos.Add(candidato);
     public void Atualizar(Candidato candidato) => _context.Candidatos.Update(candidato);
     public void Remover(Candidato candidato) => _context.Candidatos.Remove(candidato);

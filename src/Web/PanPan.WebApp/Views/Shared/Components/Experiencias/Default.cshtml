@@ -1,0 +1,45 @@
+﻿@using Extensions;
+@model IEnumerable<ExperienciaViewModel>
+
+<div class="box">
+    <div class="buttons">
+        <a type="button" asp-controller="Candidato" asp-action="IncluirExperiencia" asp-route-id="@Model.Select(e => e.CandidatoId).FirstOrDefault()" class="button is-primary">
+            <span class="icon">
+                <i class="fa-solid fa-briefcase"></i>
+            </span>
+        </a>
+    </div>
+    <table class="table is-fullwidth">
+        <thead>
+            <tr>
+                <th>Empresa</th>
+                <th>Cargo</th>
+                <th>Status</th>
+                <th>Inicio</th>
+                <th>Conclusao</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var experiencia in Model.OrderByDescending(e => e.DataInicio).ThenByDescending(e => e.DataFim))
+                {
+                    <tr>
+                        <th scope="row">@experiencia.Empresa</th>
+                        <td>@experiencia.Cargo</td>
+                        <td>@experiencia.Status.Descricao()</td>
+                        <td>@experiencia.DataInicioString</td>
+                        <td>@experiencia.DataFimString</td>
+                        <td>
+                            <div class="buttons">
+                                <a type="button" asp-controller="Candidato" asp-action="AlterarExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id" class="button is-success is-outlined"><i class="fa-solid fa-pencil"></i></a>
+                                <a type="button" asp-controller="Candidato" asp-action="RemoverExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id" class="button is-danger is-outlined"><i class="fa-solid fa-xmark"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Exceptions;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
@@ -79,7 +80,7 @@ public abstract class MainHttpService
     protected static T? DeserializeObjectResponse<T>(HttpResponseMessage httpResponse)
         => JsonConvert.DeserializeObject<T>(httpResponse.Content.ReadAsStringAsync().Result);
 
-    protected static bool ResponsePossuiErros(HttpResponseMessage httpResponse)
+    protected static bool ResponsePossuiErros(HttpResponseMessage httpResponse, bool throwException = true)
     {
         switch (httpResponse.StatusCode)
         {
@@ -90,7 +91,10 @@ public abstract class MainHttpService
                 return true;
             case HttpStatusCode.Unauthorized:
             case HttpStatusCode.InternalServerError:
-                throw new HttpRequestException($"Status Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}");
+                if(throwException)
+                    throw new CustomHttpRequestException(httpResponse.StatusCode, $"Status Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}");
+
+                return true;
         }
 
         try

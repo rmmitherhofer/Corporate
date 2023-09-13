@@ -1,23 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Notifications.Messages;
+﻿using Notifications.Messages;
+using System.Text.Json.Serialization;
 
 namespace Responses;
 
 /// <summary>
 /// Classe de resposta de validações
 /// </summary>
-public class ValidationResponse : ProblemDetails
+public class ValidationResponse
 {
     /// <summary>
     /// Notificações
     /// </summary>
-    public ICollection<Notification> Validations { get; set; }
-
+    [JsonPropertyName("validations")]
+    public IEnumerable<Notification> Validations { get; private set; }
     /// <summary>
     /// Construtor
     /// </summary>
     /// <param name="messages"></param>
-    public ValidationResponse(ICollection<Notification> notifications)
+    public ValidationResponse(IEnumerable<Notification> notifications)
     {
         Validations = notifications;
     }

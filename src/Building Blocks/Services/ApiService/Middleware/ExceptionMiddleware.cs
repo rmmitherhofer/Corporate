@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Notifications.Messages;
 using Responses;
+using System;
 using System.Diagnostics;
 using System.Net;
 
@@ -33,8 +34,7 @@ public class ExceptionMiddleware
         }
         catch (DomainException ex)
         {
-            var notifications = new List<Notification> { new(ex.GetType().Name, ex.GetType().Name, ex.Message, ex?.StackTrace!) };
-            HandleRequestException(context, new ValidationResponse(notifications), HttpStatusCode.BadRequest);
+            HandleRequestException(context, ex, HttpStatusCode.BadRequest);
         }
         catch (CustomHttpRequestException ex)
         {
@@ -53,38 +53,41 @@ public class ExceptionMiddleware
 
     private void HandleRequestException(HttpContext context, Exception exception, HttpStatusCode statusCode)
     {
-
+        LogLevel levelLog = LogLevel.Information;
         switch (statusCode)
         {
             case HttpStatusCode.Unauthorized:
             case HttpStatusCode.BadRequest:
+                levelLog = LogLevel.Warning;
                 _logger.LogWarn($"Descricao: {exception.Message} - detalhe: {exception.StackTrace}");
-                break;
+                SendException(context, exception, statusCode, levelLog);
+                return;
             case HttpStatusCode.BadGateway:
+                levelLog = LogLevel.Error;
                 _logger.LogFail($"Descricao: {exception.Message} - detalhe: {exception.StackTrace}");
                 break;
             case HttpStatusCode.InternalServerError:
+                levelLog = LogLevel.Critical;
                 _logger.LogCrit($"Descricao: {exception.Message} - detalhe: {exception.StackTrace}");
                 break;
         }
-
-        context.Response.StatusCode = (int)statusCode;
-        context.Response.ContentType = "application/json";
-
-        var notifications = new List<Notification> { new(exception.GetType().Name, exception.GetType().Name, exception.Message, exception?.StackTrace!) };
-
-        ErrorResponse error = new(statusCode, notifications);
-
-        context.Response.WriteAsync(JsonConvert.SerializeObject(error));
+        SendException(context, exception, statusCode, levelLog);
     }
-
-    private void HandleRequestException(HttpContext context, ValidationResponse response, HttpStatusCode statusCode)
+    private void SendException(HttpContext context, Exception exception, HttpStatusCode statusCode, LogLevel levelLog)
     {
-        foreach (var validation in response.Validations)
-            _logger.LogWarn($"Descrição: {validation.Key} - detalhe : {validation.Value}");
+        var notifications = new List<Notification> { new(levelLog, exception.GetType().Name, exception.GetType().Name, exception.Message, levelLog == LogLevel.Critical ? exception?.StackTrace! : null) };
 
         context.Response.StatusCode = (int)statusCode;
         context.Response.ContentType = "application/json";
-        context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+
+        switch (levelLog)
+        {
+            case LogLevel.Warning:
+                context.Response.WriteAsync(JsonConvert.SerializeObject(new ValidationResponse(notifications)));
+                break;
+            default:
+                context.Response.WriteAsync(JsonConvert.SerializeObject(new ErrorResponse(statusCode, notifications)));
+                break;
+        }
     }
 }

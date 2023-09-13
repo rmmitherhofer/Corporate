@@ -2,7 +2,9 @@
 
 namespace PanPan.WebApp.Models;
 
-public abstract class PageViewModel
+public abstract class ViewModel{}
+
+public abstract class PageViewModel : ViewModel
 {
     public int TotalRecords { get; set; }
     public int PageSize { get; set; } = 10;
@@ -29,7 +31,7 @@ public class CandidatosViewModel : PageViewModel
     public IEnumerable<CandidatoViewModel> Candidatos { get; set; } = new List<CandidatoViewModel>();
     
 }
-public class CandidatoViewModel
+public class CandidatoViewModel : ViewModel
 {
     public Guid Id { get; set; }
     public DateTime DataCadastro { get; set; }

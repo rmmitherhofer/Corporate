@@ -1,4 +1,5 @@
-﻿using PanPan.WebApp.Configurations.AutoMapper;
+﻿using Notifications.Configurations;
+using PanPan.WebApp.Configurations.AutoMapper;
 
 namespace PanPan.WebApp.Configurations;
 
@@ -6,7 +7,7 @@ public static class DependencyInjectionConfiguration
 {
     public static IServiceCollection Resolve(this IServiceCollection services)
     {
-
+        services.AddNotificationConfig();
         return services;
     }
 

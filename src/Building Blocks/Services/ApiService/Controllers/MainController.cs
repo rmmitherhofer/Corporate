@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Notifications.Interfaces;
 using Notifications.Messages;
 using Responses;
+using System.Net;
 
 namespace Api.Service.Controllers;
 
@@ -36,12 +37,10 @@ public abstract class MainController : ControllerBase
         if (OperacaoEhValida())
             return Ok(result);
 
-        ValidationResponse response = new(_notification.Get());
+        if (_notification.Get().Select(v => v.Level).Contains(LogLevel.Error))
+            return Problem(detail: JsonConvert.SerializeObject(new ErrorResponse(_notification.Get().Where(v => v.Level == LogLevel.Error))));
 
-        if (response.Validations.Select(v => v.Level).Contains(LogLevel.Error))
-            return Problem(detail: JsonConvert.SerializeObject(response));
-
-        return BadRequest(response);
+        return BadRequest(new ValidationResponse(_notification.Get()));
     }
 
     private ActionResult CustomResponse(ModelStateDictionary modelState)

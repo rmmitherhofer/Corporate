@@ -1,5 +1,6 @@
 ﻿using Candidatos.Business.Enums;
 using Core.DomainObjects;
+using Exceptions;
 using System.Text.Json.Serialization;
 
 namespace Candidatos.Business.Models;
@@ -8,7 +9,7 @@ public class Formacao : Entity
 {
     public string NomeInstituicao { get; private set; } = string.Empty;
     public string? Descricao { get; private set; }
-    public DateTime? DataInicio { get; private  set; }
+    public DateTime? DataInicio { get; private set; }
     public DateTime? DataFim { get; private set; }
     public TipoFormacao Tipo { get; private set; }
     public Ensino? Ensino { get; private set; }
@@ -19,7 +20,7 @@ public class Formacao : Entity
 
     [JsonIgnore]
     public Candidato Candidato { get; protected set; }
-    public Guid CandidatoId { get; private set; } 
+    public Guid CandidatoId { get; private set; }
 
     protected Formacao() { }
 
@@ -27,19 +28,13 @@ public class Formacao : Entity
     {
         Tipo = tipo;
 
-        if (Tipo == TipoFormacao.Curso && string.IsNullOrEmpty(nomeInstituicao)) 
-            throw new ArgumentNullException(nameof(nomeInstituicao), "O nome da instituicao deve ser informado.");
+        AtribuirNome(nomeInstituicao);
 
-        if (Tipo == TipoFormacao.Curso && string.IsNullOrEmpty(descricao))
-            throw new ArgumentNullException(nameof(descricao), "A descricao do curso deve ser informada.");
+        AtribuirDescricao(descricao);
 
         CandidatoId = candidatoId;
 
-        NomeInstituicao = nomeInstituicao.Trim();
-
         Status = status;
-
-        Descricao = descricao?.Trim();
 
         Periodo = periodo;
 
@@ -48,26 +43,42 @@ public class Formacao : Entity
         AtribuirEnsino(ensino);
     }
 
-    public void Alterar(DateTime? dataInicio, DateTime? dataFim, StatusFormacao status, Curso? curso, string? descricao, Ensino? ensino, PeriodoFormacao periodo)
+    public void Alterar(string nomeInstituicao, DateTime? dataInicio, DateTime? dataFim, StatusFormacao status, Curso? curso, string? descricao, Ensino? ensino, PeriodoFormacao periodo)
     {
         Status = status;
 
-        if (string.IsNullOrEmpty(descricao)) throw new ArgumentNullException(nameof(descricao), "A descricao do curso deve ser informada.");
-        Descricao = descricao?.Trim();
+        AtribuirNome(nomeInstituicao);
+
+        AtribuirDescricao(descricao);
 
         Periodo = periodo;
 
         IncluirPeriodo(dataInicio, dataFim);
         AtribuirCurso(curso, descricao);
         AtribuirEnsino(ensino);
+    }
+
+    private void AtribuirNome(string nomeInstituicao)
+    {
+        if (Tipo == TipoFormacao.Curso && string.IsNullOrEmpty(nomeInstituicao))
+            throw new DomainException("O nome da instituicao deve ser informado.");
+
+        NomeInstituicao = nomeInstituicao.Trim();
+    }
+    private void AtribuirDescricao(string? descricao)
+    {
+        if (Tipo == TipoFormacao.Curso && string.IsNullOrEmpty(descricao))
+            throw new DomainException("A descricao do curso deve ser informada.");
+
+        Descricao = descricao?.Trim();
     }
 
     private void AtribuirCurso(Curso? curso, string? descricao)
     {
         if (Tipo != TipoFormacao.Curso) return;
 
-        if (curso is null) throw new ArgumentNullException(nameof(curso), "O tipo de curso deve ser selecionado.");
-        
+        if (curso is null) throw new DomainException("O tipo de curso deve ser selecionado.");
+
         Curso = curso;
     }
 
@@ -75,7 +86,7 @@ public class Formacao : Entity
     {
         if (Tipo != TipoFormacao.Ensino) return;
 
-        if (ensino is null) throw new ArgumentNullException(nameof(ensino), "O tipo de ensino deve ser selecionado.");
+        if (ensino is null) throw new DomainException("O tipo de ensino deve ser selecionado.");
 
         Ensino = ensino;
     }

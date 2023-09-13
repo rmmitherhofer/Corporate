@@ -1,0 +1,139 @@
+﻿@using PanPan.WebApp.Extensions;
+@model ExperienciaViewModel
+
+<div class="box">
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-empresa" class="label">Empresa</label>
+                <div class="control">
+                    <input id="txt-empresa" asp-for="Empresa" type="text" name="Empresa" class="input" placeholder="Nome da empresa" maxlength="150">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="txt-cargo" class="label">Cargo</label>
+                <div class="control">
+                    <input id="txt-cargo" asp-for="Cargo" type="text" name="Cargo" class="input" placeholder="Cargo" maxlength="150">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-atividade" class="label">Atividade/Atribuicoes</label>
+                <div class="control">
+                    <textarea id="txt-atividade" asp-for="Atividade" name="Atividade" class="textarea" placeholder="Atividades" maxlength="2000"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="slct-regime-contratacao" class="label">Regime de contratacao</label>
+                <div class="control">
+                    <div>
+                        <select id="slct-regime-contratacao" asp-for="RegimeContratacao" name="RegimeContratacao" class="selectize" placeholder="Selecione">
+                            <option></option>
+                            @{
+                                if (Model is not null)
+                                    @Html.Raw(this.SelectOptionsRegimeContratacao(Model.RegimeContratacao))
+                                else
+                                    @Html.Raw(this.SelectOptionsRegimeContratacao())
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="field">
+                <label for="txt-habilidade" class="label">Habilidade</label>
+                <div class="control">
+                    <input id="txt-habilidade" asp-for="Habilidade" type="text" name="Habilidade" class="input" placeholder="Atencioso, Honesto, Pro-ativo" maxlength="300">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="txt-ultimo-salario" class="label">Ultimo salario</label>
+                <div class="control has-icons-left">
+                    <input id="txt-ultimo-salario" asp-for="UltimoSalario" type="text" name="UltimoSalario" class="input" placeholder="0.000,00" maxlength="17" onkeyup="mascaraMoeda(this, event)">
+                    <span class="icon is-small is-left">
+                        <i class="fa-solid fa-brazilian-real-sign"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-data-inicio" class="label">Inicio</label>
+                <div class="control">
+                    <input id="txt-data-inicio" asp-for="DataInicioString" type="text" name="DataInicioString" class="input" placeholder="00/0000" data-mask="00/0000">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="txt-data-fim" class="label">Conclusao</label>
+                <div class="control">
+                    <input id="txt-data-fim" asp-for="DataFimString" type="text" name="DataFimString" class="input" placeholder="00/0000" data-mask="00/0000">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="slct-status" class="label">Status</label>
+                <div class="control">
+                    <div>
+                        <select id="slct-status" asp-for="Status" name="Status" class="selectize" placeholder="Selecione">
+                            <option></option>
+                            @{
+                                if (Model is not null)
+                                    @Html.Raw(this.SelectOptionsStatusExperiencia(Model.Status))
+                                else
+                                    @Html.Raw(this.SelectOptionsStatusExperiencia())
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-motivo-desligamento" class="label">Motivo do desligamento</label>
+                <div class="control">
+                    <textarea id="txt-motivo-desligamento" asp-for="MotivoDesligamento" name="MotivoDesligamento" class="textarea" placeholder="Motivo de desligamento" maxlength="300"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-observacoes" class="label">Observacoes</label>
+                <div class="control">
+                    <textarea id="txt-observacoes" asp-for="Observacoes" name="Observacoes" class="textarea" placeholder="Observacoes" maxlength="2000"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.selectize').selectize();
+    });
+</script>

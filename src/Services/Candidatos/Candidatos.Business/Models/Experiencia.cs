@@ -1,6 +1,8 @@
 ﻿using Candidatos.Business.Enums;
 using Core.DomainObjects;
+using Exceptions;
 using System.Text.Json.Serialization;
+using System.util;
 
 namespace Candidatos.Business.Models;
 
@@ -46,7 +48,9 @@ public class Experiencia : Entity
         IncluirMotivoDesligamento(motivoDesligamento);
         Observacoes = observacoes?.Trim();
     }
-    public void Alterar(string cargo, 
+    public void Alterar(
+        string empresa,
+        string cargo, 
         string? atividade, 
         RegimeContratacao regimeContratacao, 
         DateTime dataInicio, 
@@ -58,6 +62,7 @@ public class Experiencia : Entity
         StatusExperiencia status
         )
     {
+        Empresa = empresa.Trim();
         Cargo = cargo.Trim();
         Atividade = atividade?.Trim();
         Habilidade = habilidade?.Trim();
@@ -79,9 +84,9 @@ public class Experiencia : Entity
 
         if (DataFim.HasValue)
         {
-            if (DataInicio.Date > DataFim.Value.Date) throw new ArgumentOutOfRangeException(nameof(DataInicio), "Data de inicio deve ser menor ou igual a data fim");
+            if (DataInicio.Date > DataFim.Value.Date) throw new DomainException("Data de inicio deve ser menor ou igual a data fim");
 
-            if (DataFim.Value.Date > DateTime.Now.Date) throw new ArgumentOutOfRangeException(nameof(DataFim), "A data de desligamento, deve ser menor ou igual a data atual");
+            if (DataFim.Value.Date > DateTime.Now.Date) throw new DomainException("A data de desligamento, deve ser menor ou igual a data atual");
 
             Status = status;
 

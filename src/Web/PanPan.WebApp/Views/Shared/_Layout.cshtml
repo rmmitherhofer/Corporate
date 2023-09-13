@@ -70,6 +70,9 @@
     </nav>
     <div class="container">
         <main role="main">
+            @* <vc:success></vc:success> *@
+            <vc:alert></vc:alert>
+            <vc:error></vc:error>
             @RenderBody()
         </main>
     </div>
@@ -92,6 +95,46 @@
     <script src="~/js/common.js"></script>
     <script src="~/js/httpclient.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+
+    @section Scripts {
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+                    const $notification = $delete.parentNode;
+
+                    $delete.addEventListener('click', () => {
+                        $notification.parentNode.removeChild($notification);
+                    });
+
+                    fadeOutEffect($notification);
+                });
+            });
+
+
+            function fadeOutEffect(fadeTarget) {
+                setTimeout(() => {
+                    var fadeEffect = setInterval(() => {
+                        if (!fadeTarget.style.opacity) {
+                            fadeTarget.style.opacity = 1;
+                        }
+                        if (fadeTarget.style.opacity > 0) {
+                            fadeTarget.style.opacity -= 0.1;
+                        } else {
+                            clearInterval(fadeEffect);
+                        }
+                    }, 200);
+
+                    setTimeout(() => {
+                        fadeTarget.parentNode.removeChild(fadeTarget);
+                    }, 2000);
+                }, 6000);
+            }
+        </script>
+
+    }
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

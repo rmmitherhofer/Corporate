@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Notifications.Interfaces;
 using PanPan.WebApp.HttpServices;
 using PanPan.WebApp.Models;
 using PanPan.WebApp.Models.Request;
@@ -11,12 +12,14 @@ public class CandidatoController : Controller
 {
     private readonly ILogger<CandidatoController> _logger;
     private readonly ICandidatoHttpService _candidatoHttpService;
+    private readonly INotificationHandler _notification;
     private readonly IMapper _mapper;
-    public CandidatoController(ILogger<CandidatoController> logger, ICandidatoHttpService candidatoHttpService, IMapper mapper)
+    public CandidatoController(ILogger<CandidatoController> logger, ICandidatoHttpService candidatoHttpService, IMapper mapper, INotificationHandler notification)
     {
         _logger = logger;
         _candidatoHttpService = candidatoHttpService;
         _mapper = mapper;
+        _notification = notification;
     }
 
     [HttpGet]
@@ -72,6 +75,9 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Incluir(request);
 
+        if (_notification.HasNotifications())
+            return View(model);
+
         return RedirectToAction(nameof(Index), new {nome = request.Nome});
     }
     [HttpGet]
@@ -80,7 +86,7 @@ public class CandidatoController : Controller
     {
         var response = await _candidatoHttpService.ObterPorId(id);
 
-        var model = _mapper.Map<CandidatoViewModel>(response);
+        var model = _mapper.Map<CandidatoViewModel>(response);        
 
         return View(model);
     }
@@ -92,7 +98,7 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Alterar(id, request);
 
-        return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
+        return View(model);
     }
     [HttpGet]
     [Route("{id}/remover")]
@@ -120,6 +126,9 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Incluir(id, request);
 
+        if(_notification.HasNotifications())
+            return View(model);
+
         return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
     }
     [HttpGet]
@@ -139,6 +148,9 @@ public class CandidatoController : Controller
         var request = _mapper.Map<UpdateFormacaoRequest>(model);
 
         await _candidatoHttpService.Alterar(id, formacaoId, request);
+
+        if (_notification.HasNotifications())
+            return View(model);
 
         return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
     }
@@ -167,6 +179,9 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Incluir(id, request);
 
+        if (_notification.HasNotifications())
+            return View(model);
+
         return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
     }
     [HttpGet]
@@ -186,6 +201,9 @@ public class CandidatoController : Controller
         var request = _mapper.Map<UpdateExperienciaRequest>(model);
 
         await _candidatoHttpService.Alterar(id, experienciaId, request);
+
+        if (_notification.HasNotifications())
+            return View(model);
 
         return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
     }

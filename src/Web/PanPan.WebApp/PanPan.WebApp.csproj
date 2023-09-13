@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Building Blocks\Core\Extensions\Extensions.csproj" />
 		<ProjectReference Include="..\..\Building Blocks\Core\Http\Http.csproj" />
+		<ProjectReference Include="..\..\Building Blocks\Core\Notification\Notifications.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
