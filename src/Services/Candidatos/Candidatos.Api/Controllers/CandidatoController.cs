@@ -65,36 +65,36 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> IncluirCandidato(AddCandidatoRequest request)
     {
-        string[] search = { request.Telefone, request.Celular, request.Email };
+        //string[] search = { request.Telefone, request.Celular, request.Email };
 
-        for (int i = 0; i < search.Length; i++)
-        {
-            CandidatoFilter filter = new();
-            var property = string.Empty;
-            switch (i)
-            {
-                case 0:
-                    property = nameof(CandidatoFilter.Telefone);
-                    filter = new() { Telefone = search[i] };
-                    break;
-                case 1:
-                    property = nameof(CandidatoFilter.Celular);
-                    filter = new() { Celular = search[i] };
-                    break;
-                case 2:
-                    property = nameof(CandidatoFilter.Email);
-                    filter = new() { Email = search[i] };
-                    break;
-            }
+        //for (int i = 0; i < search.Length; i++)
+        //{
+        //    CandidatoFilter filter = new();
+        //    var property = string.Empty;
+        //    switch (i)
+        //    {
+        //        case 0:
+        //            property = nameof(CandidatoFilter.Telefone);
+        //            filter = new() { Telefone = search[i] };
+        //            break;
+        //        case 1:
+        //            property = nameof(CandidatoFilter.Celular);
+        //            filter = new() { Celular = search[i] };
+        //            break;
+        //        case 2:
+        //            property = nameof(CandidatoFilter.Email);
+        //            filter = new() { Email = search[i] };
+        //            break;
+        //    }
 
-            var candidatos = await _candidatoRepository.ObterPaginado(filter);
+        //    var candidatos = await _candidatoRepository.ObterPaginado(filter);
 
-            if (candidatos.totalRecords > 0)
-            {
-                Notificar(property, "Candidato ja cadastrado na base de dados.");
-                return CustomResponse();
-            }
-        }
+        //    if (candidatos.totalRecords > 0)
+        //    {
+        //        Notificar(property, "Candidato ja cadastrado na base de dados.");
+        //        return CustomResponse();
+        //    }
+        //}
 
         var candidato = new Candidato(request.Nome, request.Sexo, request.RecrutadoPor, request.Telefone, request.Celular, request.CelularAlternativo, request.Email);
 

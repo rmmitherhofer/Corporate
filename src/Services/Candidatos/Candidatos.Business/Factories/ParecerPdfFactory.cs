@@ -4,7 +4,10 @@ using Candidatos.Business.Models;
 using Extensions;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Notifications.Interfaces;
+using Notifications.Messages;
 using System.IO.Pipes;
 
 namespace Candidatos.Business.Factories;
@@ -15,6 +18,7 @@ public interface IParecerPdfFactory
 }
 public class ParecerPdfFactory : IParecerPdfFactory
 {
+    private readonly INotificationHandler _notification;
     private readonly TemplatePdfFactory _template;
     private readonly ArtefatosRHF _rhf;
     private readonly bool _incluirBorda = false;
@@ -24,10 +28,11 @@ public class ParecerPdfFactory : IParecerPdfFactory
     const float _tamanhoFonteText = 8.5f;
 
 
-    public ParecerPdfFactory()
+    public ParecerPdfFactory(INotificationHandler notification)
     {
         _rhf = new();
         _template = new();
+        _notification = notification;
     }
 
     public byte[] Gerar(Candidato candidato)
@@ -483,6 +488,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         for (int i = 0; i < valores.Length; i++)
         {
+
             var celulaValor = new CelulaPdf(new Phrase(valores[i], new Font(_rhf.Fonte.GothamMedium, _tamanhoFonteText, Font.NORMAL, _rhf.Cor.CinzaEscuro)), colspan: colspan[i])
                 .DefinirBorda(Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER, 0.2f, _rhf.Cor.Cinza, _rhf.Cor.Cinza, usarBorda)
                 .DefinirAlinhamento(Element.ALIGN_LEFT, Element.ALIGN_TOP)
@@ -632,4 +638,9 @@ public class ParecerPdfFactory : IParecerPdfFactory
         return (anos, meses);
     }
 
+
+    private void Notificar(string key, string value)
+    {
+        _notification.Notify(new Notification(LogLevel.Warning, key, value));
+    }
 }

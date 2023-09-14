@@ -59,7 +59,7 @@
                         <select id="slct-estado" asp-for="Endereco.Estado" name="Endereco.Estado" class="selectize" placeholder="Selecione" onchange="buscaCidades(this.value, 'slct-cidade', '@(Model is not null ? "reload" : "load")')">
                             <option></option>
                             @{
-                                if (Model is not null)
+                                if (Model.Endereco is not null )
                                         @Html.Raw(this.SelectOptionsEstados(Model.Endereco.Estado))
                                 else
                                         @Html.Raw(this.SelectOptionsEstados())
@@ -77,7 +77,7 @@
                         <select id="slct-cidade" asp-for="Endereco.Cidade" name="Endereco.Cidade" class="selectize" placeholder="Selecione">
                             <option></option>
                             @{
-                                if (Model is not null)
+                                if (Model.Endereco is not null)
                                         @Html.Raw(this.SelectOptionsCidades(Model.Endereco.Estado, Model.Endereco.Cidade))
                                 else
                                         @Html.Raw(this.SelectOptionsCidades())
@@ -108,7 +108,7 @@
                         <select id="slct-tipo-domicilio" asp-for="Endereco.TipoDomicilio" name="Endereco.TipoDomicilio" class="selectize" placeholder="Selecione">
                             <option></option>
                             @{
-                                if (Model is not null)
+                                if (Model.Endereco is not null)
                                         @Html.Raw(this.SelectOptionsTipoDomicilio(Model.Endereco.TipoDomicilio))
                                 else
                                         @Html.Raw(this.SelectOptionsTipoDomicilio())
@@ -126,7 +126,7 @@
                         <select id="slct-domicilio" asp-for="Endereco.Domicilio" name="Endereco.Domicilio" class="selectize" placeholder="Selecione">
                             <option></option>
                             @{
-                                if (Model is not null)
+                                if (Model.Endereco is not null)
                                         @Html.Raw(this.SelectOptionsDomicilio(Model.Endereco.Domicilio))
                                 else
                                         @Html.Raw(this.SelectOptionsDomicilio())

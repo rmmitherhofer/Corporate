@@ -1,13 +1,15 @@
-﻿var experiencia = experiencia || {}
+﻿let experienciaId;
+var experiencia = experiencia || {}
 
 experiencia = {
+
     obter: function () {
         let candidatoId = document.querySelector('#input-candidato-id').value;
         httpClient.send('GET', `/candidatos/${candidatoId}/experiencias`, null, this.obterSuccess, this.fail, httpClient.complete, '');
     },
     incluir: function (element) {
         let model = this.modelRequest(element);
-        httpClient.send('POST', `/candidatos/experiencia/incluir`, model, this.incluirSuccess, this.fail, httpClient.complete, '');
+        httpClient.send('POST', `/candidatos/experiencia/incluir`, model, this.incluirSuccess, this.fail, this.complete, '');
     },
     alterar: function (element) {
         let model = this.modelRequest(element);
@@ -16,17 +18,22 @@ experiencia = {
     modelRequest: function (element) {
         request = {            
             CandidatoId: document.querySelector('#input-candidato-id').value,
-            //Id: element.querySelector('#formacao-id').value,
-            //NomeInstituicao: element.querySelector('#txt-instituicao').value,
-            //Descricao: element.querySelector('#txt-descricao').value,
-            //Tipo: element.querySelector('input[name="Tipo"]:checked').value,
-            //Ensino: element.querySelector('#slct-ensino').value,
-            //Curso: element.querySelector('#slct-curso').value,
-            //Periodo: element.querySelector('#slct-periodo').value,
-            //DataInicioString: element.querySelector('#txt-data-inicio').value,
-            //DataFimString: element.querySelector('#txt-data-fim').value,
-            //Status: element.querySelector('#slct-status').value
+            Id: element.querySelector('#input-experiencia-id').value,
+            Empresa: element.querySelector('#txt-empresa').value,
+            Cargo: element.querySelector('#txt-cargo').value,
+            Atividade: element.querySelector('#txt-atividade').value,
+            RegimeContratacao: element.querySelector('#slct-regime-contratacao').value,
+            Habilidade: element.querySelector('#txt-habilidade').value,
+            UltimoSalario: element.querySelector('#txt-ultimo-salario').value,
+            DataInicioString: element.querySelector('#txt-data-inicio').value,
+            DataFimString: element.querySelector('#txt-data-fim').value,
+            Status: element.querySelector('#slct-status').value,
+            MotivoDesligamento: element.querySelector('#txt-motivo-desligamento').value,
+            Observacoes: element.querySelector('#txt-observacoes').value
         };
+
+        experienciaId = request.Id;
+
         return request;
     },
     obterSuccess: function (response) {
@@ -41,7 +48,7 @@ experiencia = {
 
         partial.querySelectorAll('.selectize').forEach(($select) => {
             $($select).selectize();
-        })
+        });
 
         experiencia.onClick();
     },
@@ -63,7 +70,7 @@ experiencia = {
             $($select).selectize();
         })
 
-        (content.querySelectorAll('.back') || []).forEach(($back) => {
+        document.querySelectorAll('.back').forEach(($back) => {
             $back.addEventListener('click', () => {
                 closeAllModals();
             });
@@ -72,11 +79,26 @@ experiencia = {
 
     },
     alterarSuccess: function (response) {
+        let partial = document.getElementById(experienciaId);
 
+        let content = partial.querySelector('.modal-content');
+
+        content.querySelector('section').querySelector('div').remove();
+
+        content.querySelector('section').innerHTML = response;
+
+        content.querySelectorAll('.selectize').forEach(($select) => {
+            $($select).selectize();
+        });
+
+        notificationEvent();
     },
 
     fail: function (response) {
 
+    },
+    complete: function() {
+        experiencia.obter();
     },
     onClick: function () {
 

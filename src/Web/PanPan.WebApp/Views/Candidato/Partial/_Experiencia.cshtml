@@ -2,7 +2,10 @@
 @model ExperienciaViewModel
 
 <div class="box">
-    <input id="input-experiencia-id" asp-for="Id" type="hidden" />
+    <vc:success></vc:success>
+    <vc:alert></vc:alert>
+    <vc:error></vc:error>
+    <input id="input-experiencia-id" asp-for="Id"  type="hidden" />
     <div class="columns">
         <div class="column">
             <div class="field">
@@ -79,7 +82,7 @@
             <div class="field">
                 <label for="txt-data-inicio" class="label">Inicio</label>
                 <div class="control">
-                    <input id="txt-data-inicio" asp-for="DataInicioString" type="text" name="DataInicioString" class="input" placeholder="00/0000" data-mask="00/0000">
+                    <input id="txt-data-inicio" asp-for="DataInicioString" type="text" name="DataInicioString" class="input" placeholder="00/0000" maxlength="7" onkeyup="mascaraData(this)">
                 </div>
             </div>
         </div>
@@ -87,7 +90,7 @@
             <div class="field">
                 <label for="txt-data-fim" class="label">Conclusao</label>
                 <div class="control">
-                    <input id="txt-data-fim" asp-for="DataFimString" type="text" name="DataFimString" class="input" placeholder="00/0000" data-mask="00/0000">
+                    <input id="txt-data-fim" asp-for="DataFimString" type="text" name="DataFimString" class="input" placeholder="00/0000" maxlength="7" onkeyup="mascaraData(this)">
                 </div>
             </div>
         </div>

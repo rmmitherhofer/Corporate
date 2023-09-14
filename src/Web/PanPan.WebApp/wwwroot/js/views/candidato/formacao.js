@@ -1,4 +1,5 @@
-﻿var formacao = formacao || {}
+﻿let formacaoId;
+var formacao = formacao || {}
 
 formacao = {
     obter: function () {
@@ -7,14 +8,14 @@ formacao = {
     },
     incluir: function (element) {
         let model = this.modelRequest(element);
-        httpClient.send('POST', `/candidatos/formacao/incluir`, model, this.incluirSuccess, this.fail, httpClient.complete, '');
+        httpClient.send('POST', `/candidatos/formacao/incluir`, model, this.incluirSuccess, this.fail, this.complete, '');
     },
     alterar: function (element) {
         let model = this.modelRequest(element);
-        httpClient.send('POST', `/candidatos/formacao/alterar`, model, this.alterarSuccess, this.fail, httpClient.complete, '');
+        httpClient.send('POST', `/candidatos/formacao/alterar`, model, this.alterarSuccess, this.fail, this.complete, '');
     },
     modelRequest: function (element) {
-        request = {            
+        request = {
             CandidatoId: document.querySelector('#input-candidato-id').value,
             Id: element.querySelector('#formacao-id').value,
             NomeInstituicao: element.querySelector('#txt-instituicao').value,
@@ -27,6 +28,9 @@ formacao = {
             DataFimString: element.querySelector('#txt-data-fim').value,
             Status: element.querySelector('#slct-status').value
         };
+
+        formacaoId = request.Id;
+
         return request;
     },
     obterSuccess: function (response) {
@@ -57,7 +61,7 @@ formacao = {
                     formacao.apresentar(event.currentTarget, $trigger);
                 });
             })
-        });  
+        });
     },
     incluirSuccess: function (response) {
         let partial = document.getElementById('nova-formacao');
@@ -75,22 +79,37 @@ formacao = {
 
         content.querySelectorAll('.selectize').forEach(($select) => {
             $($select).selectize();
-        })
-
-        (content.querySelectorAll('.back') || []).forEach(($back) => {
-            $back.addEventListener('click', () => {
-                closeAllModals();
-            });
         });
+
+            (document.querySelectorAll('.back') || []).forEach(($back) => {
+                $back.addEventListener('click', () => {
+                    closeAllModals();
+                });
+            });
         closeAllModals();
 
     },
     alterarSuccess: function (response) {
+        let partial = document.getElementById(formacaoId);
 
+        let content = partial.querySelector('.modal-content');
+
+        content.querySelector('section').querySelector('div').remove();
+
+        content.querySelector('section').innerHTML = response;
+
+        content.querySelectorAll('.selectize').forEach(($select) => {
+            $($select).selectize();
+        });
+
+        notificationEvent();
     },
 
     fail: function (response) {
 
+    },
+    complete: function () {
+        formacao.obter();
     },
     onClick: function () {
 
@@ -100,13 +119,13 @@ formacao = {
             $trigger.querySelector('.is-success').addEventListener('click', () => {
                 formacao.alterar($trigger)
             });
-        });    
+        });
 
         (partial.querySelectorAll('.new-formacao') || []).forEach(($trigger) => {
             $trigger.querySelector('.is-success').addEventListener('click', () => {
                 formacao.incluir($trigger)
             });
-        }); 
+        });
 
         (partial.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
             const modal = $trigger.dataset.target;

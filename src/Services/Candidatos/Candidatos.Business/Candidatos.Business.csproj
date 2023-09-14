@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Building Blocks\Core\Extensions\Extensions.csproj" />
     <ProjectReference Include="..\..\..\Building Blocks\Core\Logs\Logs.csproj" />
+    <ProjectReference Include="..\..\..\Building Blocks\Core\Notification\Notifications.csproj" />
     <ProjectReference Include="..\..\..\Building Blocks\Services\Api.Core\Api.Core.csproj" />
   </ItemGroup>
 

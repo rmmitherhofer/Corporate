@@ -7,29 +7,33 @@
     <div class="modal-card">
         <div class="modal-content">
             <div class="box">
-                <partial name="Partial/_Formacao" model="Model" />
-                <div class="columns">
-                    <div class="column">
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <button id="btn-alter-form-@Model.Id" type="button" class="button is-success">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-pencil"></i>
-                                    </span>
-                                    <span>Alterar</span>
-                                </button>
-                            </div>
-                            <div class="control">
-                                <button type="button" class="button is-info is-light back">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-rotate-left"></i>
-                                    </span>
-                                    <span>Voltar</span>
-                                </button>
+                <section>
+                    <partial name="Partial/_Formacao" model="Model" />
+                </section>
+                <section class="my-4">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <button id="btn-alter-form-@Model.Id" type="button" class="button is-success">
+                                        <span class="icon">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </span>
+                                        <span>Alterar</span>
+                                    </button>
+                                </div>
+                                <div class="control">
+                                    <button type="button" class="button is-info is-light back">
+                                        <span class="icon">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </span>
+                                        <span>Voltar</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     </div>

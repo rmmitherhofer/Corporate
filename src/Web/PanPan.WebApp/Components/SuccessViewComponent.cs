@@ -14,8 +14,6 @@ public class SuccessViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var notifications = await Task.FromResult(_notification.Get());
-
-        return View(notifications.Where(n => n.Level == LogLevel.Information).ToList());
+        return View();
     }
 }

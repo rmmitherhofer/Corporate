@@ -98,6 +98,9 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Alterar(id, request);
 
+        if (!_notification.HasNotifications())
+            TempData["Sucesso"] = "Candidato alterado com sucesso!";
+
         return View(model);
     }
     [HttpGet]
@@ -132,7 +135,7 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Incluir(model.CandidatoId, request);
 
-        return PartialView(nameof(IncluirFormacao), Guid.NewGuid());
+        return PartialView(nameof(IncluirFormacao), model.CandidatoId);
     }
 
     [HttpPost]
@@ -143,7 +146,10 @@ public class CandidatoController : Controller
 
         await _candidatoHttpService.Alterar(model.CandidatoId, model.Id, request);
 
-        return View(model);
+        if (!_notification.HasNotifications())
+            TempData["Sucesso"] = "Formacao alterada com sucesso!";
+
+        return PartialView(nameof(AlterarFormacao), model);
     }
     [HttpGet]
     [Route("{id}/formacao/remover/{formacaoId}")]
@@ -168,30 +174,27 @@ public class CandidatoController : Controller
     }
 
     [HttpPost]
-    [Route("{id}/experiencia/incluir")]
-    public async Task<IActionResult> IncluirExperiencia(Guid id, ExperienciaViewModel model)
+    [Route("experiencia/incluir")]
+    public async Task<IActionResult> IncluirExperiencia(ExperienciaViewModel model)
     {
         var request = _mapper.Map<AddExperienciaRequest>(model);
 
-        await _candidatoHttpService.Incluir(id, request);
+        await _candidatoHttpService.Incluir(model.CandidatoId, request);
 
-        if (_notification.HasNotifications())
-            return View(model);
-
-        return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
+        return PartialView(nameof(IncluirExperiencia), model.CandidatoId);
     }
     [HttpPost]
-    [Route("{id}/experiencia/alterar/{experienciaId}")]
-    public async Task<IActionResult> AlterarExperiencia(Guid id, Guid experienciaId, ExperienciaViewModel model)
+    [Route("experiencia/alterar")]
+    public async Task<IActionResult> AlterarExperiencia(ExperienciaViewModel model)
     {
         var request = _mapper.Map<UpdateExperienciaRequest>(model);
 
-        await _candidatoHttpService.Alterar(id, experienciaId, request);
+        await _candidatoHttpService.Alterar(model.CandidatoId, model.Id, request);
 
-        if (_notification.HasNotifications())
-            return View(model);
+        if (!_notification.HasNotifications())
+            TempData["Sucesso"] = "Experiencia alterada com sucesso!";
 
-        return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
+        return PartialView("Partial/_Experiencia", model);
     }
     [HttpGet]
     [Route("{id}/experiencia/remover/{experienciaId}")]

@@ -1,6 +1,8 @@
 ﻿@using PanPan.WebApp.Components;
 @using PanPan.WebApp.Extensions;
 @model CandidatoViewModel
+
+
 <form asp-controller="Candidato" asp-action="AlterarCandidato" method="post" class="row g-3">
     <div class="box">
         <div class="columns">
@@ -227,10 +229,10 @@
     </div>
 </form>
 
-<div id="tbl-formacoes">
+<div id="tbl-formacoes" class="my-4">
 </div>
 
-<div id="tbl-experiencias">
+<div id="tbl-experiencias" class="my-4">
 </div>
 
 <div class="buttons">
@@ -258,6 +260,7 @@
             $('.selectize').selectize();
             formacao.obter();
             experiencia.obter();
+            notificationEvent();
         }
     </script>
 

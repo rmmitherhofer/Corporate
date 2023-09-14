@@ -40,6 +40,7 @@ function openModal($el) {
 }
 
 function closeModal($el) {
+    debugger;
     $el.classList.remove('is-active');
 }
 
