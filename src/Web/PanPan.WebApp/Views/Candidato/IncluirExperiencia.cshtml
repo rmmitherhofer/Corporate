@@ -1,8 +1,8 @@
 ﻿@using PanPan.WebApp.Enums;
 @using PanPan.WebApp.Extensions;
-@model ExperienciaViewModel
+@model Guid
 
-<form asp-controller="Candidato" asp-action="IncluirExperiencia" method="post" class="row g-3">
+@* <form asp-controller="Candidato" asp-action="IncluirExperiencia" method="post" class="row g-3">
     <input asp-for="CandidatoId" type="hidden" />
     <partial name="Partial/_Experiencia" model="Model" />
 
@@ -28,4 +28,30 @@
             </div>
         </div>
     </div>
-</form>
+</form> *@
+
+<div class="box">
+    <partial name="Partial/_Experiencia" model="new ExperienciaViewModel(){CandidatoId = Model}" />
+    <div class="columns">
+        <div class="column">
+            <div class="field is-grouped">
+                <div class="control">
+                    <button id="btn-new-experiencia" type="button" class="button is-success">
+                        <span class="icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                        <span>Incluir</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <button type="button" class="button is-info is-light back">
+                        <span class="icon">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </span>
+                        <span>Voltar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

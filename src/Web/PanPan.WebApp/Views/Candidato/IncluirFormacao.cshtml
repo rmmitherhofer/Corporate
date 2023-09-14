@@ -1,17 +1,15 @@
 ﻿@using PanPan.WebApp.Enums;
 @using PanPan.WebApp.Extensions;
-@model FormacaoViewModel
+@model Guid
 
-<form asp-controller="Candidato" asp-action="IncluirFormacao" method="post" class="row g-3">
-    <input asp-for="CandidatoId" type="hidden" />
-    
-    <partial name="Partial/_Formacao" model="Model" />
 
+<div class="box">
+    <partial name="Partial/_Formacao" model="new FormacaoViewModel(){CandidatoId = Model}" />
     <div class="columns">
-        <div class="column is-offset-10">
+        <div class="column">
             <div class="field is-grouped">
                 <div class="control">
-                    <button type="submit" class="button is-success">
+                    <button id="btn-new-formacao" type="button" class="button is-success">
                         <span class="icon">
                             <i class="fa-solid fa-plus"></i>
                         </span>
@@ -19,15 +17,14 @@
                     </button>
                 </div>
                 <div class="control">
-                    <a type="button" asp-controller="Candidato" asp-action="AlterarCandidato" asp-route-id="@Model.CandidatoId" class="button is-info is-light">
+                    <button type="button" class="button is-info is-light back">
                         <span class="icon">
                             <i class="fa-solid fa-rotate-left"></i>
                         </span>
                         <span>Voltar</span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</form>
-
+</div>

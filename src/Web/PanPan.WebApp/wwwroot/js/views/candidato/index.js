@@ -4,6 +4,7 @@ candidato.index = {
     candidatosRequest: function (pagenumber = 1) {
         httpClient.send('POST', '/candidatos', this.modelRequest(pagenumber), this.success, this.fail, httpClient.complete, '');
     },
+
     modelRequest: function (pagenumber) {
         request = {
             Nome: document.getElementById('txt-nome').value,
@@ -20,6 +21,7 @@ candidato.index = {
         };
         return request;
     },
+
     success: function (response) {
         let content = document.getElementsByClassName('table-content')[0];
         content.querySelector('div').remove();

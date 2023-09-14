@@ -30,6 +30,7 @@ public class CandidatoController : MainController
         _mapper = mapper;
     }
 
+    #region Candidato
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatosPaginatedResponse))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
@@ -88,7 +89,7 @@ public class CandidatoController : MainController
 
             var candidatos = await _candidatoRepository.ObterPaginado(filter);
 
-            if(candidatos.totalRecords > 0)
+            if (candidatos.totalRecords > 0)
             {
                 Notificar(property, "Candidato ja cadastrado na base de dados.");
                 return CustomResponse();
@@ -186,7 +187,9 @@ public class CandidatoController : MainController
 
         return CustomResponse();
     }
+    #endregion
 
+    #region Formacao
     [HttpGet("{candidatoId}/formacao")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatosPaginatedResponse))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
@@ -279,7 +282,9 @@ public class CandidatoController : MainController
 
         return CustomResponse();
     }
+    #endregion
 
+    #region Experiencia
     [HttpGet("{candidatoId}/experiencia")]
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatosPaginatedResponse))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
@@ -392,7 +397,8 @@ public class CandidatoController : MainController
         await _candidatoRepository.UnitOfWork.Commit();
 
         return CustomResponse();
-    }
+    } 
+    #endregion
 
     [HttpPut("{id}/tag")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]

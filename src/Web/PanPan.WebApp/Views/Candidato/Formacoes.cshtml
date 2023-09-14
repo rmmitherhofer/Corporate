@@ -4,11 +4,11 @@
 
 <div class="box">
     <div class="buttons">
-        <a type="button" asp-controller="Candidato" asp-action="IncluirFormacao" asp-route-id="@Model.Select(f => f.CandidatoId).FirstOrDefault()" class="button is-primary">
+        <button type="button" class="button is-primary js-modal-trigger" data-target="nova-formacao">
             <span class="icon">
                 <i class="fa-solid fa-graduation-cap"></i>
             </span>
-        </a>
+        </button>
     </div>
     <table class="table is-fullwidth">
         <thead>
@@ -43,7 +43,7 @@
                         <td>@formacao.DataFimString</td>
                         <td>
                             <div class="buttons">
-                                <a type="button" asp-controller="Candidato" asp-action="AlterarFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id" class="button is-success is-outlined"><i class="fa-solid fa-pencil"></i></a>
+                                <button type="button" class="button is-success is-outlined js-modal-trigger" data-target="@formacao.Id"><i class="fa-solid fa-pencil"></i></button>
                                 <a type="button" asp-controller="Candidato" asp-action="RemoverFormacao" asp-route-id="@formacao.CandidatoId" asp-route-formacaoId="@formacao.Id" class="button is-danger is-outlined"><i class="fa-solid fa-xmark"></i></a>
                             </div>
                         </td>
@@ -52,4 +52,24 @@
             }
         </tbody>
     </table>
+
+
+    <div id="nova-formacao" class="modal new-formacao">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <div class="modal-content">
+                <partial name="IncluirFormacao" model="Model.Select(f => f.CandidatoId).FirstOrDefault()" />
+            </div>
+        </div>
+    </div>
+
+
+
+    @if (Model != null)
+    {
+        @foreach (var formacao in Model)
+        {
+            <partial name="AlterarFormacao" model="formacao" />
+        }
+    }
 </div>

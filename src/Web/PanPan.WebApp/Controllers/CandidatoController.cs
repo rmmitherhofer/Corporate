@@ -78,7 +78,7 @@ public class CandidatoController : Controller
         if (_notification.HasNotifications())
             return View(model);
 
-        return RedirectToAction(nameof(Index), new {nome = request.Nome});
+        return RedirectToAction(nameof(Index), new { nome = request.Nome });
     }
     [HttpGet]
     [Route("alterar/{id}")]
@@ -86,7 +86,7 @@ public class CandidatoController : Controller
     {
         var response = await _candidatoHttpService.ObterPorId(id);
 
-        var model = _mapper.Map<CandidatoViewModel>(response);        
+        var model = _mapper.Map<CandidatoViewModel>(response);
 
         return View(model);
     }
@@ -112,47 +112,38 @@ public class CandidatoController : Controller
     #endregion
 
     #region Formacao
+
     [HttpGet]
-    [Route("{id}/formacao/incluir")]
-    public async Task<IActionResult> IncluirFormacao(Guid id)
+    [Route("{candidatoId}/formacoes")]
+    public async Task<IActionResult> Formacoes(Guid candidatoId)
     {
-        return View(new FormacaoViewModel() { CandidatoId = id });
+        var response = await _candidatoHttpService.ObterFormacoes(candidatoId);
+
+        var model = _mapper.Map<IEnumerable<FormacaoViewModel>>(response);
+
+        return PartialView(model);
     }
+
     [HttpPost]
-    [Route("{id}/formacao/incluir")]
-    public async Task<IActionResult> IncluirFormacao(Guid id, FormacaoViewModel model)
+    [Route("formacao/incluir")]
+    public async Task<IActionResult> IncluirFormacao(FormacaoViewModel model)
     {
         var request = _mapper.Map<AddFormacaoRequest>(model);
 
-        await _candidatoHttpService.Incluir(id, request);
+        await _candidatoHttpService.Incluir(model.CandidatoId, request);
 
-        if(_notification.HasNotifications())
-            return View(model);
-
-        return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
+        return PartialView(nameof(IncluirFormacao), Guid.NewGuid());
     }
-    [HttpGet]
-    [Route("{id}/formacao/alterar/{formacaoId}")]
-    public async Task<IActionResult> AlterarFormacao(Guid id, Guid formacaoId)
-    {
-        var response = await _candidatoHttpService.ObterPorId(id);
 
-        var model = response.Formacoes.Where(f => f.Id == formacaoId).FirstOrDefault();
-
-        return View(_mapper.Map<FormacaoViewModel>(model));
-    }
     [HttpPost]
-    [Route("{id}/formacao/alterar/{formacaoId}")]
-    public async Task<IActionResult> AlterarFormacao(Guid id, Guid formacaoId, FormacaoViewModel model)
+    [Route("formacao/alterar")]
+    public async Task<IActionResult> AlterarFormacao(FormacaoViewModel model)
     {
         var request = _mapper.Map<UpdateFormacaoRequest>(model);
 
-        await _candidatoHttpService.Alterar(id, formacaoId, request);
+        await _candidatoHttpService.Alterar(model.CandidatoId, model.Id, request);
 
-        if (_notification.HasNotifications())
-            return View(model);
-
-        return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
+        return View(model);
     }
     [HttpGet]
     [Route("{id}/formacao/remover/{formacaoId}")]
@@ -166,11 +157,16 @@ public class CandidatoController : Controller
 
     #region Experiencia profissional
     [HttpGet]
-    [Route("{id}/experiencia/incluir")]
-    public async Task<IActionResult> IncluirExperiencia(Guid id)
+    [Route("{candidatoId}/experiencias")]
+    public async Task<IActionResult> Experiencias(Guid candidatoId)
     {
-        return View(new ExperienciaViewModel() { CandidatoId = id });
+        var response = await _candidatoHttpService.ObterExperiencias(candidatoId);
+
+        var model = _mapper.Map<IEnumerable<ExperienciaViewModel>>(response);
+
+        return PartialView(model);
     }
+
     [HttpPost]
     [Route("{id}/experiencia/incluir")]
     public async Task<IActionResult> IncluirExperiencia(Guid id, ExperienciaViewModel model)
@@ -183,16 +179,6 @@ public class CandidatoController : Controller
             return View(model);
 
         return RedirectToAction(nameof(AlterarCandidato), new { Id = id });
-    }
-    [HttpGet]
-    [Route("{id}/experiencia/alterar/{experienciaId}")]
-    public async Task<IActionResult> AlterarExperiencia(Guid id, Guid experienciaId)
-    {
-        var response = await _candidatoHttpService.ObterPorId(id);
-
-        var model = response.Experiencias.Where(f => f.Id == experienciaId).FirstOrDefault();
-
-        return View(_mapper.Map<ExperienciaViewModel>(model));
     }
     [HttpPost]
     [Route("{id}/experiencia/alterar/{experienciaId}")]

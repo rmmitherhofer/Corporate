@@ -3,11 +3,11 @@
 
 <div class="box">
     <div class="buttons">
-        <a type="button" asp-controller="Candidato" asp-action="IncluirExperiencia" asp-route-id="@Model.Select(e => e.CandidatoId).FirstOrDefault()" class="button is-primary">
+        <button type="button" class="button is-primary js-modal-trigger" data-target="nova-experiencia">
             <span class="icon">
                 <i class="fa-solid fa-briefcase"></i>
             </span>
-        </a>
+        </button>
     </div>
     <table class="table is-fullwidth">
         <thead>
@@ -33,7 +33,7 @@
                         <td>@experiencia.DataFimString</td>
                         <td>
                             <div class="buttons">
-                                <a type="button" asp-controller="Candidato" asp-action="AlterarExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id" class="button is-success is-outlined"><i class="fa-solid fa-pencil"></i></a>
+                                <button type="button" class="button is-success is-outlined js-modal-trigger" data-target="@experiencia.Id"><i class="fa-solid fa-pencil"></i></button>
                                 <a type="button" asp-controller="Candidato" asp-action="RemoverExperiencia" asp-route-id="@experiencia.CandidatoId" asp-route-experienciaId="@experiencia.Id" class="button is-danger is-outlined"><i class="fa-solid fa-xmark"></i></a>
                             </div>
                         </td>
@@ -43,3 +43,23 @@
         </tbody>
     </table>
 </div>
+
+
+<div id="nova-experiencia" class="modal new-experiencia">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <div class="modal-content">
+            <partial name="IncluirExperiencia" model="Model.Select(f => f.CandidatoId).FirstOrDefault()" />
+        </div>
+    </div>
+</div>
+
+
+
+@if (Model != null)
+{
+    @foreach (var experiencia in Model)
+    {
+        <partial name="AlterarExperiencia" model="experiencia" />
+    }
+}

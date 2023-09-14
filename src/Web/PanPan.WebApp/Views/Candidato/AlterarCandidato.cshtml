@@ -225,24 +225,26 @@
             </div>
         </div>
     </div>
-
-
-    @await Component.InvokeAsync(typeof(FormacoesViewComponent), new { candidatoId =  Model.Id })
-
-    @await Component.InvokeAsync(typeof(ExperienciasViewComponent), new { candidatoId =  Model.Id })
-
-    <div class="buttons">
-        <button type="button" class="button is-primary" onclick="gerarParecer('@Model.Id')">
-            <span class="icon">
-                <i class="fa-solid fa-file-pdf"></i>
-            </span>
-            <span>Gerar parecer</span>
-        </button>
-    </div>
 </form>
 
-<script src="~/js/parecer-candidato.js" asp-append-version="true"></script>
+<div id="tbl-formacoes">
+</div>
 
+<div id="tbl-experiencias">
+</div>
+
+<div class="buttons">
+    <button type="button" class="button is-primary" onclick="gerarParecer('@Model.Id')">
+        <span class="icon">
+            <i class="fa-solid fa-file-pdf"></i>
+        </span>
+        <span>Gerar parecer</span>
+    </button>
+</div>
+
+<script src="~/js/views/candidato/formacao.js" asp-append-version="true"></script>
+<script src="~/js/views/candidato/experiencia.js" asp-append-version="true"></script>
+<script src="~/js/parecer-candidato.js" asp-append-version="true"></script>
 
 @section Scripts {
 
@@ -251,10 +253,12 @@
     }
 
     <script>
-        $(document).ready(function () {
+        window.onload = function () {
             BuscaCep();
             $('.selectize').selectize();
-        });        
+            formacao.obter();
+            experiencia.obter();
+        }
     </script>
 
 }

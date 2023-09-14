@@ -3,20 +3,21 @@
 @model FormacaoViewModel
 
 <div class="box">
+    <input id="formacao-id" asp-for="Id" value="@Model.Id" type="hidden" />
     <div class="columns">
         <div class="column">
             <div class="field">
                 <label for="txt-instituicao" class="label">Instituicao</label>
                 <div class="control">
-                    <input id="txt-instituicao" asp-for="NomeInstituicao" type="text" name="NomeInstituicao" class="input" placeholder="Instituicao" maxlength="150">
+                    <input id="txt-instituicao" type="text" name="NomeInstituicao" class="input" placeholder="Instituicao" maxlength="150">
                 </div>
             </div>
         </div>
         <div class="column">
             <div class="field">
-                <label for="txt-descricacao" class="label">Descricao do curso</label>
+                <label for="txt-descricao" class="label">Descricao do curso</label>
                 <div class="control">
-                    <input id="txt-descricacao" asp-for="Descricao" type="text" name="Descricao" class="input" placeholder="Descricao do curso" maxlength="150">
+                    <input id="txt-descricao" type="text" name="Descricao" class="input" placeholder="Descricao do curso" maxlength="150">
                 </div>
             </div>
         </div>
@@ -26,11 +27,11 @@
             <div class="field">
                 <div class="control">
                     <label class="radio">
-                        <input id="radio-tipo-formacao-ensino" asp-for="Tipo" type="radio" name="Tipo" value="@TipoFormacao.Ensino">
+                        <input id="radio-tipo-formacao-ensino" type="radio" name="Tipo" value="@TipoFormacao.Ensino">
                         Ensino
                     </label>
                     <label class="radio">
-                        <input id="radio-tipo-formacao-curso" asp-for="Tipo" type="radio" name="Tipo" value="@TipoFormacao.Curso">
+                        <input id="radio-tipo-formacao-curso" type="radio" name="Tipo" value="@TipoFormacao.Curso">
                         Curso
                     </label>
                 </div>
@@ -45,7 +46,7 @@
                     <label for="slct-ensino" class="label">Tipo de ensino</label>
                     <div class="control">
                         <div>
-                            <select id="slct-ensino" asp-for="Ensino" name="Ensino" class="selectize" placeholder="Selecione">
+                            <select id="slct-ensino" name="Ensino" class="selectize" placeholder="Selecione">
                                 <option></option>
                                 @{
                                     if (Model is not null)
@@ -68,7 +69,7 @@
                     <label for="slct-curso" class="label">Curso</label>
                     <div class="control">
                         <div>
-                            <select id="slct-curso" asp-for="Curso" name="Curso" class="selectize" placeholder="Selecione">
+                            <select id="slct-curso" name="Curso" class="selectize" placeholder="Selecione">
                                 <option></option>
                                 @{
                                     if (Model is not null)
@@ -90,7 +91,7 @@
                 <label for="slct-periodo" class="label">Periodo</label>
                 <div class="control">
                     <div>
-                        <select id="slct-periodo" asp-for="Periodo" name="Periodo" class="selectize" placeholder="Selecione">
+                        <select id="slct-periodo" name="Periodo" class="selectize" placeholder="Selecione">
                             <option></option>
                             @{
                                 if (Model is not null)
@@ -107,7 +108,7 @@
             <div class="field">
                 <label for="txt-data-inicio" class="label">Inicio</label>
                 <div class="control">
-                    <input id="txt-data-inicio" asp-for="DataInicioString" type="text" name="DataInicioString" class="input" placeholder="00/0000" data-mask="00/0000">
+                    <input id="txt-data-inicio" type="text" name="DataInicioString" class="input" placeholder="00/0000" data-mask="00/0000">
                 </div>
             </div>
         </div>
@@ -115,7 +116,7 @@
             <div class="field">
                 <label for="txt-data-fim" class="label">Conclusao</label>
                 <div class="control">
-                    <input id="txt-data-fim" asp-for="DataFimString" type="text" name="DataFimString" class="input" placeholder="00/0000" data-mask="00/0000">
+                    <input id="txt-data-fim" type="text" name="DataFimString" class="input" placeholder="00/0000" data-mask="00/0000">
                 </div>
             </div>
         </div>
@@ -125,7 +126,7 @@
                 <label for="slct-status" class="label">Status</label>
                 <div class="control">
                     <div>
-                        <select id="slct-status" asp-for="Status" name="Status" class="selectize" placeholder="Selecione">
+                        <select id="slct-status" name="Status" class="selectize" placeholder="Selecione">
                             <option></option>
                             @{
                                 if (Model is not null)
@@ -140,4 +141,3 @@
         </div>
     </div>
 </div>
-<script src="~/js/views/candidato/formacao.js"></script>

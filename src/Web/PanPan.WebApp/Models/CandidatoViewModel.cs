@@ -111,10 +111,10 @@ public class FormacaoViewModel
     public Guid CandidatoId { get; set; }
     public DateTime DataCadastro { get; set; }
     public DateTime? DataAlteracao { get; set; }
-    public string NomeInstituicao { get; set; }
-    public string? Descricao { get; set; }
-    public string? DataInicioString { get; set; }
-    public string? DataFimString { get; set; }
+    public string NomeInstituicao { get; set; } =string.Empty;
+    public string? Descricao { get; set; } = string.Empty;
+    public string? DataInicioString { get; set; } = string.Empty;
+    public string? DataFimString { get; set; } = string.Empty;
     public DateTime? DataInicio { get; set; }
     public DateTime? DataFim { get; set; }
     public TipoFormacao Tipo { get; set; }
