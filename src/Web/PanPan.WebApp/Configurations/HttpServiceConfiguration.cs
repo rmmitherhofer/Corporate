@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using PanPan.WebApp.HttpServices;
+﻿using PanPan.WebApp.HttpServices;
 
 namespace PanPan.WebApp.Configurations;
 
@@ -12,11 +11,11 @@ public static class HttpServiceConfiguration
         );
 
         services.AddHttpClient<IClienteHttpService, ClienteHttpService>(services =>
-            services.BaseAddress = new Uri("https://localhost:7032")
+            services.BaseAddress = new Uri(configuration.GetSection("Apis:Cliente").Value)
         );
 
         services.AddHttpClient<IVagaHttpService, VagaHttpService>(services =>
-            services.BaseAddress = new Uri("https://localhost:7105")
+            services.BaseAddress = new Uri(configuration.GetSection("Apis:Vaga").Value)
         );
 
         return services;

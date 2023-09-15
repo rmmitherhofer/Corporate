@@ -9,17 +9,14 @@
     }
   },
   "profiles": {
-    "http": {
+    "Container Production": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5253",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "applicationUrl": "https://localhost:7105;http://localhost:5253"
     },
-    "https": {
+    "Container Developer": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
