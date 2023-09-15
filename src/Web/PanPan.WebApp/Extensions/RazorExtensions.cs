@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Routing;
 using PanPan.WebApp.Enums;
-using PanPan.WebApp.Models;
+using PanPan.WebApp.Models.ViewModels;
 using System;
 using System.Text;
 

@@ -32,7 +32,7 @@ public class CandidatoController : MainController
 
     #region Candidato
     [HttpGet]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatosPaginatedResponse))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<Candidato>))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> ObterTodosCandidatos()
     {
@@ -54,7 +54,7 @@ public class CandidatoController : MainController
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CandidatosPaginatedResponse))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Candidato))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> ObterCandidadoPorId(Guid id)
         => CustomResponse(await _candidatoRepository.ObterPorId(id));

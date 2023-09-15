@@ -128,7 +128,16 @@ public class Candidato : Entity, IAggregateRoot
         Endereco = endereco;
         Endereco?.AtribuirCandidato(Id);
     }
-    public void AlterarEndereco(Endereco endereco) => Endereco?.Alterar(endereco);
+    public void AlterarEndereco(Endereco endereco)
+    {
+        if (Endereco is null)
+        {
+            IncluirEndereco(endereco);
+            return;
+        }
+        Endereco?.Alterar(endereco);
+    }
+
     private int IdadeEmAnos(int? anos)
     {
         if (DataNascimento is null)

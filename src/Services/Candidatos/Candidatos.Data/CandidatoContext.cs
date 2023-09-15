@@ -4,6 +4,7 @@ using Candidatos.Business.Models;
 using FluentValidation.Results;
 using Logs.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Notifications.Interfaces;
 using Notifications.Messages;
 
@@ -71,14 +72,13 @@ public class CandidatoContext : DbContext, IUnitOfWork
         {
             if (_notification.HasNotifications()) return sucesso;
 
-            sucesso =  await base.SaveChangesAsync() > 0;
+            sucesso = await base.SaveChangesAsync() > 0;
         }
         catch (Exception ex)
         {
-            _notification.Notify(new Notification(ex.GetType().Name, "SQL-Server", ex.Message));
-            ConsoleLog.LogFail(ex.Message);
+            _notification.Notify(new Notification(LogLevel.Critical, ex.GetType().Name, "SQL-Server", ex.Message));
+            ConsoleLog.LogCrit(ex.Message);
         }
-
         return sucesso;
     }
 }

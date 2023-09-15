@@ -1,55 +1,111 @@
-﻿@model IEnumerable<ClienteViewModel>
+﻿@using PanPan.WebApp.Extensions;
+@using PanPan.WebApp.Models.ViewModels.Clientes;
+@model ClientesViewModel
 
+@{
+    ViewData["Title"] = "Clientes";
+}
+<form asp-controller="Candidato" asp-action="Index" method="get" class="">
+    <div class="box">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-cnpj" class="label">CNPJ</label>
+                    <div class="control">
+                        <input id="txt-cnpj" asp-for="Cnpj" type="text" name="Cnpj" class="input" placeholder="00.000.000/0000-00" maxlength="18">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-nome" class="label">Nome</label>
+                    <div class="control">
+                        <input id="txt-nome" asp-for="Nome" type="text" name="NomeFantasia" class="input" placeholder="Nome" maxlength="150">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-representante" class="label">Representante</label>
+                    <div class="control">
+                        <input id="txt-representante" asp-for="Representante" type="text" name="NomeRepresentante" class="input" placeholder="Representante" maxlength="150">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<form class="row g-3">
-    <div class="col-md-6">
-        <label for="inputEmail4" class="form-label">Nome</label>
-        <input type="text" class="form-control" id="inputEmail4">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="txt-email" class="label">E-mail</label>
+                    <div class="control">
+                        <input id="txt-email" asp-for="Email" type="text" name="Email" class="input email-helper" placeholder="email@domain.com">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-telefone" class="label">Telefone</label>
+                    <div class="control">
+                        <input id="txt-telefone" asp-for="Telefone" type="text" name="Telefone" class="input" placeholder="(00) 0000-0000" data-mask="(00) 0000-0000">
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="txt-celular" class="label">Celular</label>
+                    <div class="control">
+                        <input id="txt-celular" asp-for="Celular" type="text" name="Celular" class="input" placeholder="(00) 90000-0000" data-mask="(00) 00000-0000">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="slct-estado" class="label">Estado</label>
+                    <div class="control">
+                        <div id="sec-estado">
+                            <select id="slct-estado" asp-for="Estado" name="Estado" class="selectize" placeholder="Selecione" onchange="buscaCidades(this.value, 'slct-cidade', '@(Model is not null ? "reload" : "load")')">
+                                <option></option>
+                                @{
+                                    if (Model is not null)
+                                        @Html.Raw(this.SelectOptionsEstados(Model.Estado))
+                                    else
+                                        @Html.Raw(this.SelectOptionsEstados())
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label for="slct-cidade" class="label">Cidade</label>
+                    <div class="control">
+                        <div id="sec-cidade">
+                            <select id="slct-cidade" asp-for="Cidade" name="Cidade" class="selectize" placeholder="Selecione">
+                                <option></option>
+                                @{
+                                    if (Model is not null)
+                                        @Html.Raw(this.SelectOptionsCidades(Model.Estado, Model.Cidade))
+                                    else
+                                        @Html.Raw(this.SelectOptionsCidades())
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="col-md-6">
-        <label for="inputPassword4" class="form-label">E-mail</label>
-        <input type="email" class="form-control" id="inputPassword4">
-    </div>
-    <div class="col-12">
-        <button type="submit" class="btn btn-primary">Pesquisar</button>
-        <a type="button" class="btn btn-primary" asp-controller="Cliente" asp-action="New">Novo</a>
+
+    <div class="table-content">
+        <partial name="Partial/_Clientes" model="Model" />
     </div>
 </form>
 
-
-<table class="table table-light  table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">CNPJ</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Representante</th>
-            <th scope="col">e-mail</th>
-            <th scope="col">Telefone</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var candidate in Model)
-        {
-            <tr>
-                <th scope="row">@candidate.Cnpj</th>
-                <td>@candidate.NomeFantasia</td>
-                <td>@candidate.NomeRepresentante</td>
-                <td>@candidate.Email</td>
-                <td>@candidate.Telefone</td>
-                <td>
-                    <button type="button" class="btn btn-primary">Primary</button>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger">Danger</button>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info">Info</button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<script src="~/js/cidades.js" asp-append-version="true"></script>
+<script src="~/js/views/cliente/index.js" asp-append-version="true"></script>

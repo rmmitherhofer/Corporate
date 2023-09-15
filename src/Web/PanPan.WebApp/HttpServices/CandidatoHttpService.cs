@@ -1,45 +1,34 @@
-﻿using Exceptions;
-using Http;
-using Notifications.Interfaces;
-using Notifications.Messages;
-using PanPan.WebApp.Models;
-using PanPan.WebApp.Models.Request;
-using PanPan.WebApp.Models.Response;
+﻿using Notifications.Interfaces;
+using PanPan.WebApp.Models.Request.Candidato;
 using PanPan.WebApp.Models.Response.Candidato;
-using System;
-using System.Net;
+using PanPan.WebApp.Models.ViewModels.Candidatos;
 
 namespace PanPan.WebApp.HttpServices;
 
 public interface ICandidatoHttpService
 {
     Task<CandidatosPaginatedResponse> ObterPaginado(CandidatosViewModel request);
-    Task<IEnumerable<CandidatoResponse>> ObterTodos();
     Task<CandidatoResponse> ObterPorId(Guid id);
     Task<byte[]> GerarParecer(Guid id);
 
-    Task Incluir(AddCandidatoRequest request);
+    Task Adicionar(AddCandidatoRequest request);
     Task Alterar(Guid id, UpdateCandidatoRequest request);
     Task Remover(Guid id);
 
     Task<IEnumerable<FormacaoResponse>> ObterFormacoes(Guid candidatoId);
-    Task Incluir(Guid id, AddFormacaoRequest request);
+    Task Adicionar(Guid id, AddFormacaoRequest request);
     Task Alterar(Guid id, Guid formacaoId, UpdateFormacaoRequest request);
     Task RemoverFormacao(Guid id, Guid formacaoId);
 
     Task<IEnumerable<ExperienciaResponse>> ObterExperiencias(Guid candidatoId);
-    Task Incluir(Guid id, AddExperienciaRequest request);
+    Task Adicionar(Guid id, AddExperienciaRequest request);
     Task Alterar(Guid id, Guid experienciaId, UpdateExperienciaRequest request);
     Task RemoverExperiencia(Guid id, Guid experienciaId);
 
 }
-public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
+public class CandidatoHttpService : HttpService, ICandidatoHttpService
 {
-    private readonly INotificationHandler _notification;
-    public CandidatoHttpService(HttpClient httpClient, INotificationHandler notification) : base(httpClient)
-    {
-        _notification = notification;
-    }
+    public CandidatoHttpService(HttpClient httpClient, INotificationHandler notification) : base(httpClient, notification) { }
 
     public async Task<CandidatosPaginatedResponse> ObterPaginado(CandidatosViewModel request)
     {
@@ -80,20 +69,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await GetAsync(uri);
 
-        Notificar(response, "GET", uri);
-
-        return await DeserializeObjectResponseAsync<CandidatosPaginatedResponse>(response);
-    }
-
-    public async Task<IEnumerable<CandidatoResponse>> ObterTodos()
-    {
-        var uri = "api/v1/candidato";
-
-        var response = await GetAsync(uri);
-
-         Notificar(response, "GET", uri);
-
-        return await DeserializeObjectResponseAsync<IEnumerable<CandidatoResponse>>(response);
+        return ValidarERetornar<CandidatosPaginatedResponse>(response);
     }
     public async Task<CandidatoResponse> ObterPorId(Guid id)
     {
@@ -101,9 +77,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await GetAsync(uri);
 
-        Notificar(response, "GET", uri);
-
-        return await DeserializeObjectResponseAsync<CandidatoResponse>(response);
+        return ValidarERetornar<CandidatoResponse>(response);
     }
     public async Task<byte[]> GerarParecer(Guid id)
     {
@@ -111,12 +85,10 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await GetAsync(uri);
 
-        Notificar(response, "GET", uri);
-
-        return await DeserializeObjectResponseAsync<byte[]>(response);
+        return ValidarERetornar<byte[]>(response);
     }
 
-    public async Task Incluir(AddCandidatoRequest request)
+    public async Task Adicionar(AddCandidatoRequest request)
     {
         var uri = "api/v1/candidato";
 
@@ -124,7 +96,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await PostAsync(uri, content);
 
-        Notificar(response, "POST", uri);
+        ValidarResponse(response);
     }
     public async Task Alterar(Guid id, UpdateCandidatoRequest request)
     {
@@ -134,7 +106,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await PutAsync(uri, content);
 
-        Notificar(response, "PUT", uri);
+        ValidarResponse(response);
     }
     public async Task Remover(Guid id)
     {
@@ -142,7 +114,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await DeleteAsync(uri);
 
-        Notificar(response, "DELETE", uri);
+        ValidarResponse(response);
     }
 
     public async Task<IEnumerable<FormacaoResponse>> ObterFormacoes(Guid candidatoId)
@@ -151,11 +123,9 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await GetAsync(uri);
 
-        Notificar(response, "GET", uri);
-
-        return await DeserializeObjectResponseAsync<IEnumerable<FormacaoResponse>>(response);
+        return ValidarERetornar<IEnumerable<FormacaoResponse>>(response);
     }
-    public async Task Incluir(Guid id, AddFormacaoRequest request)
+    public async Task Adicionar(Guid id, AddFormacaoRequest request)
     {
         var uri = $"api/v1/candidato/{id}/formacao";
 
@@ -163,7 +133,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await PostAsync(uri, content);
 
-        Notificar(response, "POST", uri);
+        ValidarResponse(response);
     }
     public async Task Alterar(Guid id, Guid formacaoId, UpdateFormacaoRequest request)
     {
@@ -173,7 +143,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await PutAsync(uri, content);
 
-        Notificar(response, "PUT", uri);
+        ValidarResponse(response);
     }
     public async Task RemoverFormacao(Guid id, Guid formacaoId)
     {
@@ -181,7 +151,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await DeleteAsync(uri);
 
-        Notificar(response, "DELETE", uri);
+        ValidarResponse(response);
     }
 
     public async Task<IEnumerable<ExperienciaResponse>> ObterExperiencias(Guid candidatoId)
@@ -190,11 +160,9 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await GetAsync(uri);
 
-        Notificar(response, "GET", uri);
-
-        return await DeserializeObjectResponseAsync<IEnumerable<ExperienciaResponse>>(response);
+        return ValidarERetornar<IEnumerable<ExperienciaResponse>>(response);
     }
-    public async Task Incluir(Guid id, AddExperienciaRequest request)
+    public async Task Adicionar(Guid id, AddExperienciaRequest request)
     {
         var uri = $"api/v1/candidato/{id}/experiencia";
 
@@ -202,7 +170,7 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await PostAsync(uri, content);
 
-        Notificar(response, "POST", uri);
+        ValidarResponse(response);
     }
     public async Task Alterar(Guid id, Guid experienciaId, UpdateExperienciaRequest request)
     {
@@ -211,7 +179,8 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
         var content = SerializeContent(request);
 
         var response = await PutAsync(uri, content);
-        Notificar(response, "PUT", uri);
+
+        ValidarResponse(response);
     }
     public async Task RemoverExperiencia(Guid id, Guid experienciaId)
     {
@@ -219,35 +188,6 @@ public class CandidatoHttpService : MainHttpService, ICandidatoHttpService
 
         var response = await DeleteAsync(uri);
 
-        Notificar(response, "DELETE", uri);
-    }
-
-
-    private void Notificar(HttpResponseMessage response, string method, string uri)
-    {
-        if (ResponsePossuiErros(response, false))
-        {
-            switch (response.StatusCode)
-            {
-                case HttpStatusCode.InternalServerError:
-                    var errorResponse = DeserializeObjectResponse<ErrorResponse>(response);
-                    foreach (var error in errorResponse.Errors)
-                    {
-                        _notification.Notify(new Notification(error.Level, error.Type, error.Key, error.Value));
-                    }
-                    break;
-                case HttpStatusCode.BadRequest:
-                    var validationResponse = DeserializeObjectResponse<ValidationResponse>(response);
-                    foreach (var validation in validationResponse.Validations)
-                    {
-                        _notification.Notify(new Notification(validation.Level, validation.Type, validation.Key, validation.Value));
-                    }
-                    break;
-                default:
-                    throw new CustomHttpRequestException($"{method}:{uri} - {response.StatusCode}");
-            }
-        }
-    }
-
-
+        ValidarResponse(response);
+    }    
 }

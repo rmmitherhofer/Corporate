@@ -1,0 +1,66 @@
+﻿@using PanPan.WebApp.Enums;
+@using PanPan.WebApp.Extensions;
+@using PanPan.WebApp.Models.ViewModels.Clientes;
+@model ClienteViewModel
+
+<input id="input-cliente-id" asp-for="Id" type="hidden" />
+
+<div class="box">
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <label for="txt-cnpj" class="label">CNPJ</label>
+            <div class="control">
+                <input id="txt-cnpj" asp-for="Cnpj" type="text" name="Cnpj" class="input" placeholder="00.000.000/0000-00" data-mask="00.000.000/0000-00" maxlength="18">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="field">
+            <label for="txt-nome" class="label">Nome</label>
+            <div class="control">
+                <input id="txt-nome" asp-for="Nome" type="text" name="Nome" class="input" placeholder="Nome" maxlength="150">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <label for="txt-representante" class="label">Representante</label>
+            <div class="control">
+                <input id="txt-representante" asp-for="Representante" type="text" name="Representante" class="input" placeholder="Representante">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="field">
+            <label for="txt-email" class="label">Email</label>
+            <div class="control">
+                <input id="txt-email" asp-for="Email" type="email" name="Email" class="input email-helper" placeholder="email@domain.com">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <label for="txt-telefone" class="label">Telefone</label>
+            <div class="control">
+                <input id="txt-telefone" asp-for="Telefone" type="text" name="Telefone" class="input" placeholder="(00) 0000-0000" data-mask="(00) 0000-0000">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="field">
+            <label for="txt-celular" class="label">Celular</label>
+            <div class="control">
+                <input id="txt-celular" asp-for="Celular" type="text" name="Celular" class="input" placeholder="(00) 90000-0000" data-mask="(00) 0000-0000">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<partial name="Partial/_Endereco" model="Model.Endereco" />

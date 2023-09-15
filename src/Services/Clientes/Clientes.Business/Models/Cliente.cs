@@ -1,30 +1,52 @@
 ﻿using Core.DomainObjects;
+using Core.ValueObjects;
 
 namespace Clientes.Business.Models;
 
 public class Cliente : Entity, IAggregateRoot
 {
-    public string Cnpj { get; set; }
-    public string NomeFantasia { get; set; }
-    public string NomeRepresentante { get; set; }
-    public string Telefone { get; set; }
-    public string Email { get; set; }
+    public string Cnpj { get; private set; }
+    public string Nome { get; private set; }
+    public string? Representante { get; private set; }
+    public string? Telefone { get; private set; }
+    public string? Celular { get; private set; }
+    public string? Email { get; private set; }
+
+    public Endereco? Endereco { get; private set; }
 
     protected Cliente() { }
-    public Cliente(string cnpj, string nomeFantasia, string nomeRepresentante, string telefone, string email)
+    public Cliente(string cnpj, string nome, string? representante, string? telefone, string? email, string? celular)
     {
-        Cnpj = cnpj;
-        NomeFantasia = nomeFantasia;
-        NomeRepresentante = nomeRepresentante;
+        Cnpj = new Cnpj(cnpj).Numero;
+        Nome = nome;
+        Representante = representante;
         Telefone = telefone;
-        Email = email;
+        Celular = celular;
+        Email = new Email(email).Endereco;
     }
 
-    public void Atualizar(string nomeFantasia, string representante, string telefone, string email)
+    public void Atualizar(string nome, string? representante, string? telefone, string? email, string? celular)
     {
-        NomeFantasia = nomeFantasia;
-        NomeRepresentante = representante;
+        Nome = nome;
+        Representante = representante;
         Telefone = telefone;
-        Email = email;
+        Email = new Email(email).Endereco;
+        Celular = celular;
+    }
+
+    public void IncluirEndereco(Endereco endereco)
+    {
+        Endereco = endereco;
+        Endereco?.AtribuirCliente(Id);
+    }
+    public void AlterarEndereco(Endereco endereco)
+    {
+        if (Endereco is null)
+        {
+            IncluirEndereco(endereco);
+            return;
+        }
+
+        Endereco?.Alterar(endereco);
     }
 }

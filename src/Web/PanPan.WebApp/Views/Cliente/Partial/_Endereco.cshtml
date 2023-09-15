@@ -1,0 +1,97 @@
+﻿@using PanPan.WebApp.Extensions;
+@using PanPan.WebApp.Models.ViewModels;
+@model EnderecoViewModel
+
+
+<div class="box endereco">
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-cep" class="label">CEP</label>
+                <div class="control">
+                    <input id="txt-cep" asp-for="Cep" type="text" name="Endereco.Cep" class="input" placeholder="00000-000" data-mask="00000-000">
+                </div>
+            </div>
+        </div>
+        <div class="column"></div>
+        <div class="column"></div>
+        <div class="column"></div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-logradouro" class="label">Logradouro</label>
+                <div class="control">
+                    <input id="txt-logradouro" asp-for="Logradouro" type="text" name="Endereco.Logradouro" class="input" placeholder="Rua ..." maxlength="150">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="txt-numero" class="label">Numero</label>
+                <div class="control">
+                    <input id="txt-numero" asp-for="Numero" type="text" name="Endereco.Numero" class="input" placeholder="0000" maxlength="10">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="txt-complemento" class="label">Complemento</label>
+                <div class="control">
+                    <input id="txt-complemento" asp-for="Complemento" type="text" name="Endereco.Complemento" class="input" placeholder="AP 000, Proximo a..." maxlength="60">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label for="txt-bairro" class="label">Bairro</label>
+                <div class="control">
+                    <input id="txt-bairro" asp-for="Bairro" type="text" name="Endereco.Bairro" class="input" placeholder="Bairro" maxlength="120">
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="slct-estado" class="label">Estado</label>
+                <div class="control">
+                    <div id="sec-estado">
+                        <select id="slct-estado" asp-for="Estado" name="Endereco.Estado" class="selectize" placeholder="Selecione" onchange="buscaCidades(this.value, 'slct-cidade', '@(Model is not null ? "reload" : "load")')">
+                            <option></option>
+                            @{
+                                if (Model is not null )
+                                        @Html.Raw(this.SelectOptionsEstados(Model.Estado))
+                                else
+                                        @Html.Raw(this.SelectOptionsEstados())
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label for="slct-cidade" class="label">Cidade</label>
+                <div class="control">
+                    <div id="sec-cidade">
+                        <select id="slct-cidade" asp-for="Cidade" name="Endereco.Cidade" class="selectize" placeholder="Selecione">
+                            <option></option>
+                            @{
+                                if (Model is not null)
+                                        @Html.Raw(this.SelectOptionsCidades(Model.Estado, Model.Cidade))
+                                else
+                                        @Html.Raw(this.SelectOptionsCidades())
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/cidades.js" asp-append-version="true"></script>
+<script src="~/js/cep.js" asp-append-version="true"></script>
+
+@section Scripts {}

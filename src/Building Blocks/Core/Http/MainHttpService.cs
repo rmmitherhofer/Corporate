@@ -80,9 +80,9 @@ public abstract class MainHttpService
     protected static T? DeserializeObjectResponse<T>(HttpResponseMessage httpResponse)
         => JsonConvert.DeserializeObject<T>(httpResponse.Content.ReadAsStringAsync().Result);
 
-    protected static bool ResponsePossuiErros(HttpResponseMessage httpResponse, bool throwException = true)
+    protected static bool ResponsePossuiErros(HttpResponseMessage response, bool throwException = true)
     {
-        switch (httpResponse.StatusCode)
+        switch (response.StatusCode)
         {
             case HttpStatusCode.NotFound:
             case HttpStatusCode.Forbidden:
@@ -92,14 +92,14 @@ public abstract class MainHttpService
             case HttpStatusCode.Unauthorized:
             case HttpStatusCode.InternalServerError:
                 if(throwException)
-                    throw new CustomHttpRequestException(httpResponse.StatusCode, $"Status Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}");
+                    throw new CustomHttpRequestException(response.StatusCode, $"{response.RequestMessage.Method} - {response.RequestMessage.RequestUri} - {(int)response.StatusCode} - {response.StatusCode}");
 
                 return true;
         }
 
         try
         {
-            httpResponse.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
             return false;
         }
         catch

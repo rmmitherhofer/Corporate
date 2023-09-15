@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Building Blocks\Core\Requests\Requests.csproj" />
 		<ProjectReference Include="..\..\..\Building Blocks\Services\ApiService\Api.Service.csproj" />
 		<ProjectReference Include="..\Clientes.Business\Clientes.Business.csproj" />
 		<ProjectReference Include="..\Clientes.Data\Clientes.Data.csproj" />

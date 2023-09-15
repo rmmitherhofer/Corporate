@@ -1,5 +1,6 @@
 ﻿@using PanPan.WebApp.Enums;
 @using PanPan.WebApp.Extensions;
+@using PanPan.WebApp.Models.ViewModels.Candidatos;
 @model FormacaoViewModel
 
 
@@ -28,22 +29,20 @@
     </div>
     <div class="columns">
         <div class="column">
-            <div class="field">
-                <div class="control">
-                    <label class="radio">
-                        <input id="radio-tipo-formacao-ensino" asp-for="Tipo" type="radio" name="Tipo" value="@TipoFormacao.Ensino">
-                        Ensino
-                    </label>
-                    <label class="radio">
-                        <input id="radio-tipo-formacao-curso" asp-for="Tipo" type="radio" name="Tipo" value="@TipoFormacao.Curso">
-                        Curso
-                    </label>
-                </div>
+            <div class="control">
+                <label class="radio">
+                    <input id="radio-tipo-formacao-ensino-@Model.Id" asp-for="Tipo" type="radio" name="Tipo-@Model.Id" value="@TipoFormacao.Ensino">
+                    Ensino
+                </label>
+                <label class="radio">
+                    <input id="radio-tipo-formacao-curso-@Model.Id" asp-for="Tipo" type="radio" name="Tipo-@Model.Id" value="@TipoFormacao.Curso">
+                    Curso
+                </label>
             </div>
         </div>
     </div>
 
-    <div id="tab-radio-tipo-formacao-ensino" class="ai-form-tab-content" ai-form-tab="radio-tipo-formacao-ensino">
+    <div id="tab-radio-tipo-formacao-ensino-@Model.Id" class="ai-form-tab-content" ai-form-tab="radio-tipo-formacao-ensino-@Model.Id">
         <div class="columns">
             <div class="column">
                 <div class="field">
@@ -66,7 +65,7 @@
         </div>
     </div>
 
-    <div id="tab-radio-tipo-formacao-curso" class="ai-form-tab-content" ai-form-tab="radio-tipo-formacao-curso">
+    <div id="tab-radio-tipo-formacao-curso-@Model.Id" class="ai-form-tab-content" ai-form-tab="radio-tipo-formacao-curso-@Model.Id">
         <div class="columns">
             <div class="column">
                 <div class="field">

@@ -1,4 +1,4 @@
-﻿namespace PanPan.WebApp.Models;
+﻿namespace PanPan.WebApp.Models.ViewModels.Vagas;
 
 public class VagaViewModel
 {

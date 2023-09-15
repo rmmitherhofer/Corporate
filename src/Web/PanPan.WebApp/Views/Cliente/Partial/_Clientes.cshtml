@@ -1,0 +1,84 @@
+﻿@using PanPan.WebApp.Models.ViewModels.Clientes;
+@using Extensions;
+@model ClientesViewModel
+
+<div class="box">
+    <div class="columns">
+        <div class="column is-offset-6">
+            <div class="field is-grouped">
+                <div class="control has-icons-left">
+                    <div class="select">
+                        <select id="slct-ordernar" asp-for="OrderBy" name="OrderBy" placeholder="Selecione">
+                            <option value="cnpj">Cnpj crescente</option>
+                            <option value="-cnpj">Cnpj decrescente</option>
+                            <option value="nome">Nome crescente</option>
+                            <option value="-nome">Nome decrescente</option>
+                        </select>
+                    </div>
+                    <span class="icon is-left">
+                        <i class="fa-solid fa-arrow-up-wide-short"></i>
+                    </span>
+                </div>
+                <div class="control has-icons-left">
+                    <div class="select">
+                        <select id="slct-exibir" asp-for="PageSize" name="PageSize" placeholder="Selecione">
+                            <option value="10">10 por pagina</option>
+                            <option value="20">20 por pagina</option>
+                            <option value="30">30 por pagina</option>
+                            <option value="40">40 por pagina</option>
+                            <option value="50">50 por pagina</option>
+                            <option value="100">100 por pagina</option>
+                        </select>
+                    </div>
+                    <span class="icon is-left">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </span>
+                </div>
+                <div class="control">
+                    <button id="btn-find" type="button" class="button is-info"><i class="fa-solid fa-magnifying-glass search"></i></button>
+                </div>
+                <div class="control">
+                    <button id="btn-clear" type="button" class="button is-info is-light clear"><i class="fa-solid fa-eraser"></i></button>
+                </div>
+                <div class="control">
+                    <a type="button" asp-controller="Cliente" asp-action="Incluir" class="button is-primary"><i class="fa-solid fa-user-plus"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table is-fullwidth">
+        <thead>
+            <tr>
+                <th>CNPJ</th>
+                <th>Nome</th>
+                <th>Representante</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Celular</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cliente in Model.Clientes)
+            {
+                <tr>
+                    <th>@cliente.Cnpj.MascaraCpfCnpj()</th>
+                    <td>@cliente.Nome</td>
+                    <td>@cliente.Representante</td>
+                    <td>@cliente.Email</td>
+                    <td>@cliente.Telefone</td>
+                    <td>@cliente.Celular</td>
+                    <td>
+                        <div class="buttons">
+                            <a type="button" asp-controller="Cliente" asp-action="Alterar" asp-route-id="@cliente.Id" class="button is-success is-outlined"><i class="fa-solid fa-user-pen"></i></a>
+                            <a type="button" asp-controller="Cliente" asp-action="Remover" asp-route-id="@cliente.Id" class="button is-danger is-outlined"><i class="fa-solid fa-user-xmark"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<partial name="_Paginacao" model="Model" />

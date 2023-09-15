@@ -12,7 +12,7 @@ formacao = {
     },
     alterar: function (element) {
         let model = this.modelRequest(element);
-        httpClient.send('POST', `/candidatos/formacao/alterar`, model, this.alterarSuccess, this.fail, this.complete, '');
+        httpClient.send('POST', `/candidatos/formacao/alterar`, model, this.alterarSuccess, this.fail, httpClient.complete, '');
     },
     modelRequest: function (element) {
         request = {
@@ -20,7 +20,7 @@ formacao = {
             Id: element.querySelector('#formacao-id').value,
             NomeInstituicao: element.querySelector('#txt-instituicao').value,
             Descricao: element.querySelector('#txt-descricao').value,
-            Tipo: element.querySelector('input[name="Tipo"]:checked').value,
+            Tipo: element.querySelector(`input[name="Tipo-${element.querySelector("#formacao-id").value}"]:checked`).value,
             Ensino: element.querySelector('#slct-ensino').value,
             Curso: element.querySelector('#slct-curso').value,
             Periodo: element.querySelector('#slct-periodo').value,
@@ -81,15 +81,16 @@ formacao = {
             $($select).selectize();
         });
 
-            (document.querySelectorAll('.back') || []).forEach(($back) => {
-                $back.addEventListener('click', () => {
-                    closeAllModals();
-                });
+        (document.querySelectorAll('.back') || []).forEach(($back) => {
+            $back.addEventListener('click', () => {
+                closeAllModals();
             });
+        });
         closeAllModals();
 
     },
     alterarSuccess: function (response) {
+        debugger;
         let partial = document.getElementById(formacaoId);
 
         let content = partial.querySelector('.modal-content');

@@ -1,4 +1,4 @@
-﻿namespace PanPan.WebApp.Models.Request;
+﻿namespace PanPan.WebApp.Models.Request.Vaga;
 
 public class AddVagaRequest
 {

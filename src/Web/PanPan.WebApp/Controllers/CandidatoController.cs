@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Notifications.Interfaces;
 using PanPan.WebApp.HttpServices;
-using PanPan.WebApp.Models;
-using PanPan.WebApp.Models.Request;
+using PanPan.WebApp.Models.Request.Candidato;
+using PanPan.WebApp.Models.ViewModels.Candidatos;
 
 namespace PanPan.WebApp.Controllers;
 
@@ -65,7 +65,7 @@ public class CandidatoController : Controller
     [Route("incluir")]
     public IActionResult IncluirCandidato()
     {
-        return View();
+        return View(new CandidatoViewModel());
     }
     [HttpPost]
     [Route("incluir")]
@@ -73,7 +73,7 @@ public class CandidatoController : Controller
     {
         var request = _mapper.Map<AddCandidatoRequest>(model);
 
-        await _candidatoHttpService.Incluir(request);
+        await _candidatoHttpService.Adicionar(request);
 
         if (_notification.HasNotifications())
             return View(model);
@@ -81,7 +81,7 @@ public class CandidatoController : Controller
         return RedirectToAction(nameof(Index), new { nome = request.Nome });
     }
     [HttpGet]
-    [Route("alterar/{id}")]
+    [Route("{id}/alterar")]
     public async Task<IActionResult> AlterarCandidato(Guid id)
     {
         var response = await _candidatoHttpService.ObterPorId(id);
@@ -91,7 +91,7 @@ public class CandidatoController : Controller
         return View(model);
     }
     [HttpPost]
-    [Route("alterar/{id}")]
+    [Route("{id}/alterar")]
     public async Task<IActionResult> AlterarCandidato(Guid id, CandidatoViewModel model)
     {
         var request = _mapper.Map<UpdateCandidatoRequest>(model);
@@ -133,7 +133,7 @@ public class CandidatoController : Controller
     {
         var request = _mapper.Map<AddFormacaoRequest>(model);
 
-        await _candidatoHttpService.Incluir(model.CandidatoId, request);
+        await _candidatoHttpService.Adicionar(model.CandidatoId, request);
 
         return PartialView(nameof(IncluirFormacao), model.CandidatoId);
     }
@@ -149,7 +149,7 @@ public class CandidatoController : Controller
         if (!_notification.HasNotifications())
             TempData["Sucesso"] = "Formacao alterada com sucesso!";
 
-        return PartialView(nameof(AlterarFormacao), model);
+        return PartialView("Partial/_Formacao", model);
     }
     [HttpGet]
     [Route("{id}/formacao/remover/{formacaoId}")]
@@ -179,7 +179,7 @@ public class CandidatoController : Controller
     {
         var request = _mapper.Map<AddExperienciaRequest>(model);
 
-        await _candidatoHttpService.Incluir(model.CandidatoId, request);
+        await _candidatoHttpService.Adicionar(model.CandidatoId, request);
 
         return PartialView(nameof(IncluirExperiencia), model.CandidatoId);
     }

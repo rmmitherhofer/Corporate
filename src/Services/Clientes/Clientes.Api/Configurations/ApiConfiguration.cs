@@ -12,6 +12,7 @@ public static class ApiConfiguration
         services.AddCoreApiConfig(configuration, environment);
 
         services.AddRepositories();
+        services.AddAutoMapper();
         services.AddDbContext(configuration);
 
         return services;

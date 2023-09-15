@@ -26,7 +26,7 @@ public class VagaController : MainController
     public async Task<IActionResult> Get(Guid id) => CustomResponse(await _vagaRepository.ObterPorId(id));
 
     [HttpPost]
-    public async Task<IActionResult> Post(AddVagaRequest request)
+    public async Task<IActionResult> Post(VagaRequest request)
     {
         var vaga = new Vaga(request.Nome, request.Descricao, request.ClienteId);
 

@@ -1,0 +1,46 @@
+﻿@using PanPan.WebApp.Enums;
+@using PanPan.WebApp.Extensions;
+@using PanPan.WebApp.Models.ViewModels.Clientes;
+@model ClienteViewModel
+
+<form asp-controller="Cliente" asp-action="Incluir" method="post" class="row g-3">
+    <partial name="Partial/_Cliente" model="Model" />
+    <div class="columns">
+        <div class="column is-offset-10">
+            <div class="field is-grouped">
+                <div class="control">
+                    <button type="submit" class="button is-success">
+                        <span class="icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </span>
+                        <span>Incluir</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <a type="button" asp-controller="Cliente" asp-action="Index" class="button is-info is-light">
+                        <span class="icon">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </span>
+                        <span>Voltar</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            BuscaCep();
+            $('.selectize').selectize();
+        });
+    </script>
+
+}
+

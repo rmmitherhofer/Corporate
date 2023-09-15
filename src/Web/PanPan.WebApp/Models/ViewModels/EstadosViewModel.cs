@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PanPan.WebApp.Models;
+namespace PanPan.WebApp.Models.ViewModels;
 
 public class EstadosViewModel
 {
