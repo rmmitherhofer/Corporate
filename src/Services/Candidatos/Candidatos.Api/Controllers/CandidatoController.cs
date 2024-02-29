@@ -132,6 +132,8 @@ public class CandidatoController : MainController
 
         candidato.AtribuirNome(request.Nome);
 
+        candidato.AtribuirSexo(request.Sexo);
+
         candidato.AlterarApelido(request.Apelido);
 
         candidato.AtribuirDadosContato(request.Telefone, request.Celular, request.CelularAlternativo, request.Email);

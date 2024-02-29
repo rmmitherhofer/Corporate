@@ -2,16 +2,24 @@
 using FluentValidation.Results;
 using Logs.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Notifications.Interfaces;
+using Notifications.Messages;
 using Vagas.Business.Models;
 
 namespace Vagas.Data;
 
 public class VagasContext : DbContext, IUnitOfWork
 {
-    private const string RegistrationDate = nameof(RegistrationDate);
-    private const string DateChange = nameof(DateChange);
+    private const string DataCadastro = nameof(DataCadastro);
+    private const string DataAlteracao = nameof(DataAlteracao);
 
-    public VagasContext(DbContextOptions<VagasContext> options) : base(options) { }
+    private readonly INotificationHandler _notification;
+
+    public VagasContext(DbContextOptions<VagasContext> options, INotificationHandler notification) : base(options)
+    {
+        _notification = notification;
+    }
 
     public DbSet<Vaga> Vagas { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,7 +29,7 @@ public class VagasContext : DbContext, IUnitOfWork
                 e.GetProperties()
                 .Where(p => p.ClrType == typeof(string))))
         {
-            property.SetColumnType("varchar(100)");
+            property.SetColumnType("varchar(150)");
         }
 
         modelBuilder.Ignore<ValidationResult>();
@@ -30,36 +38,41 @@ public class VagasContext : DbContext, IUnitOfWork
 
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
         {
-            relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+            relationship.DeleteBehavior = DeleteBehavior.Cascade;
         }
         base.OnModelCreating(modelBuilder);
     }
 
     public async Task<bool> Commit()
     {
-        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty(RegistrationDate) != null))
+        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty(DataCadastro) != null))
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Property(RegistrationDate).CurrentValue = DateTime.Now;
+                entry.Property(DataCadastro).CurrentValue = DateTime.Now;
             }
 
             if (entry.State == EntityState.Modified)
             {
-                entry.Property(RegistrationDate).IsModified = false;
+                entry.Property(DataCadastro).IsModified = false;
 
-                entry.Property(DateChange).CurrentValue = DateTime.Now;
+                entry.Property(DataAlteracao).CurrentValue = DateTime.Now;
             }
         }
 
+        var sucesso = false;
+
         try
         {
-            return await base.SaveChangesAsync() > 0;
+            if (_notification.HasNotifications()) return sucesso;
+
+            sucesso = await base.SaveChangesAsync() > 0;
         }
         catch (Exception ex)
         {
-            ConsoleLog.LogFail(ex.Message);
-            throw;
+            _notification.Notify(new Notification(LogLevel.Critical, ex.GetType().Name, "SQL-Server", ex.Message));
+            ConsoleLog.LogCrit(ex.Message);
         }
+        return sucesso;
     }
 }

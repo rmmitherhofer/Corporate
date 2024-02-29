@@ -51,7 +51,7 @@ public class Candidato : Entity, IAggregateRoot
 
     public Candidato(string nome, Sexo sexo, RecrutadoPor recrutadoPor, string? telefone, string? celular, string? celularAlternativo, string? email)
     {
-        Sexo = sexo;
+        AtribuirSexo(sexo);
         AtribuirNome(nome);
         AtribuirDadosContato(telefone, celular, celularAlternativo, email);
 
@@ -108,6 +108,7 @@ public class Candidato : Entity, IAggregateRoot
         RelatoCandidato = relatosCandidato?.Trim();
         RelatoEntrevistador = relatosEntrevistador?.Trim();
     }
+    public void AtribuirSexo(Sexo sexo) => Sexo = sexo;
 
     public void AtribuirCNH(string? cnh) => CNH = cnh?.Trim();
     public void AlterarStatus(StatusCandidato status) => Status = status;

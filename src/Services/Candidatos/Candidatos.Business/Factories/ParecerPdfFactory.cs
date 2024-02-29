@@ -163,7 +163,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
             };
 
             #region Linha 1
-            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando ? $" - {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}" };
+            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando ? $" - previsão de conclusão em {ensino.DataFim?.ToString("MM/yyyy")} - período {ensino.Periodo.Descricao()?.ToLower()}" : string.Empty)}" };
             int[] colspanLinhaUm = { maxColunas };
             LinhaTabelaSemBorda(ref tableContent, valoresLinhaUm, colspanLinhaUm);
             #endregion
@@ -303,7 +303,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         var texto = $"{(ehMasculino ? "Ele" : "Ela")} é natural de {candidato?.Naturalidade}, ";
         texto += $"reside em {candidato?.Endereco?.Cidade}-{candidato?.Endereco?.Estado} {(string.IsNullOrEmpty(candidato.Endereco.MoraCom) ? string.Empty : $"com {candidato.Endereco.MoraCom}")}. ";
-        texto += $"{(ehMasculino ? candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "o") : candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "a"))} e {(candidato?.QuantidadeFilhos == 0 ? "não possui filhos" : $"possui {candidato.QuantidadeFilhos} {(candidato.QuantidadeFilhos > 1 ? "filhos" : "filho")}{(string.IsNullOrEmpty(candidato.IdadeFilhos) ? string.Empty :  $" de {candidato.IdadeFilhos}")}")}.";
+        texto += $"{(ehMasculino ? candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "o") : candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "a"))} e {(candidato?.QuantidadeFilhos == 0 ? "não possui filhos" : $"possui {candidato.QuantidadeFilhos} {(candidato.QuantidadeFilhos > 1 ? "filhos" : "filho")}{(string.IsNullOrEmpty(candidato.IdadeFilhos) ? string.Empty : $" de {candidato.IdadeFilhos}")}")}.";
 
         Paragrafo(ref document, texto);
 
@@ -314,7 +314,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
             ? $"Esta cursando o {ensino.Ensino?.Descricao()?.ToLower()}"
             : $"Tem o {ensino.Ensino?.Descricao()?.ToLower()}")} " +
             $"{((int)ensino.Ensino.Value > (int)Ensino.Medio ? $"em {ensino.Descricao.ToLower()}" : string.Empty)}" +
-            $"{(ensino.Status == StatusFormacao.Concluido ?  ensino.Status.Descricao()?.ToLower() : string.Empty)}.";
+            $"{(ensino.Status == StatusFormacao.Concluido ? $" {ensino.Status.Descricao()?.ToLower()}" : string.Empty)}.";
 
         var cursos = candidato?.Formacoes?.Where(f => f.Tipo == TipoFormacao.Curso).ToList();
 
@@ -349,8 +349,8 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         var experiencias = candidato.Experiencias.OrderBy(f => f.Status).ThenByDescending(f => f.DataFim).ToList();
 
-        aspectosProfissionais += "Em entrevista demonstrou conhecimentos e habilidades nas áreas de ";
-
+        if (experiencias.Any())
+            aspectosProfissionais += "Em entrevista demonstrou conhecimentos e habilidades nas áreas de ";
 
         var listHabilidades = experiencias.Select(e => e.Habilidade).ToList();
 
@@ -360,7 +360,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
         {
             var arrayHabilidade = habilidade?.Split(",");
             for (int i = 0; i < arrayHabilidade.Length; i++)
-                habilidades.Add(arrayHabilidade[i].ToLower().Trim());
+                habilidades.Add(arrayHabilidade[i].Trim());
         }
 
         habilidades = habilidades.Distinct().ToList();

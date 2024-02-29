@@ -30,7 +30,7 @@ public class ClienteContext : DbContext, IUnitOfWork
                 e.GetProperties()
                 .Where(p => p.ClrType == typeof(string))))
         {
-            property.SetColumnType("varchar(100)");
+            property.SetColumnType("varchar(150)");
         }
 
         modelBuilder.Ignore<ValidationResult>();
@@ -39,7 +39,7 @@ public class ClienteContext : DbContext, IUnitOfWork
 
         foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
         {
-            relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+            relationship.DeleteBehavior = DeleteBehavior.Cascade;
         }
         base.OnModelCreating(modelBuilder);
     }

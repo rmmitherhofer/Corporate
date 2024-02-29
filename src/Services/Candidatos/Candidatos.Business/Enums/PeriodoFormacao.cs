@@ -4,11 +4,11 @@ namespace Candidatos.Business.Enums;
 
 public enum PeriodoFormacao
 {
-    [Description("Manhã")]
+    [Description("Matutino")]
     Manha = 1,
-    [Description("Tarde")]
+    [Description("Vespertino")]
     Tarde = 2,
-    [Description("Noturno ")]
+    [Description("Noturno")]
     Noite = 3,
     [Description("Integral")]
     Integral = 4
