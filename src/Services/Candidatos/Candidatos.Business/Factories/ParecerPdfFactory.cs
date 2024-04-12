@@ -352,7 +352,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
         if (experiencias.Any())
             aspectosProfissionais += "Em entrevista demonstrou conhecimentos e habilidades nas áreas de ";
 
-        var listHabilidades = experiencias.Select(e => e.Habilidade).ToList();
+        var listHabilidades = experiencias.Where(e => e.Habilidade != null).Select(e => e.Habilidade).ToList();
 
         List<string> habilidades = new();
 
