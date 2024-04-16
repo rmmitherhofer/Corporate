@@ -70,6 +70,9 @@ public class Formacao : Entity
         if (Tipo == TipoFormacao.Curso && string.IsNullOrEmpty(descricao))
             throw new DomainException("A descricao do curso deve ser informada.");
 
+        if (Tipo == TipoFormacao.Ensino && Ensino > Enums.Ensino.Medio && string.IsNullOrEmpty(descricao))
+            throw new DomainException("A descricao do ensino deve ser informada quando superior ao nivel médio.");
+
         Descricao = descricao?.Trim();
     }
 
