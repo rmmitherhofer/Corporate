@@ -11,5 +11,7 @@ public enum PeriodoFormacao
     [Description("Noturno ")]
     Noite = 3,
     [Description("Integral")]
-    Integral = 4
+    Integral = 4,
+    [Description("EAD")]
+    Ead = 5
 }
