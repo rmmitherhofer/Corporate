@@ -1,5 +1,4 @@
 ﻿using Api.Core;
-using Azure.Core;
 using Candidatos.Business.Models;
 using FluentValidation.Results;
 using Logs.Extensions;

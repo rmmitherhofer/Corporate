@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\inetpub\wwwroot\pan-pan-web</_PublishTargetUrl>
+    <History>True|2024-08-19T20:09:26.1119400Z;True|2024-08-19T17:09:14.3679500-03:00;True|2024-08-19T17:08:31.7875543-03:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
