@@ -22,7 +22,7 @@ public class ExperienciaMapping : IEntityTypeConfiguration<Experiencia>
             .IsRequired();
 
         builder.Property(e => e.Atividade)
-            .HasColumnType("varchar(2048)");
+            .HasColumnType("varchar(MAX)");
 
         builder.Property(e => e.Habilidade)
             .HasColumnType("varchar(300)");
