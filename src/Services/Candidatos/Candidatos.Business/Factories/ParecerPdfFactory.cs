@@ -163,7 +163,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
             };
 
             #region Linha 1
-            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando ? $" - previsão de conclusão em {ensino.DataFim?.ToString("MM/yyyy")} - período {ensino.Periodo.Descricao()?.ToLower()}" : string.Empty)}" };
+            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao} - {ensino.NomeInstituicao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando  ? $"{(ensino.DataFim.HasValue ? $" - previsão de conclusão em {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}{(ensino.Periodo == PeriodoFormacao.Ead ? $" - {ensino.Periodo.Descricao()?.ToUpper()}" : $" - período {ensino.Periodo.Descricao()?.ToLower()}")}" : string.Empty)}" };
             int[] colspanLinhaUm = { maxColunas };
             LinhaTabelaSemBorda(ref tableContent, valoresLinhaUm, colspanLinhaUm);
             #endregion
