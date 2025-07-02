@@ -90,37 +90,44 @@ public class ParecerPdfFactory : IParecerPdfFactory
         LinhaComTopBorder(ref table, titulosLinhaDois, valoresLinhaDois, colspanLinhaDois, _incluirBorda);
         #endregion
 
+        #region Linha 3
+        string[] titulosLinhaTres = { "CNH" };
+        string[] valoresLinhaTres = { string.IsNullOrEmpty(candidato.CNH) ? "Não possui" : candidato.CNH };
+        int[] colspanLinhaTres = { maxColunas };
+        LinhaComTopBorder(ref table, titulosLinhaTres, valoresLinhaTres, colspanLinhaTres, _incluirBorda);
+        #endregion
+
         if (!string.IsNullOrEmpty(candidato.Endereco.Logradouro))
         {
-            #region Linha 3
-            string[] titulosLinhaTres = { "Endereço", "Complemento" };
-            string[] valoresLinhaTres = { $"{candidato.Endereco.Logradouro}, {candidato.Endereco.Numero}", candidato.Endereco.Complemento };
-            int[] colspanLinhaTres = { 3, 1 };
+            #region Linha 4
+            string[] titulosLinhaQuatro = { "Endereço", "Complemento" };
+            string[] valoresLinhaQuatro = { $"{candidato.Endereco.Logradouro}, {candidato.Endereco.Numero}", candidato.Endereco.Complemento };
+            int[] colspanLinhQuatro = { 3, 1 };
 
             if (string.IsNullOrEmpty(candidato.Endereco.Complemento))
             {
-                titulosLinhaTres = new string[] { "Endereço" };
-                valoresLinhaTres = new string[] { $"{candidato.Endereco.Logradouro}, {candidato.Endereco.Numero}" };
-                colspanLinhaTres = new int[] { maxColunas };
+                titulosLinhaQuatro = new string[] { "Endereço" };
+                valoresLinhaQuatro = new string[] { $"{candidato.Endereco.Logradouro}, {candidato.Endereco.Numero}" };
+                colspanLinhQuatro = new int[] { maxColunas };
             }
 
-            LinhaComTopBorder(ref table, titulosLinhaTres, valoresLinhaTres, colspanLinhaTres, _incluirBorda);
+            LinhaComTopBorder(ref table, titulosLinhaQuatro, valoresLinhaQuatro, colspanLinhQuatro, _incluirBorda);
             #endregion
         }
 
-        #region Linha 4
-        string[] titulosLinhaQuatro = { "Cidade", "UF", "CEP" };
-        string[] valoresLinhaQuatro = { candidato.Endereco.Cidade, candidato.Endereco.Estado, candidato.Endereco.Cep };
-        int[] colspanLinhQuatro = { 2, 1, 1 };
+        #region Linha 5
+        string[] titulosLinhaCinco = { "Cidade", "UF", "CEP" };
+        string[] valoresLinhaCinco = { candidato.Endereco.Cidade, candidato.Endereco.Estado, candidato.Endereco.Cep };
+        int[] colspanLinhaCinco = { 2, 1, 1 };
 
         if (string.IsNullOrEmpty(candidato.Endereco.Cep))
         {
-            titulosLinhaQuatro = new string[] { "Cidade", "UF" };
-            valoresLinhaQuatro = new string[] { candidato.Endereco.Cidade, candidato.Endereco.Estado };
-            colspanLinhQuatro = new int[] { 2, 2 };
+            titulosLinhaCinco = new string[] { "Cidade", "UF" };
+            valoresLinhaCinco = new string[] { candidato.Endereco.Cidade, candidato.Endereco.Estado };
+            colspanLinhaCinco = new int[] { 2, 2 };
         }
 
-        LinhaComBottomBorder(ref table, titulosLinhaQuatro, valoresLinhaQuatro, colspanLinhQuatro, _incluirBorda);
+        LinhaComBottomBorder(ref table, titulosLinhaCinco, valoresLinhaCinco, colspanLinhaCinco, _incluirBorda);
         #endregion
 
         document.Add(table);
@@ -163,7 +170,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
             };
 
             #region Linha 1
-            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao} - {ensino.NomeInstituicao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando  ? $"{(ensino.DataFim.HasValue ? $" - previsão de conclusão em {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}{(ensino.Periodo == PeriodoFormacao.Ead ? $" - {ensino.Periodo.Descricao()?.ToUpper()}" : $" - período {ensino.Periodo.Descricao()?.ToLower()}")}" : string.Empty)}" };
+            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao} - {ensino.NomeInstituicao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando ? $"{(ensino.DataFim.HasValue ? $" - previsão de conclusão em {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}{(ensino.Periodo == PeriodoFormacao.Ead ? $" - {ensino.Periodo.Descricao()?.ToUpper()}" : $" - período {ensino.Periodo.Descricao()?.ToLower()}")}" : string.Empty)}" };
             int[] colspanLinhaUm = { maxColunas };
             LinhaTabelaSemBorda(ref tableContent, valoresLinhaUm, colspanLinhaUm);
             #endregion
