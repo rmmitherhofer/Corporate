@@ -213,7 +213,14 @@ public class ParecerPdfFactory : IParecerPdfFactory
             };
 
             #region Linha 1
-            string[] valoresLinhaUm = { $"{curso.Curso?.Descricao()} em {curso.Descricao} - {curso.NomeInstituicao} - {curso.Status.Descricao()}" };
+            string[] valoresLinhaUm = { $"{curso.Curso?.Descricao()} em {curso.Descricao} - {curso.NomeInstituicao} - {curso.Status.Descricao()}" +
+                    $"{(curso.Status == StatusFormacao.Cursando
+                    ? $"{(curso.DataFim.HasValue
+                        ? $" - previsão de conclusão em {curso.DataFim?.ToString("MM/yyyy")}"
+                        : string.Empty)}{(curso.Periodo == PeriodoFormacao.Ead 
+                        ? $" - {curso.Periodo.Descricao()?.ToUpper()}"
+                        : $" - período {curso.Periodo.Descricao()?.ToLower()}")}"
+                    :string.Empty)}"};
             int[] colspanLinhaUm = { maxColunas };
             LinhaTabelaSemBorda(ref tableContent, valoresLinhaUm, colspanLinhaUm);
             #endregion

@@ -4,7 +4,7 @@ namespace Candidatos.Business.Enums;
 
 public enum Curso
 {
-    [Description("Curso técnica")]
+    [Description("Curso técnico")]
     Tecnico = 1,
     [Description("Curso profissionalizante")]
     Profissionalizante = 2
