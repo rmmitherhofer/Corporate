@@ -53,10 +53,10 @@ namespace Candidatos.Data.Migrations
                     b.Property<string>("Conhecimentos")
                         .HasColumnType("varchar(1024)");
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime?>("DateChanged")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataCadastro")
+                    b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataNascimento")
@@ -132,10 +132,10 @@ namespace Candidatos.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(150)");
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime?>("DateChanged")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataCadastro")
+                    b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataFim")
@@ -185,10 +185,10 @@ namespace Candidatos.Data.Migrations
                     b.Property<int?>("Curso")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime?>("DateChanged")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataCadastro")
+                    b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataFim")
@@ -236,10 +236,10 @@ namespace Candidatos.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(450)");
 
-                    b.Property<DateTime?>("DataAlteracao")
+                    b.Property<DateTime?>("DateChanged")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataCadastro")
+                    b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

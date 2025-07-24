@@ -1,0 +1,620 @@
+﻿@using PanPan.WebApp.Enums
+@using PanPan.WebApp.Extensions
+@using PanPan.WebApp.Models.ViewModels.Candidatos
+@model CandidatoViewModel;
+
+
+<style>
+    .section-title {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+        .section-title:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 70%;
+            width: 4px;
+            background: #3273dc;
+            border-radius: 4px;
+        }
+
+    .skill-tag {
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .accordion-content {
+        transition: all 0.3s ease;
+    }
+
+    .is-collapsed {
+        display: none;
+    }
+
+    .card-header-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .is-rotated {
+        transform: rotate(180deg);
+    }
+
+    .dynamic-block {
+        position: relative;
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        border: 1px solid #eee;
+        border-radius: 6px;
+    }
+
+    .remove-block {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+
+    .add-skill-input {
+        width: 70%;
+        display: inline-block;
+        margin-right: 0.5rem;
+    }
+</style>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title is-2 has-text-centered mb-6">Cadastro de Colaborador</h1>
+
+        <form id="employeeForm" asp-controller="Candidato" asp-action="CadastarCurriculo" method="post" class="row g-3">
+            <!-- Dados Cadastrais -->
+            <div class="card mb-5">
+                <header class="card-header">
+                    <p class="card-header-title section-title">
+                        <span class="icon mr-2"><i class="fas fa-user"></i></span>
+                        Dados Cadastrais
+                    </p>
+                    <button class="card-header-icon" type="button" aria-label="toggle">
+                        <span class="icon">
+                            <i class="fas fa-angle-down"></i>
+                        </span>
+                    </button>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-12">
+                                <div class="field">
+                                    <label class="label">Nome Completo</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Nome" name="Nome" placeholder="Nome completo" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">Sexo</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select id="slct-estado-civil" asp-for="Sexo" name="Sexo" class="selectize" placeholder="Selecione">
+                                                <option></option>
+                                                @{
+                                                    if (Model is not null)
+                                                @Html.Raw(this.SelectOptionsGender(Model.Sexo))
+                                                                                                else
+                                                @Html.Raw(this.SelectOptionsGender())
+                                                                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">Data de Nascimento</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="DataNascimento" name="DataNascimento">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-4">
+                                <div class="field">
+                                    <label class="label">Idade</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Idade" name="Idade" placeholder="Idade" min="14" max="100">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-4">
+                                <div class="field">
+                                    <label class="label">Estado Civil</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select id="slct-estado-civil" asp-for="StatusCivil" name="StatusCivil" class="selectize" placeholder="Selecione">
+                                                <option></option>
+                                                @{
+                                                    if (Model is not null)
+                                                @Html.Raw(this.SelectOptionsEstadoCivil(Model.StatusCivil))
+                                                                                                else
+                                                @Html.Raw(this.SelectOptionsEstadoCivil())
+                                                                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-4">
+                                <div class="field">
+                                    <label class="label">CNH</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select id="slct-cnh" asp-for="CNH" name="CNH" class="selectize" placeholder="Selecione">
+                                                <option></option>
+                                                <option value="Nao possui">Nao possui</option>
+                                                <option value="A">A</option>
+                                                <option value="A e B">A e B</option>
+                                                <option value="A, B e C">A, B e C</option>
+                                                <option value="A, B, C e D">A, B, C e D</option>
+                                                <option value="A, B, C, D e E">A, B, C, D e E</option>
+                                                <option value="B">B</option>
+                                                <option value="B e C">B e C</option>
+                                                <option value="B, C e D">B, C e D</option>
+                                                <option value="B, C, D e E">B, C, D e E</option>
+                                                <option value="C">C</option>
+                                                <option value="C e D">C e D</option>
+                                                <option value="C, D e E">C, D e E</option>
+                                                <option value="D">D</option>
+                                                <option value="D e E">D e E</option>
+                                                <option value="E">E</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">E-mail</label>
+                                    <div class="control">
+                                        <input class="input" type="email" asp-for="Email" name="Email" placeholder="E-mail corporativo">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-3">
+                                <div class="field">
+                                    <label class="label">Telefone</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Telefone" name="Telefone" placeholder="(00) 0000-0000">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-3">
+                                <div class="field">
+                                    <label class="label">Celular</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Celular" name="Celular" placeholder="(00) 00000-0000">
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*   <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">LinkedIn</label>
+                                    <div class="control">
+                                        <input class="input" type="url" asp-for="Resume.Registration.LinkedInUrl" name="Resume.Registration.LinkedInUrl" placeholder="URL do perfil">
+                                    </div>
+                                </div>
+                            </div> *@
+
+                            @*                     <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">GitHub</label>
+                                    <div class="control">
+                                        <input class="input" type="url" asp-for="Resume.Registration.GitHubUrl" name="Resume.Registration.GitHubUrl" placeholder="URL do perfil">
+                                    </div>
+                                </div>
+                            </div> *@
+
+                            <div class="column is-12">
+                                <div class="field">
+                                    <label class="label">Objetivo Profissional</label>
+                                    <div class="control">
+                                        <textarea class="textarea" asp-for="Comentarios" name="Comentarios" placeholder="Descreva brevemente seus objetivos profissionais"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endereço -->
+            <div class="card mb-5">
+                <header class="card-header">
+                    <p class="card-header-title section-title">
+                        <span class="icon mr-2"><i class="fas fa-map-marker-alt"></i></span>
+                        Endereço
+                    </p>
+                    <button class="card-header-icon" type="button" aria-label="toggle">
+                        <span class="icon">
+                            <i class="fas fa-angle-down"></i>
+                        </span>
+                    </button>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-8">
+                                <div class="field">
+                                    <label class="label">Logradouro</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Endereco.Logradouro" name="Endereco.Logradouro" placeholder="Rua, Avenida, etc.">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-4">
+                                <div class="field">
+                                    <label class="label">Número</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Endereco.Numero" name="Endereco.Numero" placeholder="Número">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">Complemento</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Endereco.Complemento" name="Endereco.Complemento" placeholder="Apartamento, bloco, etc.">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">Bairro</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Endereco.Bairro" name="Endereco.Bairro" placeholder="Bairro">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">Cidade</label>
+                                    <div class="control">
+                                        <input class="input" type="text" asp-for="Endereco.Cidade" name="Endereco.Cidade" placeholder="Cidade">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">Estado</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select asp-for="Endereco.Estado" name="Endereco.Estado" class="selectize" placeholder="Selecione">
+                                                <option></option>
+                                                @{
+                                                    if (Model.Endereco is not null)
+                                                @Html.Raw(this.SelectOptionsEstados(Model.Endereco.Estado))
+                                                                                                else
+                                                @Html.Raw(this.SelectOptionsEstados())
+                                                                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section id="sec-formacoes">
+                <!-- Formação Acadêmica -->
+                <div class="card mb-5">
+                    <header class="card-header">
+                        <p class="card-header-title section-title">
+                            <span class="icon mr-2"><i class="fas fa-graduation-cap"></i></span>
+                            Formação Acadêmica
+                        </p>
+                        <button class="card-header-icon" type="button" aria-label="toggle">
+                            <span class="icon">
+                                <i class="fas fa-angle-down"></i>
+                            </span>
+                        </button>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            <div id="academic-blocks">
+                                <!-- Dynamic blocks will be added here -->
+                                @if (Model.Formacoes is not null && Model.Formacoes.Any(x => x.Tipo == TipoFormacao.Ensino))
+                                {
+                                    @foreach (var (formacao, i) in Model.Formacoes
+                                                                    .Select((x, i) => (x, i))
+                                                                    .Where(x => x.x.Tipo == TipoFormacao.Ensino))
+                                    {
+                                        var formation = Model.Formacoes[i];
+
+                                        if (formation.Tipo != TipoFormacao.Ensino) continue;
+
+                                        <div class="dynamic-block">
+                                            <button class="delete remove-block" type="button"></button>
+
+                                            <div class="columns is-multiline">
+
+                                                <input type="hidden" asp-for="@Model.Formacoes[i].Tipo" />
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Nome da Instituição</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].NomeInstituicao" placeholder="Nome da faculdade/escola" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Nível de Formação</label>
+                                                        <div class="control">
+                                                            <div class="select is-fullwidth">
+                                                                <select asp-for="@Model.Formacoes[i].Ensino" class="selectize" placeholder="Selecione" required>
+                                                                    <option></option>
+                                                                    @{
+                                                                        if (Model.Endereco is not null)
+                                                            @Html.Raw(this.SelectOptionsEnsino(Model.Formacoes[i].Ensino))
+                                                                                                                        else
+                                                            @Html.Raw(this.SelectOptionsEnsino())
+                                                                                                                        }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-12">
+                                                    <div class="field">
+                                                        <label class="label">Descrição do Curso</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].Descricao" placeholder="Nome do curso" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Data de Início</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].DataInicioString">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Data de Conclusão</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].DataFimString">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cursos complementares -->
+                <div class="card mb-5">
+                    <header class="card-header">
+                        <p class="card-header-title section-title">
+                            <span class="icon mr-2"><i class="fas fa-graduation-cap"></i></span>
+                            Cursos complementares
+                        </p>
+                        <button class="card-header-icon" type="button" aria-label="toggle">
+                            <span class="icon">
+                                <i class="fas fa-angle-down"></i>
+                            </span>
+                        </button>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            <div id="courses-blocks">
+                                <!-- Dynamic blocks will be added here -->
+                                @if (Model.Formacoes is not null && Model.Formacoes.Any(x => x.Tipo == TipoFormacao.Curso))
+                                {
+                                    @foreach (var (formacao, i) in Model.Formacoes
+                                                                    .Select((x, i) => (x, i))
+                                                                    .Where(x => x.x.Tipo == TipoFormacao.Curso))
+                                    {
+                                        var formation = Model.Formacoes[i];
+
+                                        if (formation.Tipo != TipoFormacao.Curso) continue;
+
+
+                                        <div class="dynamic-block">
+                                            <button class="delete remove-block" type="button"></button>
+
+                                            <div class="columns is-multiline">
+                                                <input type="hidden" asp-for="@Model.Formacoes[i].Tipo" />
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Nome da Instituição</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].NomeInstituicao" placeholder="Nome da faculdade/escola" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Nível de Formação</label>
+                                                        <div class="control">
+                                                            <div class="select is-fullwidth">
+                                                                <select asp-for="@Model.Formacoes[i].Curso" class="selectize" placeholder="Selecione" required>
+                                                                    <option></option>
+                                                                    @{
+                                                                        if (Model.Endereco is not null)
+                                                            @Html.Raw(this.SelectOptionsCurso(Model.Formacoes[i].Curso))
+                                                                                                                        else
+                                                            @Html.Raw(this.SelectOptionsCurso())
+                                                                                                                        }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-12">
+                                                    <div class="field">
+                                                        <label class="label">Descrição do Curso</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].Descricao" placeholder="Nome do curso" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Data de Início</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].DataInicioString">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Data de Conclusão</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Formacoes[i].DataFimString">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="sec-experiencia">
+                <!-- Experiência Profissional -->
+                <div class="card mb-5">
+                    <header class="card-header">
+                        <p class="card-header-title section-title">
+                            <span class="icon mr-2"><i class="fas fa-briefcase"></i></span>
+                            Experiência Profissional
+                        </p>
+                        <button class="card-header-icon" type="button" aria-label="toggle">
+                            <span class="icon">
+                                <i class="fas fa-angle-down"></i>
+                            </span>
+                        </button>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            <div id="experience-blocks">
+                                <!-- Dynamic blocks will be added here -->
+                                @if (Model.Experiencias is not null && Model.Experiencias.Any())
+                                {
+                                    for (int i = 0; i < Model.Experiencias.Count(); i++)
+                                    {
+                                        <div class="dynamic-block">
+                                            <button class="delete remove-block" type="button"></button>
+
+                                            <div class="columns is-multiline">
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Empresa</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Experiencias[i].Empresa" placeholder="Nome da empresa">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Cargo</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Experiencias[i].Cargo" placeholder="Cargo ocupado">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Data de Início</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Experiencias[i].DataInicioString">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label">Data de Saída</label>
+                                                        <div class="control">
+                                                            <input class="input" type="text" asp-for="@Model.Experiencias[i].DataFimString">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="column is-12">
+                                                    <div class="field">
+                                                        <label class="label">Descrição das Atividades</label>
+                                                        <div class="control">
+                                                            <textarea class="textarea" asp-for="@Model.Experiencias[i].Atividade" placeholder="Descreva suas principais atividades e conquistas"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Form Actions -->
+            <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                    <button type="submit" class="button is-primary is-large">
+                        <span class="icon"><i class="fas fa-save"></i></span>
+                        <span>Salvar Cadastro</span>
+                    </button>
+                </div>
+                <div class="control">
+                    <button type="reset" class="button is-light is-large">
+                        <span class="icon"><i class="fas fa-eraser"></i></span>
+                        <span>Limpar Formulário</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script src="~/js/views/candidato/resume-review.js"></script>

@@ -4,6 +4,7 @@ var experiencia = experiencia || {}
 experiencia = {
 
     obter: function () {
+        debugger;
         let candidatoId = document.querySelector('#input-candidato-id').value;
         httpClient.send('GET', `/candidatos/${candidatoId}/experiencias`, null, this.obterSuccess, this.fail, httpClient.complete, '');
     },

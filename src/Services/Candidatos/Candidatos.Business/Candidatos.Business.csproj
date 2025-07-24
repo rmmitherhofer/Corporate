@@ -9,13 +9,11 @@
   <ItemGroup>
     <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.7.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Zypher.Persistence.Abstractions" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Building Blocks\Core\Extensions\Extensions.csproj" />
-    <ProjectReference Include="..\..\..\Building Blocks\Core\Logs\Logs.csproj" />
-    <ProjectReference Include="..\..\..\Building Blocks\Core\Notification\Notifications.csproj" />
-    <ProjectReference Include="..\..\..\Building Blocks\Services\Api.Core\Api.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

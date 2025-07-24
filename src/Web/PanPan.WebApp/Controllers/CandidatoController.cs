@@ -1,9 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Notifications.Interfaces;
+using PanPan.WebApp.Enums;
+using PanPan.WebApp.Helpers;
 using PanPan.WebApp.HttpServices;
 using PanPan.WebApp.Models.Request.Candidato;
+using PanPan.WebApp.Models.Response.NewFolder;
 using PanPan.WebApp.Models.ViewModels.Candidatos;
+using System.Reflection;
+using Zypher.Json;
+using Zypher.Notifications.Interfaces;
 
 namespace PanPan.WebApp.Controllers;
 
@@ -12,14 +17,16 @@ public class CandidatoController : Controller
 {
     private readonly ILogger<CandidatoController> _logger;
     private readonly ICandidatoHttpService _candidatoHttpService;
+    private readonly ITalentMindHttpService _talentMindHttpService;
     private readonly INotificationHandler _notification;
     private readonly IMapper _mapper;
-    public CandidatoController(ILogger<CandidatoController> logger, ICandidatoHttpService candidatoHttpService, IMapper mapper, INotificationHandler notification)
+    public CandidatoController(ILogger<CandidatoController> logger, ICandidatoHttpService candidatoHttpService, IMapper mapper, INotificationHandler notification, ITalentMindHttpService talentMindHttpService)
     {
         _logger = logger;
         _candidatoHttpService = candidatoHttpService;
         _mapper = mapper;
         _notification = notification;
+        _talentMindHttpService = talentMindHttpService;
     }
 
     [HttpGet]
@@ -110,6 +117,66 @@ public class CandidatoController : Controller
         await _candidatoHttpService.Remover(id);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [Route("importar-curriculo")]
+    public async Task<IActionResult> ImportarCurriculo(CandidatoViewModel model)
+    {
+        var response = await _talentMindHttpService.ExtractFromPdf(model.File);
+
+        var resume = response.Resume;
+
+        if (_notification.HasNotifications())
+            return View(model);        
+
+        return View(nameof(ResumeImportPreview), ParseToViewModel(resume));
+    }
+
+    [HttpGet]
+    [Route("cadatro-curriculo")]
+    public async Task<IActionResult> ResumeImportPreview(CandidatoViewModel model)
+    {
+        return View(model);
+    }
+
+    [HttpPost]
+    [Route("cadatro-curriculo")]
+    public async Task<IActionResult> CadastarCurriculo(CandidatoViewModel model)
+    {
+        var candidatoRequest = _mapper.Map<AddCandidatoRequest>(model);
+
+        await _candidatoHttpService.Adicionar(candidatoRequest);
+
+        var candidato = await _candidatoHttpService.ObterPaginado(new() { Nome = candidatoRequest.Nome });
+
+        if (candidato.PageCount <= 0)
+            return View(nameof(ResumeImportPreview), model);
+
+        foreach (var formacaoRequest in _mapper.Map<List<AddFormacaoRequest>>(model.Formacoes))
+            await _candidatoHttpService.Adicionar(candidato.Candidatos.FirstOrDefault().Id, formacaoRequest);
+
+        foreach (var experienciaRequest in _mapper.Map<List<AddExperienciaRequest>>(model.Experiencias))
+            await _candidatoHttpService.Adicionar(candidato.Candidatos.FirstOrDefault().Id, experienciaRequest);
+
+        return RedirectToAction(nameof(AlterarCandidato), new { id = candidato.Candidatos.FirstOrDefault().Id });
+
+    }
+
+    [HttpGet]
+    [Route("importar-curriculo-json")]
+    public async Task<IActionResult> JsonResumeImport()
+    {
+        return View(new JsonResumeImport());
+    }
+
+    [HttpPost]
+    [Route("importar-curriculo-json")]
+    public async Task<IActionResult> JsonResumeImport(JsonResumeImport model)
+    {
+        var resume = JsonExtensions.Deserialize<ParserHttpResponse>(model.Json).Resume;
+
+        return View(nameof(ResumeImportPreview), ParseToViewModel(resume));
     }
 
     #endregion
@@ -213,5 +280,93 @@ public class CandidatoController : Controller
         var pdf = await _candidatoHttpService.GerarParecer(id);
 
         return new JsonResult(pdf);
+    }
+
+
+    private CandidatoViewModel ParseToViewModel(ResumeHttpResponse resume)
+    {
+        CandidatoViewModel model = new();
+
+        var enderecoCorrigido = new EnderecoCorretor().CorrigirEndereco(resume.Address.State, resume.Address.City, resume.Address.Bairro);
+
+        string telefone = null;
+
+        string celular = null;
+
+        var (tipo, numero) = TelefoneHelper.PadronizarTelefone(resume.Registration.PhoneNumber);
+        if (tipo == TipoTelefone.Celular)
+            celular = numero;
+        else
+            telefone = numero;
+
+        var (tipo2, numero2) = TelefoneHelper.PadronizarTelefone(resume.Registration.MobileNumber);
+        if (tipo2 == TipoTelefone.Celular)
+            celular = numero2;
+        else
+            telefone = numero2;
+
+        model.Nome = resume.Registration.FullName;
+        model.Sexo = SexoExtensions.ParseOuInferirSexo(resume.Registration.Gender, resume.Registration.FullName);
+        model.Telefone = telefone;
+        model.Celular = celular;
+        model.Email = resume.Registration.Email;
+        model.DataNascimento = DataNascimentoExtensions.TryParseBirthDate(resume.Registration.BrithDate.ToString())?.ToString("dd/MM/yyyy");
+        model.Idade = IdadeHelper.MapearIdade(resume.Registration.Age);
+        model.Naturalidade = null;
+        model.StatusCivil = EstadoCivilHelper.MapearEstadoCivil(resume.Registration.MaterialStatus);
+        model.CNH = CNHNormalizer.NormalizeCNH(resume.Registration.CNH);
+        model.Comentarios = resume.Registration.Goals;
+        model.Endereco = new()
+        {
+            Logradouro = resume.Address.Street,
+            Numero = resume.Address.Number,
+            Complemento = resume.Address.Complement,
+            Cep = null,
+            Bairro = enderecoCorrigido.Bairro,
+            Cidade = enderecoCorrigido.Cidade,
+            Estado = enderecoCorrigido.Estado,
+        };
+
+        model.Experiencias ??= [];
+        model.Formacoes ??= [];
+        foreach (var item in resume.Experiences)
+        {
+            model.Experiencias.Add(new()
+            {
+                Empresa = item.Company,
+                Cargo = item.Cargo,
+                Atividade = item.Description,
+                DataInicioString = DateHelper.TryParseToFirstDayOfMonth(item.StartDate)?.ToString("MM/yyyy"),
+                DataFimString = DateHelper.TryParseToFirstDayOfMonth(item.EndDate)?.ToString("MM/yyyy"),
+            });
+        }
+
+        foreach (var item in resume.Formations)
+        {
+            model.Formacoes.Add(new()
+            {
+                NomeInstituicao = item.InstitutionName,
+                Descricao = item.Description,
+                Tipo = TipoFormacao.Ensino,
+                DataInicioString = DateHelper.TryParseToFirstDayOfMonth(item.StartDate)?.ToString("MM/yyyy"),
+                DataFimString = DateHelper.TryParseToFirstDayOfMonth(item.EndDate)?.ToString("MM/yyyy"),
+                Ensino = CourseClassifier.ClassificarEnsino(item.InstitutionName, item.Description)
+            });
+        }
+
+        foreach (var item in resume.Courses)
+        {
+            model.Formacoes.Add(new()
+            {
+                NomeInstituicao = item.InstitutionName,
+                Descricao = item.Description,
+                Tipo = TipoFormacao.Curso,
+                DataInicioString = DateHelper.TryParseToFirstDayOfMonth(item.StartDate)?.ToString("MM/yyyy"),
+                DataFimString = DateHelper.TryParseToFirstDayOfMonth(item.EndDate)?.ToString("MM/yyyy"),
+                Curso = CourseClassifier.ClassificarCurso(item.InstitutionName, item.Description)
+            });
+        }
+
+        return model;
     }
 }

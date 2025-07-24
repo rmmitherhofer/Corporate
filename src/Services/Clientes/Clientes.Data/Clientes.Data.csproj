@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Building Blocks\Services\Api.Data\Api.Data.csproj" />
-    <ProjectReference Include="..\Clientes.Business\Clientes.Business.csproj" />
   </ItemGroup>
 
   <ItemGroup>

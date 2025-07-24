@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PanPan.WebApp.HttpServices;
+using PanPan.WebApp.Models;
 using PanPan.WebApp.Models.Request.Vaga;
 using PanPan.WebApp.Models.ViewModels.Vagas;
 

@@ -61,4 +61,6 @@ candidato.index = {
 
 window.onload = function () {
     candidato.index.onClick();
+
+
 }

@@ -10,10 +10,12 @@ public class HistoricoMapping : IEntityTypeConfiguration<Historico>
     {
         builder.HasKey(f => f.Id);
 
-        builder.Property(f => f.DataCadastro)
+        builder.Property(c => c.RegistrationDate)
+            .HasColumnName("DataCadastro")
             .IsRequired();
 
-        builder.Property(f => f.DataAlteracao);
+        builder.Property(c => c.DateChanged)
+            .HasColumnName("DataAlteracao");
 
         builder.Property(f => f.Comentario)
             .HasColumnType("varchar(450)")

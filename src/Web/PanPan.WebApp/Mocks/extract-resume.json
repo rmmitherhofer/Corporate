@@ -1,0 +1,186 @@
+{
+  "notifications": [],
+  "resume": {
+    "registration": {
+      "nomeCompleto": "KAIO MOREIRA APOLINÁRIO",
+      "sexo": "Male",
+      "email": "kaio.apolo@outlook.com",
+      "celular": "(11) 9.4365-1946",
+      "linkedinUrl": "www.linkedin.com/in/kaio-moreira-apolinario",
+      "githubUrl": "github.com/Kaputino99",
+      "objetivo": "Analista de Dados | Desenvolvedor",
+      "idade": "22",
+      "estadoCivil": "Solteiro",
+      "cnh": "CNH – B"
+    },
+    "address": {
+      "logradouro": "Vila Maluf",
+      "cidade": "Suzano",
+      "estado": "SP"
+    },
+    "languages": [
+      {
+        "idioma": "Português",
+        "nivel": "Profissional"
+      },
+      {
+        "idioma": "Inglês",
+        "nivel": "Básico"
+      }
+    ],
+    "skills": {
+      "softSkills": [
+        "Habilidade para estruturar e visualizar informações de forma clara e eficiente",
+        "Perfil analítico, com foco na solução de problemas, otimização de processos e melhoria contínua"
+      ],
+      "hardSkills": [
+        "Programming languages: Python, SQL, JavaScript, HTML5, CSS3",
+        "Business Intelligence: Power BI, Excel avançado, Power Query, Power Automate, DAX",
+        "Database management",
+        "Dashboard development",
+        "Automation of processes through Power Automate",
+        "Miro workflow mapping and management",
+        "Inventory control"
+      ]
+    },
+    "experiences": [
+      {
+        "empresa": "JSL | J ÚLIO SIMÕES LOGÍSTICA",
+        "cargo": "Analista de Logística",
+        "dataInicio": "03/2024",
+        "descricao": "Atualização e manutenção de bases de dados, assegurando qualidade e precisão das informações para análises de BI. Desenvolvimento de dashboards interativos no Power BI, aplicando DAX avançado e Power Query para facilitar a tomada de decisões. Criação de painéis estratégicos para apresentação de informações-chave durante visitas. Automação de processos operacionais por meio do Power Automate, aumentando a eficiência e reduzindo retrabalho. Mapeamento e gestão de fluxos de trabalho no Miro, garantindo maior organização e agilidade nos pipelines de processos."
+      },
+      {
+        "empresa": "RH FRANQUIAS",
+        "cargo": "Auxiliar de Escritório",
+        "dataInicio": "04/2021",
+        "dataFim": "02/2024",
+        "descricao": "Controle de estoque de insumos, com acompanhamento de entradas, saídas. Elaboração de relatórios gerenciais. Emissão de notas fiscais eletrônicas via sistema OMIE. Criação de planilhas para gestão de estoque, com foco na redução de perdas e melhoria no controle de materiais."
+      },
+      {
+        "empresa": "SANOFI AVENT’S",
+        "cargo": "Auxiliar de Escritório",
+        "dataInicio": "05/2019",
+        "dataFim": "maio de 2020",
+        "descricao": "Elaboração de relatórios de DSS e DDS, reforçando práticas de segurança e prevenção de riscos. Criação de planilhas para controle de estoque e apoio à gestão de processos internos."
+      }
+    ],
+    "formations": [
+      {
+        "nomeInstituicao": "Faculdade Anhanguera",
+        "descricaoCurso": "Engenharia de Software",
+        "dataInicio": "",
+        "dataFim": "06/2026",
+        "nivel": "Graduação"
+      },
+      {
+        "nomeInstituicao": "Onebitcode",
+        "descricaoCurso": "Programação com JavaScript, Curso Básico de ETL no Power BI, Curso Básico Power BI, Power BI Avançado, Excel Avançado, Javascript 1 - Lógica de Programação, Javascript 2 - DOM, CSS Moderno, CSS3, HTML5",
+        "dataInicio": "2023",
+        "dataFim": "2025",
+        "nivel": "Cursos Complementares"
+      },
+      {
+        "nomeInstituicao": "Planilheiros",
+        "descricaoCurso": "Power BI Avançado, Dados Criativos",
+        "dataInicio": "2024",
+        "dataFim": "2024",
+        "nivel": "Cursos Complementares"
+      },
+      {
+        "nomeInstituicao": "Hashtag Treinamentos",
+        "descricaoCurso": "Excel Avançado",
+        "dataInicio": "2024",
+        "dataFim": "2024",
+        "nivel": "Cursos Complementares"
+      },
+      {
+        "nomeInstituicao": "Dados Criativos",
+        "descricaoCurso": "Power BI Avançado",
+        "dataInicio": "2024",
+        "dataFim": "2024",
+        "nivel": "Cursos Complementares"
+      }
+    ],
+    "courses": [
+      {
+        "nomeInstituicao": "Onebitcode",
+        "descricaoCurso": "Programação com JavaScript",
+        "dataInicio": "2025",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Onebitcode",
+        "descricaoCurso": "Javascript 1 - Lógica de Programação",
+        "dataInicio": "2023",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Onebitcode",
+        "descricaoCurso": "Javascript 2 - DOM",
+        "dataInicio": "2023",
+        "nivel": "Intermediário"
+      },
+      {
+        "nomeInstituicao": "Onebitcode",
+        "descricaoCurso": "CSS Moderno",
+        "dataInicio": "2023",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Onebitcode",
+        "descricaoCurso": "CSS3",
+        "dataInicio": "2023",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Onebitcode",
+        "descricaoCurso": "HTML5",
+        "dataInicio": "2023",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Planilheiros",
+        "descricaoCurso": "Curso Básico ETL no Power BI",
+        "dataInicio": "2024",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Planilheiros",
+        "descricaoCurso": "Curso Básico Power BI",
+        "dataInicio": "2024",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Dados Criativos",
+        "descricaoCurso": "Power BI Avançado",
+        "dataInicio": "2024",
+        "nivel": "Avançado"
+      },
+      {
+        "nomeInstituicao": "Hashtag Treinamentos",
+        "descricaoCurso": "Excel Avançado",
+        "dataInicio": "2024",
+        "nivel": "Avançado"
+      },
+      {
+        "nomeInstituicao": "Designer de Qualidade",
+        "descricaoCurso": "Designer Gráfico",
+        "dataInicio": "2022",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Escola Conquer",
+        "descricaoCurso": "Inteligência Emocional",
+        "dataInicio": "2021",
+        "nivel": "Básico"
+      },
+      {
+        "nomeInstituicao": "Digital Innovation One Inc.",
+        "descricaoCurso": "Digital Innovation One (Dio)",
+        "dataInicio": "2020",
+        "nivel": "Básico"
+      }
+    ]
+  }
+}

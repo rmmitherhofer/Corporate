@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Notifications.Interfaces;
+using Zypher.Notifications.Interfaces;
 
 namespace PanPan.WebApp.Components;
 
@@ -16,6 +16,6 @@ public class AlertViewComponent : ViewComponent
     {
         var notifications = await Task.FromResult(_notification.Get());
 
-        return View(notifications.Where(n => n.Level <= LogLevel.Warning).ToList());
+        return View(notifications.Where(n => n.LogLevel <= LogLevel.Warning).ToList());
     }
 }

@@ -10,10 +10,12 @@ public class ExperienciaMapping : IEntityTypeConfiguration<Experiencia>
     {
         builder.HasKey(e => e.Id);
 
-        builder.Property(e => e.DataCadastro)
+        builder.Property(c => c.RegistrationDate)
+            .HasColumnName("DataCadastro")
             .IsRequired();
 
-        builder.Property(e => e.DataAlteracao);
+        builder.Property(c => c.DateChanged)
+            .HasColumnName("DataAlteracao");
 
         builder.Property(e => e.Empresa)
             .IsRequired();

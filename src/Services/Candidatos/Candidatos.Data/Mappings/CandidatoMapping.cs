@@ -1,8 +1,8 @@
 ﻿using Candidatos.Business.Models;
-using Core.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
+using Zypher.Domain.Core.ValueObjects;
 
 namespace Candidatos.Data.Mappings;
 
@@ -12,10 +12,12 @@ public class CandidatoMapping : IEntityTypeConfiguration<Candidato>
     {
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.DataCadastro)
+        builder.Property(c => c.RegistrationDate)
+            .HasColumnName("DataCadastro")
             .IsRequired();
 
-        builder.Property(c => c.DataAlteracao);
+        builder.Property(c => c.DateChanged)
+            .HasColumnName("DataAlteracao");
 
         builder.Property(c => c.Codigo)
                 .HasDefaultValueSql("NEXT VALUE FOR SQ_Candidato");

@@ -1,24 +1,27 @@
-﻿using Api.Core;
-using Candidatos.Business.Models;
-using FluentValidation.Results;
-using Logs.Extensions;
+﻿using Candidatos.Business.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Notifications.Interfaces;
-using Notifications.Messages;
+using System.ComponentModel.DataAnnotations;
+using Zypher.Domain.Core.Enums;
+using Zypher.Logs.Extensions;
+using Zypher.Notifications.Interfaces;
+using Zypher.Notifications.Messages;
+using Zypher.Persistence.Abstractions.Data;
 
 namespace Candidatos.Data;
 
 public class CandidatoContext : DbContext, IUnitOfWork
 {
-    private const string DataCadastro = nameof(DataCadastro);
-    private const string DataAlteracao = nameof(DataAlteracao);
+    private readonly ILogger<CandidatoContext> _logger;
+    private const string RegistrationDate = nameof(RegistrationDate);
+    private const string DateChanged = nameof(DateChanged);
 
     private readonly INotificationHandler _notification;
 
-    public CandidatoContext(DbContextOptions<CandidatoContext> options, INotificationHandler notification) : base(options)
+    public CandidatoContext(DbContextOptions<CandidatoContext> options, INotificationHandler notification, ILogger<CandidatoContext> logger) : base(options)
     {
         _notification = notification;
+        _logger = logger;
     }
 
     public DbSet<Candidato> Candidatos { get; set; }
@@ -48,36 +51,55 @@ public class CandidatoContext : DbContext, IUnitOfWork
         base.OnModelCreating(modelBuilder);
     }
 
-    public async Task<bool> Commit()
+    public async Task<(bool, OperationType)> Commit()
     {
-        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty(DataCadastro) != null))
-        {
-            if (entry.State == EntityState.Added)
-            {
-                entry.Property(DataCadastro).CurrentValue = DateTime.Now;
-            }
+        var operationType = ValidateChange();
 
-            if (entry.State == EntityState.Modified)
-            {
-                entry.Property(DataCadastro).IsModified = false;
+        var success = await SaveChangesAsync();
 
-                entry.Property(DataAlteracao).CurrentValue = DateTime.Now;
-            }
-        }
+        return (success, operationType);
+    }
 
-        var sucesso = false;
-
+    private async Task<bool> SaveChangesAsync()
+    {
+        var success = false;
         try
         {
-            if (_notification.HasNotifications()) return sucesso;
+            if (_notification.HasNotifications()) return success;
 
-            sucesso = await base.SaveChangesAsync() > 0;
+            success = await base.SaveChangesAsync() > 0;
         }
         catch (Exception ex)
         {
             _notification.Notify(new Notification(LogLevel.Critical, ex.GetType().Name, "SQL-Server", ex.Message));
-            ConsoleLog.LogCrit(ex.Message);
+
+            _logger.LogCrit(ex.Message);
         }
-        return sucesso;
+        return success;
+    }
+    private OperationType ValidateChange()
+    {
+        OperationType operationType = OperationType.None;
+        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty(RegistrationDate) != null))
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Property(RegistrationDate).CurrentValue = DateTime.Now;
+                operationType = OperationType.Added;
+            }
+
+            if (entry.State == EntityState.Modified)
+            {
+                entry.Property(RegistrationDate).IsModified = false;
+
+                entry.Property(DateChanged).CurrentValue = DateTime.Now;
+
+                operationType = OperationType.Modified;
+            }
+
+            if (entry.State == EntityState.Deleted)
+                operationType = OperationType.Deleted;
+        }
+        return operationType;
     }
 }

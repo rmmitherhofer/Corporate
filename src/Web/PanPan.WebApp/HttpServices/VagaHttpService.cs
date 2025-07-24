@@ -1,6 +1,9 @@
-﻿using Http;
-using PanPan.WebApp.Models.Request.Vaga;
+﻿using PanPan.WebApp.Models.Request.Vaga;
 using PanPan.WebApp.Models.ViewModels.Vagas;
+using Zypher.Http;
+using Zypher.Http.Extensions;
+using Zypher.Json;
+using Zypher.Notifications.Interfaces;
 
 namespace PanPan.WebApp.HttpServices;
 
@@ -10,9 +13,9 @@ public interface IVagaHttpService
     Task Adicionar(AddVagaRequest request);
     Task Alterar(UpdateVagaRequest request);
 }
-public class VagaHttpService : MainHttpService, IVagaHttpService
+public class VagaHttpService : HttpService, IVagaHttpService
 {
-    public VagaHttpService(HttpClient httpClient) : base(httpClient) { }
+    public VagaHttpService(HttpClient httpClient, INotificationHandler notificationHandler, ILogger<VagaHttpService> logger) : base(httpClient, notificationHandler, logger) { }
 
     public async Task<IEnumerable<VagaViewModel>> ObterTodos()
     {
@@ -20,30 +23,30 @@ public class VagaHttpService : MainHttpService, IVagaHttpService
 
         var response = await GetAsync(uri);
 
-        ResponsePossuiErros(response);
+        response.HasErrors();
 
-        return await DeserializeObjectResponseAsync<IEnumerable<VagaViewModel>>(response);
+        return await response.ReadAsAsync<IEnumerable<VagaViewModel>>();
     }
 
     public async Task Adicionar(AddVagaRequest request)
     {
         var uri = "api/v1/vaga";
 
-        var content = SerializeContent(request);
+        var content = JsonExtensions.SerializeContent(request);
 
         var response = await PostAsync(uri, content);
 
-        ResponsePossuiErros(response);
+        response.HasErrors();
     }
 
     public async Task Alterar(UpdateVagaRequest request)
     {
         var uri = "api/v1/vaga";
 
-        var content = SerializeContent(request);
+        var content = JsonExtensions.SerializeContent(request);
 
         var response = await PutAsync(uri, content);
 
-        ResponsePossuiErros(response);
+        response.HasErrors();
     }
 }

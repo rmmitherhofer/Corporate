@@ -7,8 +7,16 @@
     <partial name="Partial/_Candidato" model="Model" />
     <partial name="Partial/_Endereco" model="Model" />
     <div class="columns">
-        <div class="column is-offset-10">
+        <div class="column is-offset-8">
             <div class="field is-grouped">
+                <div class="control">
+                    <a type="button" asp-controller="Candidato" asp-action="JsonResumeImport" class="button is-success">
+                        <span class="icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </span>
+                        <span>Importar Json</span>
+                    </a>
+                </div>
                 <div class="control">
                     <button type="submit" class="button is-success">
                         <span class="icon">
@@ -29,6 +37,37 @@
         </div>
     </div>
 </form>
+<form asp-controller="Candidato" asp-action="ImportarCurriculo" method="post" role="form" enctype="multipart/form-data">
+    <div class="field is-grouped is-align-items-center is-justify-content-flex-start">
+        <!-- Upload com botão discreto -->
+        <p class="control">
+            <div class="file is-small is-info">
+                <label class="file-label">
+                    <input class="file-input" type="file" asp-for="File" name="resumeFile" id="resumeFile">
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">Escolher</span>
+                    </span>
+                </label>
+            </div>
+        </p>
+
+        <!-- Nome do arquivo -->
+        <p class="control">
+            <span class="tag is-light is-small" id="fileNameDisplay" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Nenhum arquivo</span>
+        </p>
+
+        <!-- Botão Importar -->
+        <p class="control">
+            <button class="button is-primary is-small">Importar</button>
+        </p>
+    </div>
+</form>
+
+
+
 
 @section Scripts {
 
@@ -40,8 +79,14 @@
         $(document).ready(function () {
             BuscaCep();
             $('.selectize').selectize();
+
+            const fileInput = document.getElementById('resumeFile');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+            fileInput.addEventListener('change', function () {
+              fileNameDisplay.textContent = this.files.length > 0 ? this.files[0].name : 'Nenhum arquivo';
+            });
         });
     </script>
-
 }
 

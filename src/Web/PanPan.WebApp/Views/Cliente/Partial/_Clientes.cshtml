@@ -1,5 +1,5 @@
 ﻿@using PanPan.WebApp.Models.ViewModels.Clientes;
-@using Extensions;
+@using Zypher.Extensions.Core
 @model ClientesViewModel
 
 <div class="box">
@@ -62,7 +62,7 @@
             @foreach (var cliente in Model.Clientes)
             {
                 <tr>
-                    <th>@cliente.Cnpj.MascaraCpfCnpj()</th>
+                    <th>@cliente.Cnpj.CpfCnpjMask()</th>
                     <td>@cliente.Nome</td>
                     <td>@cliente.Representante</td>
                     <td>@cliente.Email</td>

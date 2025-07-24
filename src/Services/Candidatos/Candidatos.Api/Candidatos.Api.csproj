@@ -9,15 +9,18 @@
 		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+		<PackageReference Include="Zypher.Api.Foundation" Version="1.0.8" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Building Blocks\Core\Requests\Requests.csproj" />
-	  <ProjectReference Include="..\..\..\Building Blocks\Services\ApiService\Api.Service.csproj" />
+	  <!--<ProjectReference Include="..\..\..\Building Blocks\Core\Requests\Requests.csproj" />-->
+	  <!--<ProjectReference Include="..\..\..\Building Blocks\Services\ApiService\Api.Service.csproj" />-->
 	  <ProjectReference Include="..\Candidatos.Business\Candidatos.Business.csproj" />
 	  <ProjectReference Include="..\Candidatos.Data\Candidatos.Data.csproj" />
 	</ItemGroup>

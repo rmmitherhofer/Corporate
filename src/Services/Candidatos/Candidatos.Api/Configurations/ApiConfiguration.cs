@@ -1,4 +1,4 @@
-﻿using Api.Service.Configurations;
+﻿using Zypher.Api.Foundation.Configurations;
 
 namespace Candidatos.Api.Configurations;
 
@@ -9,7 +9,7 @@ public static class ApiConfiguration
         ArgumentNullException.ThrowIfNull(services, nameof(IServiceCollection));
         ArgumentNullException.ThrowIfNull(configuration, nameof(IConfiguration));
 
-        services.AddCoreApiConfig(configuration, environment);
+        services.AddZypherApiFoundation(configuration, environment);
 
         services.AddRepositories();
         services.AddFactories();
@@ -21,7 +21,7 @@ public static class ApiConfiguration
 
     public static WebApplication UseApiConfig(this WebApplication app)
     {
-        app.UseCoreApiConfig();
+        app.UseZypherApiFoundation();
 
         return app;
     }

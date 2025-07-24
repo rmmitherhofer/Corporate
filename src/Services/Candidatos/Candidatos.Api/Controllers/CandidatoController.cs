@@ -1,14 +1,14 @@
-﻿using Api.Service.Controllers;
-using AutoMapper;
+﻿using AutoMapper;
 using Candidatos.Api.DTO.Request;
 using Candidatos.Api.DTO.Responses;
 using Candidatos.Business.Filters;
 using Candidatos.Business.Interfaces.Repositories;
 using Candidatos.Business.Models;
 using Microsoft.AspNetCore.Mvc;
-using Notifications.Interfaces;
-using Responses;
 using System.Net;
+using Zypher.Api.Foundation.Controllers;
+using Zypher.Notifications.Interfaces;
+using Zypher.Responses;
 
 namespace Candidatos.Api.Controllers;
 
@@ -36,7 +36,7 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> ObterTodosCandidatos()
     {
-        var candidatos = await _candidatoRepository.ObterTodos();
+        var candidatos = await _candidatoRepository.GetAll();
 
         return CustomResponse(candidatos.OrderBy(c => c.Codigo));
     }
@@ -57,7 +57,7 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Candidato))]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> ObterCandidadoPorId(Guid id)
-        => CustomResponse(await _candidatoRepository.ObterPorId(id));
+        => CustomResponse(await _candidatoRepository.GetById(id));
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -65,37 +65,6 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> IncluirCandidato(AddCandidatoRequest request)
     {
-        //string[] search = { request.Telefone, request.Celular, request.Email };
-
-        //for (int i = 0; i < search.Length; i++)
-        //{
-        //    CandidatoFilter filter = new();
-        //    var property = string.Empty;
-        //    switch (i)
-        //    {
-        //        case 0:
-        //            property = nameof(CandidatoFilter.Telefone);
-        //            filter = new() { Telefone = search[i] };
-        //            break;
-        //        case 1:
-        //            property = nameof(CandidatoFilter.Celular);
-        //            filter = new() { Celular = search[i] };
-        //            break;
-        //        case 2:
-        //            property = nameof(CandidatoFilter.Email);
-        //            filter = new() { Email = search[i] };
-        //            break;
-        //    }
-
-        //    var candidatos = await _candidatoRepository.ObterPaginado(filter);
-
-        //    if (candidatos.totalRecords > 0)
-        //    {
-        //        Notificar(property, "Candidato ja cadastrado na base de dados.");
-        //        return CustomResponse();
-        //    }
-        //}
-
         var candidato = new Candidato(request.Nome, request.Sexo, request.RecrutadoPor, request.Telefone, request.Celular, request.CelularAlternativo, request.Email);
 
         candidato.IncluirEndereco(new(request.Endereco.Logradouro,
@@ -109,7 +78,7 @@ public class CandidatoController : MainController
             request.Endereco.TipoDomicilio,
             request.Endereco.MoraCom));
 
-        _candidatoRepository.Adicionar(candidato);
+        _candidatoRepository.Add(candidato);
 
         await _candidatoRepository.UnitOfWork.Commit();
 
@@ -122,11 +91,11 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> AlterarCandidato(Guid id, UpdateCandidatoRequest request)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar(nameof(id), $"Candidato {id} nao localizado.");
+            Notify(nameof(id), $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -162,7 +131,7 @@ public class CandidatoController : MainController
             request.Endereco.TipoDomicilio,
             request.Endereco.MoraCom));
 
-        _candidatoRepository.Atualizar(candidato);
+        _candidatoRepository.Update(candidato);
 
         await _candidatoRepository.UnitOfWork.Commit();
 
@@ -175,15 +144,15 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> DeleteCandidato(Guid id)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar(nameof(id), $"Candidato {id} nao localizado.");
+            Notify(nameof(id), $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
-        _candidatoRepository.Remover(candidato);
+        _candidatoRepository.Remove(candidato);
 
         await _candidatoRepository.UnitOfWork.Commit();
 
@@ -208,11 +177,11 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> IncluirFormacao(Guid id, AddFormacaoRequest request)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar(nameof(id), $"Candidato {id} nao localizado.");
+            Notify(nameof(id), $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -231,11 +200,11 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> AlterarFormacao(Guid id, Guid formacaoId, UpdateFormacaoRequest request)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar("put-formacao", $"Candidato {id} nao localizado.");
+            Notify("put-formacao", $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -243,7 +212,7 @@ public class CandidatoController : MainController
 
         if (formacao is null)
         {
-            Notificar("put-formacao", $"Formacao {id} nao localizado.");
+            Notify("put-formacao", $"Formacao {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -262,11 +231,11 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> DeleteFormacao(Guid id, Guid formacaoId)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar(nameof(id), $"Candidato {id} nao localizado.");
+            Notify(nameof(id), $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -274,7 +243,7 @@ public class CandidatoController : MainController
 
         if (formacao is null)
         {
-            Notificar(nameof(formacaoId), $"Formacao {formacaoId} nao localizado.");
+            Notify(nameof(formacaoId), $"Formacao {formacaoId} nao localizado.");
             return CustomResponse();
         }
 
@@ -303,11 +272,11 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> IncluirExperiencia(Guid id, AddExperienciaRequest request)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar("id", $"Candidato {id} nao localizado.");
+            Notify("id", $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -337,11 +306,11 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> AlterarExperiencia(Guid id, Guid experienciaId, UpdateExperienciaRequest request)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar("put-experiencia", $"Candidato {id} nao localizado.");
+            Notify("put-experiencia", $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -349,7 +318,7 @@ public class CandidatoController : MainController
 
         if (experiencia is null)
         {
-            Notificar("put-experiencia", $"Experiencia {id} nao localizada.");
+            Notify("put-experiencia", $"Experiencia {id} nao localizada.");
             return CustomResponse();
         }
 
@@ -378,11 +347,11 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> RemoverExperiencia(Guid id, Guid experienciaId)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar("delete-experiencia", $"Candidato {id} nao localizado.");
+            Notify("delete-experiencia", $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
@@ -390,7 +359,7 @@ public class CandidatoController : MainController
 
         if (experiencia is null)
         {
-            Notificar("delete-experiencia", $"Experiencia {id} nao localizada.");
+            Notify("delete-experiencia", $"Experiencia {id} nao localizada.");
             return CustomResponse();
         }
 
@@ -408,17 +377,17 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> AlterarTag(Guid id, [FromBody] string request)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar("put-tag", $"Candidato {id} nao localizado.");
+            Notify("put-tag", $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
         candidato.IncluirTag(request);
 
-        _candidatoRepository.Atualizar(candidato);
+        _candidatoRepository.Update(candidato);
 
         await _candidatoRepository.UnitOfWork.Commit();
 
@@ -431,17 +400,17 @@ public class CandidatoController : MainController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse))]
     public async Task<IActionResult> RemoverTag(Guid id, [FromBody] string request)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         if (candidato is null)
         {
-            Notificar("delete-tag", $"Candidato {id} nao localizado.");
+            Notify("delete-tag", $"Candidato {id} nao localizado.");
             return CustomResponse();
         }
 
         candidato.RemoverTag(request);
 
-        _candidatoRepository.Atualizar(candidato);
+        _candidatoRepository.Update(candidato);
 
         await _candidatoRepository.UnitOfWork.Commit();
 

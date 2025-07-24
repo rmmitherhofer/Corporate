@@ -1,5 +1,5 @@
-﻿using Api.Core.Data.Filters;
-using Candidatos.Business.Enums;
+﻿using Candidatos.Business.Enums;
+using Zypher.Persistence.Abstractions.Data.Filters;
 
 namespace Candidatos.Business.Filters;
 

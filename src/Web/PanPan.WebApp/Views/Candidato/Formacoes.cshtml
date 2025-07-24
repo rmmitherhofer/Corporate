@@ -1,6 +1,6 @@
-﻿@using Extensions;
-@using PanPan.WebApp.Enums;
+﻿@using PanPan.WebApp.Enums;
 @using PanPan.WebApp.Models.ViewModels.Candidatos;
+@using Zypher.Enums
 @model IEnumerable<FormacaoViewModel>
 
 <div class="box">
@@ -31,15 +31,15 @@
                     <tr>
                         @if (formacao.Tipo == TipoFormacao.Ensino)
                         {
-                            <td>@formacao.Ensino.Value.Descricao()</td>
+                            <td>@formacao.Ensino.Value.GetDescription()</td>
                         }
                         else
                         {
-                            <td>@formacao.Curso.Value.Descricao()</td>
+                            <td>@formacao.Curso.Value.GetDescription()</td>
                         }
                         <td>@formacao.NomeInstituicao</td>
                         <th scope="row">@formacao.Descricao</th>
-                        <td>@formacao.Status.Descricao()</td>
+                        <td>@formacao.Status.GetDescription()</td>
                         <td>@formacao.DataInicioString</td>
                         <td>@formacao.DataFimString</td>
                         <td>
