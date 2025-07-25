@@ -1,5 +1,7 @@
 ﻿using Candidatos.Business.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Zypher.Domain.Core.Enums;
@@ -101,5 +103,59 @@ public class CandidatoContext : DbContext, IUnitOfWork
                 operationType = OperationType.Deleted;
         }
         return operationType;
+    }
+}
+
+public class CandidatoContextFactory : IDesignTimeDbContextFactory<CandidatoContext>
+{
+    public CandidatoContext CreateDbContext(string[] args)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false)
+            .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+        var optionsBuilder = new DbContextOptionsBuilder<CandidatoContext>();
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("CNN_DB_CANDIDATO"));
+
+        var logger = LoggerFactory.Create(builder =>
+        {
+            builder
+                .AddFilter("Microsoft", LogLevel.Warning)
+                .AddConsole();
+        }).CreateLogger<CandidatoContext>();
+
+        var notification = new FakeNotificationHandler();
+
+        return new CandidatoContext(optionsBuilder.Options, notification, logger);
+    }
+
+    // Handler fake para uso apenas em tempo de design
+    private class FakeNotificationHandler : INotificationHandler
+    {
+        public bool HasNotifications() => false;
+
+        public void Notify(Notification notification) { }
+
+        public IEnumerable<Notification> GetNotifications() => Enumerable.Empty<Notification>();
+
+        public void Notify(IEnumerable<Notification> notifications)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Notification> Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

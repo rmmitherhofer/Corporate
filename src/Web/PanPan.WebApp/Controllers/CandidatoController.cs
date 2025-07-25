@@ -7,8 +7,10 @@ using PanPan.WebApp.Models.Request.Candidato;
 using PanPan.WebApp.Models.Response.NewFolder;
 using PanPan.WebApp.Models.ViewModels.Candidatos;
 using System.Reflection;
+using System.Text.Json;
 using Zypher.Json;
 using Zypher.Notifications.Interfaces;
+using Zypher.Notifications.Messages;
 
 namespace PanPan.WebApp.Controllers;
 
@@ -33,7 +35,7 @@ public class CandidatoController : Controller
     [Route("")]
     public async Task<IActionResult> Index(string nome)
     {
-        var response = await _candidatoHttpService.ObterPaginado(new() { Nome = nome });
+        var response = await _candidatoHttpService.ObterPaginado(new() { Nome = nome, OrderBy = "-registrationDate" });
 
         var model = _mapper.Map<CandidatosViewModel>(response);
 
@@ -174,9 +176,29 @@ public class CandidatoController : Controller
     [Route("importar-curriculo-json")]
     public async Task<IActionResult> JsonResumeImport(JsonResumeImport model)
     {
-        var resume = JsonExtensions.Deserialize<ParserHttpResponse>(model.Json).Resume;
+        if (string.IsNullOrWhiteSpace(model.Json))
+        {
+            _notification.Notify(new Notification("Json", "JSON não pode ser vazio."));
+            return View(model);
+        }
 
-        return View(nameof(ResumeImportPreview), ParseToViewModel(resume));
+        ParserHttpResponse parsed;
+        try
+        {
+            parsed = JsonExtensions.Deserialize<ParserHttpResponse>(model.Json);
+        }
+        catch (Exception ex)
+        {
+            _notification.Notify(new Notification("Json", $"JSON inválido: {ex.Message}"));
+            return View(model);
+        }
+
+        if (parsed?.Resume is null)
+        {
+            _notification.Notify(new Notification("Json", "Estrutura do JSON não corresponde ao formato esperado."));
+            return View(model);
+        }
+        return View(nameof(ResumeImportPreview), ParseToViewModel(parsed.Resume));
     }
 
     #endregion

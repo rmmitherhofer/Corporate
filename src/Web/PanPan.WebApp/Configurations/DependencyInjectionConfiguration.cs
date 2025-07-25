@@ -10,7 +10,5 @@ public static class DependencyInjectionConfiguration
 
         return services;
     }
-
-
 }
 

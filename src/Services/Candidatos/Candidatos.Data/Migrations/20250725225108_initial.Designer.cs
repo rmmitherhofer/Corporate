@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Candidatos.Data.Migrations
 {
     [DbContext(typeof(CandidatoContext))]
-    [Migration("20250701233750_initial")]
+    [Migration("20250725225108_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Candidatos.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -56,14 +56,12 @@ namespace Candidatos.Data.Migrations
                     b.Property<string>("Conhecimentos")
                         .HasColumnType("varchar(1024)");
 
-                    b.Property<DateTime?>("DateChanged")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("DataNascimento")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateChanged")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAlteracao");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(254)");
@@ -92,6 +90,10 @@ namespace Candidatos.Data.Migrations
 
                     b.Property<int>("RecrutadoPor")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCadastro");
 
                     b.Property<string>("RelatoCandidato")
                         .HasColumnType("varchar(1024)");
@@ -126,7 +128,7 @@ namespace Candidatos.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Atividade")
-                        .HasColumnType("varchar(2048)");
+                        .HasColumnType("varchar(MAX)");
 
                     b.Property<Guid>("CandidatoId")
                         .HasColumnType("uniqueidentifier");
@@ -135,17 +137,15 @@ namespace Candidatos.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(150)");
 
-                    b.Property<DateTime?>("DateChanged")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("DataFim")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataInicio")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateChanged")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAlteracao");
 
                     b.Property<string>("Empresa")
                         .IsRequired()
@@ -162,6 +162,10 @@ namespace Candidatos.Data.Migrations
 
                     b.Property<int>("RegimeContratacao")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCadastro");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -188,17 +192,15 @@ namespace Candidatos.Data.Migrations
                     b.Property<int?>("Curso")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DateChanged")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("DataFim")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataInicio")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateChanged")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAlteracao");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("varchar(150)");
@@ -212,6 +214,10 @@ namespace Candidatos.Data.Migrations
 
                     b.Property<int>("Periodo")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCadastro");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -240,10 +246,12 @@ namespace Candidatos.Data.Migrations
                         .HasColumnType("varchar(450)");
 
                     b.Property<DateTime?>("DateChanged")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAlteracao");
 
                     b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCadastro");
 
                     b.HasKey("Id");
 

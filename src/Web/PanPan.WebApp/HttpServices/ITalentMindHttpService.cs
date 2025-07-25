@@ -4,5 +4,5 @@ namespace PanPan.WebApp.HttpServices;
 
 public interface ITalentMindHttpService
 {
-    Task<ParserHttpResponse> ExtractFromPdf(IFormFile file);
+    Task<ParserHttpResponse?> ExtractFromPdf(IFormFile file);
 }

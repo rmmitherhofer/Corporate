@@ -9,7 +9,7 @@
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="12.0.1" />
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-	  <PackageReference Include="NedMonitor" Version="1.0.6" />
+	  <PackageReference Include="NedMonitor" Version="1.0.7" />
 	  <PackageReference Include="NedMonitor.Http" Version="1.0.8" />
 	  <PackageReference Include="Zypher.Domain.Exceptions" Version="1.0.1" />
 	</ItemGroup>

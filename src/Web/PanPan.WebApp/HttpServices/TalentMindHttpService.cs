@@ -11,7 +11,7 @@ public class TalentMindHttpService : HttpService, ITalentMindHttpService
     {
     }
 
-    public async Task<ParserHttpResponse> ExtractFromPdf(IFormFile file)
+    public async Task<ParserHttpResponse?> ExtractFromPdf(IFormFile file)
     {
         var uri = "api/v1/resumes";
 
@@ -19,8 +19,6 @@ public class TalentMindHttpService : HttpService, ITalentMindHttpService
 
         var response = await PostAsync(uri.FormatRouteWithTemplate(), content);
 
-        if (response.HasErrors()) { }
-
-        return await response.ReadAsAsync<ParserHttpResponse>();
+        return await ValidateAndReturn<ParserHttpResponse>(response);
     }
 }
