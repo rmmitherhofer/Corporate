@@ -1,8 +1,8 @@
-﻿using Api.Core.Data.Filters;
-using AutoMapper;
+﻿using AutoMapper;
 using Candidatos.Api.DTO.Request;
 using Candidatos.Business.Filters;
-using Requests;
+using Zypher.Persistence.Abstractions.Data.Filters;
+using Zypher.Requests;
 
 namespace Candidatos.Api.Configurations.AutoMapper;
 

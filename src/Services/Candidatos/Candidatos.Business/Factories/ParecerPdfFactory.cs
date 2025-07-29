@@ -1,14 +1,13 @@
 ﻿using Candidatos.Business.Artefatos;
 using Candidatos.Business.Enums;
 using Candidatos.Business.Models;
-using Extensions;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Notifications.Interfaces;
-using Notifications.Messages;
-using System.IO.Pipes;
+using Zypher.Notifications.Interfaces;
+using Zypher.Enums;
+using Zypher.Notifications.Messages;
+using Extensions;
 
 namespace Candidatos.Business.Factories;
 
@@ -85,14 +84,14 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         #region Linha 2
         string[] titulosLinhaDois = { "Idade", "Estado civil", "Possui filhos", "Pretensão salarial" };
-        string[] valoresLinhaDois = { $"{candidato.Idade} anos", $"{(ehMasculino ? candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "o") : candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "a"))}", candidato.QuantidadeFilhos > 0 ? "Sim" : "Não", candidato.PretensaoSalarial == "0" ? "Aceita o proposto" : $"R$ {candidato.PretensaoSalarial}" };
+        string[] valoresLinhaDois = { $"{candidato.Idade} anos", $"{(ehMasculino ? candidato?.StatusCivil?.GetDescription()?.Replace("o(a)", "o") : candidato?.StatusCivil?.GetDescription()?.Replace("o(a)", "a"))}", candidato.QuantidadeFilhos > 0 ? "Sim" : "Não", candidato.PretensaoSalarial == "0" ? "Aceita o proposto" : $"R$ {candidato.PretensaoSalarial}" };
         int[] colspanLinhaDois = { 1, 1, 1, 1 };
         LinhaComTopBorder(ref table, titulosLinhaDois, valoresLinhaDois, colspanLinhaDois, _incluirBorda);
         #endregion
 
         #region Linha 3
         string[] titulosLinhaTres = { "CNH" };
-        string[] valoresLinhaTres = { string.IsNullOrEmpty(candidato.CNH) ? "Não possui" : candidato.CNH };
+        string[] valoresLinhaTres = { string.IsNullOrEmpty(candidato.CNH) ? "" : candidato.CNH };
         int[] colspanLinhaTres = { maxColunas };
         LinhaComTopBorder(ref table, titulosLinhaTres, valoresLinhaTres, colspanLinhaTres, _incluirBorda);
         #endregion
@@ -170,7 +169,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
             };
 
             #region Linha 1
-            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.Descricao()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao} - {ensino.NomeInstituicao}" : string.Empty)} - {ensino.Status.Descricao()}{(ensino.Status == StatusFormacao.Cursando ? $"{(ensino.DataFim.HasValue ? $" - previsão de conclusão em {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}{(ensino.Periodo == PeriodoFormacao.Ead ? $" - {ensino.Periodo.Descricao()?.ToUpper()}" : $" - período {ensino.Periodo.Descricao()?.ToLower()}")}" : string.Empty)}" };
+            string[] valoresLinhaUm = { $"{ensino.Ensino.Value.GetDescription()}{(ensino.Ensino > Ensino.Medio ? $" {ensino.Descricao} - {ensino.NomeInstituicao}" : string.Empty)} - {ensino.Status.GetDescription()}{(ensino.Status == StatusFormacao.Cursando ? $"{(ensino.DataFim.HasValue ? $" - previsão de conclusão em {ensino.DataFim?.ToString("MM/yyyy")}" : string.Empty)}{(ensino.Periodo == PeriodoFormacao.Ead ? $" - {ensino.Periodo.GetDescription()?.ToUpper()}" : $" - período {ensino.Periodo.GetDescription()?.ToLower()}")}" : string.Empty)}" };
             int[] colspanLinhaUm = { maxColunas };
             LinhaTabelaSemBorda(ref tableContent, valoresLinhaUm, colspanLinhaUm);
             #endregion
@@ -213,13 +212,13 @@ public class ParecerPdfFactory : IParecerPdfFactory
             };
 
             #region Linha 1
-            string[] valoresLinhaUm = { $"{curso.Curso?.Descricao()} em {curso.Descricao} - {curso.NomeInstituicao} - {curso.Status.Descricao()}" +
+            string[] valoresLinhaUm = { $"{curso.Curso?.GetDescription()} em {curso.Descricao} - {curso.NomeInstituicao} - {curso.Status.GetDescription()}" +
                     $"{(curso.Status == StatusFormacao.Cursando
                     ? $"{(curso.DataFim.HasValue
                         ? $" - previsão de conclusão em {curso.DataFim?.ToString("MM/yyyy")}"
                         : string.Empty)}{(curso.Periodo == PeriodoFormacao.Ead 
-                        ? $" - {curso.Periodo.Descricao()?.ToUpper()}"
-                        : $" - período {curso.Periodo.Descricao()?.ToLower()}")}"
+                        ? $" - {curso.Periodo.GetDescription()?.ToUpper()}"
+                        : $" - período {curso.Periodo.GetDescription()?.ToLower()}")}"
                     :string.Empty)}"};
             int[] colspanLinhaUm = { maxColunas };
             LinhaTabelaSemBorda(ref tableContent, valoresLinhaUm, colspanLinhaUm);
@@ -267,7 +266,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
             #region Linha 1
             string[] titulosLinhaUm = { "Empresa", "Função", "Período" };
-            string[] valoresLinhaUm = { experiencia.Empresa, experiencia.Cargo, $"{experiencia.DataInicio:MM/yyyy} - {(experiencia.DataFim.HasValue ? experiencia.DataFim.Value.ToString("MM/yyyy") : experiencia.Status.Descricao())}" };
+            string[] valoresLinhaUm = { experiencia.Empresa, experiencia.Cargo, $"{experiencia.DataInicio:MM/yyyy} - {(experiencia.DataFim.HasValue ? experiencia.DataFim.Value.ToString("MM/yyyy") : experiencia.Status.GetDescription())}" };
             int[] colspanLinhaUm = { 1, 1, 1 };
             PrimeiraLinhaComTopBorder(ref tableContent, titulosLinhaUm, valoresLinhaUm, colspanLinhaUm, _incluirBorda);
             #endregion
@@ -317,7 +316,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         var texto = $"{(ehMasculino ? "Ele" : "Ela")} é natural de {candidato?.Naturalidade}, ";
         texto += $"reside em {candidato?.Endereco?.Cidade}-{candidato?.Endereco?.Estado} {(string.IsNullOrEmpty(candidato.Endereco.MoraCom) ? string.Empty : $"com {candidato.Endereco.MoraCom}")}. ";
-        texto += $"{(ehMasculino ? candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "o") : candidato?.StatusCivil?.Descricao()?.Replace("o(a)", "a"))} e {(candidato?.QuantidadeFilhos == 0 ? "não possui filhos" : $"possui {candidato.QuantidadeFilhos} {(candidato.QuantidadeFilhos > 1 ? "filhos" : "filho")}{(string.IsNullOrEmpty(candidato.IdadeFilhos) ? string.Empty : $" de {candidato.IdadeFilhos}")}")}.";
+        texto += $"{(ehMasculino ? candidato?.StatusCivil?.GetDescription()?.Replace("o(a)", "o") : candidato?.StatusCivil?.GetDescription()?.Replace("o(a)", "a"))} e {(candidato?.QuantidadeFilhos == 0 ? "não possui filhos" : $"possui {candidato.QuantidadeFilhos} {(candidato.QuantidadeFilhos > 1 ? "filhos" : "filho")}{(string.IsNullOrEmpty(candidato.IdadeFilhos) ? string.Empty : $" de {candidato.IdadeFilhos}")}")}.";
 
         Paragrafo(ref document, texto);
 
@@ -325,10 +324,10 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         if (ensino is not null)
             texto = $"{(ensino?.Status == StatusFormacao.Cursando
-            ? $"Esta cursando o {ensino.Ensino?.Descricao()?.ToLower()}"
-            : $"Tem o {ensino.Ensino?.Descricao()?.ToLower()}")} " +
+            ? $"Esta cursando o {ensino.Ensino?.GetDescription()?.ToLower()}"
+            : $"Tem o {ensino.Ensino?.GetDescription()?.ToLower()}")} " +
             $"{((int)ensino.Ensino.Value > (int)Ensino.Medio ? $"em {ensino.Descricao.ToLower()}" : string.Empty)}" +
-            $"{(ensino.Status == StatusFormacao.Concluido ? $" {ensino.Status.Descricao()?.ToLower()}" : string.Empty)}.";
+            $"{(ensino.Status == StatusFormacao.Concluido ? $" {ensino.Status.GetDescription()?.ToLower()}" : string.Empty)}.";
 
         var cursos = candidato?.Formacoes?.Where(f => f.Tipo == TipoFormacao.Curso).ToList();
 

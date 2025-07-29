@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importador de Arquivos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .file-name {
+            max-width: 16em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .hero.is-primary {
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+        }
+        .file-upload-box {
+            border: 2px dashed #dbdbdb;
+            border-radius: 6px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .file-upload-box:hover {
+            border-color: #3273dc;
+            background-color: #f9f9f9;
+        }
+        .file-upload-box.is-active {
+            border-color: #00d1b2;
+            background-color: #f0fff4;
+        }
+        .preview-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 1rem;
+        }
+        .preview-content {
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero is-primary is-medium">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title is-1">
+                    <i class="fas fa-file-import"></i> Importador de Arquivos
+                </h1>
+                <h2 class="subtitle">
+                    Selecione e visualize seus arquivos de forma simples
+                </h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div class="box has-text-centered">
+                        <h3 class="title is-4">Importar Arquivo</h3>
+                        <p class="subtitle is-6 mb-4">Selecione um arquivo do seu computador</p>
+                        
+                        <button id="openModalBtn" class="button is-primary is-medium">
+                            <span class="icon">
+                                <i class="fas fa-file-import"></i>
+                            </span>
+                            <span>Selecionar Arquivo</span>
+                        </button>
+                        
+                        <div id="fileInfo" class="mt-4 is-hidden">
+                            <div class="notification is-success is-light">
+                                <button class="delete"></button>
+                                <p>Arquivo selecionado com sucesso!</p>
+                                <p><strong>Nome:</strong> <span id="fileName"></span></p>
+                                <p><strong>Tamanho:</strong> <span id="fileSize"></span></p>
+                                <p><strong>Tipo:</strong> <span id="fileType"></span></p>
+                            </div>
+                            
+                            <div class="preview-container">
+                                <h4 class="title is-5">Pré-visualização:</h4>
+                                <div id="filePreview" class="preview-content"></div>
+                            </div>
+                            
+                            <div class="buttons is-centered mt-4">
+                                <button id="processFileBtn" class="button is-info">
+                                    <span class="icon">
+                                        <i class="fas fa-cog"></i>
+                                    </span>
+                                    <span>Processar Arquivo</span>
+                                </button>
+                                <button id="clearFileBtn" class="button is-danger is-outlined">
+                                    <span class="icon">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                    <span>Limpar Seleção</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="fileModal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Selecionar Arquivo</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div id="dropZone" class="file-upload-box">
+                    <span class="icon is-large">
+                        <i class="fas fa-cloud-upload-alt fa-3x"></i>
+                    </span>
+                    <h4 class="title is-4 mt-2">Arraste e solte seu arquivo aqui</h4>
+                    <p class="subtitle is-6">ou</p>
+                    
+                    <div class="file is-centered">
+                        <label class="file-label">
+                            <input class="file-input" type="file" id="fileInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Selecione um arquivo...
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <p class="help mt-3">Formatos suportados: .txt, .pdf, .csv, .json, .xml</p>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button id="cancelBtn" class="button">Cancelar</button>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal elements
+            const openModalBtn = document.getElementById('openModalBtn');
+            const fileModal = document.getElementById('fileModal');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const modalCloseButtons = document.querySelectorAll('.modal .delete');
+            
+            // File input elements
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const fileType = document.getElementById('fileType');
+            const filePreview = document.getElementById('filePreview');
+            const processFileBtn = document.getElementById('processFileBtn');
+            const clearFileBtn = document.getElementById('clearFileBtn');
+            const dropZone = document.getElementById('dropZone');
+            
+            // Open modal
+            openModalBtn.addEventListener('click', () => {
+                fileModal.classList.add('is-active');
+            });
+            
+            // Close modal
+            function closeModal() {
+                fileModal.classList.remove('is-active');
+            }
+            
+            cancelBtn.addEventListener('click', closeModal);
+            modalCloseButtons.forEach(button => {
+                button.addEventListener('click', closeModal);
+            });
+            
+            // Handle file selection
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropZone.classList.add('is-active');
+            }
+            
+            function unhighlight() {
+                dropZone.classList.remove('is-active');
+            }
+            
+            dropZone.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length) {
+                    fileInput.files = files;
+                    handleFileSelect({ target: fileInput });
+                }
+            }
+            
+            // File selection handler
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                // Display file info
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileType.textContent = file.type || 'Desconhecido';
+                
+                // Read and preview file content
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    filePreview.textContent = e.target.result;
+                };
+                
+                // Handle different file types
+                if (file.type.match('text.*')) {
+                    reader.readAsText(file);
+                } else if (file.type.match('application/pdf')) {
+                    filePreview.textContent = 'Visualização de PDF não disponível neste preview.';
+                } else if (file.type.match('application/json')) {
+                    reader.readAsText(file);
+                } else if (file.type.match('application/vnd.ms-excel') || 
+                          file.type.match('text/csv')) {
+                    reader.readAsText(file);
+                } else {
+                    filePreview.textContent = 'Visualização não disponível para este tipo de arquivo.';
+                }
+                
+                // Show file info section
+                fileInfo.classList.remove('is-hidden');
+                
+                // Close modal
+                closeModal();
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // Process file button
+            processFileBtn.addEventListener('click', () => {
+                // Here you would typically send the file to a server
+                // For this example, we'll just show a notification
+                const notification = document.createElement('div');
+                notification.className = 'notification is-success';
+                notification.innerHTML = `
+                    <button class="delete"></button>
+                    Arquivo processado com sucesso! (Simulação)
+                `;
+                
+                // Insert before the file info
+                fileInfo.parentNode.insertBefore(notification, fileInfo);
+                
+                // Remove notification when clicked
+                notification.querySelector('.delete').addEventListener('click', () => {
+                    notification.remove();
+                });
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 5000);
+            });
+            
+            // Clear file button
+            clearFileBtn.addEventListener('click', () => {
+                fileInput.value = '';
+                fileInfo.classList.add('is-hidden');
+                filePreview.textContent = '';
+            });
+            
+            // Close notifications
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete')) {
+                    e.target.parentNode.remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

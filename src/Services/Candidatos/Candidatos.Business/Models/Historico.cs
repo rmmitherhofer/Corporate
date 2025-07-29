@@ -1,5 +1,5 @@
-﻿using Core.DomainObjects;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Zypher.Domain.Core.DomainObjects;
 
 namespace Candidatos.Business.Models;
 

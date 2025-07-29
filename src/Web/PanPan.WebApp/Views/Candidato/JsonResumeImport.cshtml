@@ -1,0 +1,206 @@
+﻿@using PanPan.WebApp.Models.ViewModels.Candidatos
+@model JsonResumeImport;
+
+<title>Gerador de JSON Empresarial</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/atelier-savanna.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/json.min.js"></script>
+
+<style>
+    div.code {
+        white-space: pre;
+    }
+
+    .disclaimer-box {
+        border-left: 4px solid #485fc7;
+        transition: all 0.3s ease;
+    }
+
+        .disclaimer-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+    .copy-btn:hover {
+        background-color: #3a4a9a !important;
+    }
+
+    .import-btn {
+        transition: all 0.3s ease;
+    }
+
+        .import-btn:hover {
+            transform: scale(1.05);
+        }
+
+    .back-btn {
+        transition: all 0.3s ease;
+    }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+
+
+    .json-textarea {
+        font-family: 'Fira Mono', 'Courier New', Courier, monospace; /* fonte monoespaçada */
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #2d2d2d;
+        background-color: #f7f9fc;
+        border: 2px solid #00d1b2; /* cor primária do Bulma */
+        border-radius: 6px;
+        padding: 1rem;
+        resize: vertical; /* só permite redimensionar verticalmente */
+        min-height: 180px;
+        max-height: 400px;
+        box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.06);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        overflow: auto;
+    }
+
+        .json-textarea:focus {
+            border-color: #00b89c; /* tom mais escuro de verde */
+            box-shadow: 0 0 8px rgba(0, 209, 178, 0.5);
+            outline: none;
+        }
+
+        /* scrollbar customizada (webkit-based browsers) */
+        .json-textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .json-textarea::-webkit-scrollbar-thumb {
+            background-color: #00d1b2;
+            border-radius: 4px;
+        }
+
+        .json-textarea::-webkit-scrollbar-track {
+            background-color: #e6f3f1;
+            border-radius: 4px;
+        }
+</style>
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="box">
+                    <h3 class="title is-4 has-text-centered">
+                        <i class="fas fa-edit"></i> Editor de JSON
+                    </h3>
+                    <div class="notification disclaimer-box is-info is-light mt-5">
+                        <h4 class="title is-5">
+                            <i class="fas fa-info-circle"></i> Instruções para Solicitar JSON à IA
+                        </h4>
+                        <div id="disclaimer-content">
+                            <p>Para solicitar à IA que gere um JSON estruturado, utilize o seguinte prompt:</p>
+                            <section id="copy-area">
+                                <p>Você deve analisar um documento de currículo, que pode estar em formato PDF, imagem escaneada, DOC, DOCX ou texto, e extrair dele todas as informações estruturadas conforme o modelo abaixo.                                </p>
+                                <p>⚠️ ATENÇÃO:</p>
+                                <p>- Extraia somente o que estiver presente no conteúdo.</p>
+                                <p>- Não invente, assuma ou preencha valores fictícios.</p>
+                                <p>- Se um dado não estiver no documento, preencha com `null` ou omita o campo correspondente.</p>
+                                <p>- Retorne **somente o JSON abaixo**, preenchido com os dados extraídos.</p>
+                                <p>- Respeite os formatos e padrões indicados nos comentários de cada campo. </p>
+                                <p>### 🎯 Formato da saída (retorne exatamente este JSON com os campos preenchidos):</p>
+                                <p>```json</p>
+                                <div class='code'>
+                                    <pre><code class="json">
+{
+    "resume": {
+        "registration": {
+            "nomeCompleto": "string",
+            "sexo": "string", // Masculino ou Feminino
+            "email": "string",
+            "telefone": "string", // Formato: (xx) xxxx-xxxx
+            "celular": "string", // Formato: (xx) 9xxxx-xxxx
+            "linkedInUrl": "string",
+            "gitHubUrl": "string",
+            "objetivo": "string",
+            "idade": "string", // Apenas número
+            "dataNascimento": "2025-07-23T02:05:30.828Z", // Formato DateTime ISO
+            "estadoCivil": "string", // Ex: Solteiro, Casado, Divorciado, etc.
+            "cnh": "string" // Ex: A ; A e B ; A, B e C
+        },
+        "address": {
+            "logradouro": "string",
+            "numero": "string",
+            "complemento": "string",
+            "bairro": "string",
+            "cidade": "string",
+            "estado": "string" // Sigla UF: SP, RJ, MG, etc.
+        },
+        "languages": [
+            {
+                "idioma": "string",
+                "nivel": "string"
+            }
+        ],
+        "skills": {
+            "softSkills": [
+                "string"
+            ],
+            "hardSkills": [
+                "string"
+            ]
+        },
+        "experiences": [
+            {
+                "empresa": "string",
+                "cargo": "string",
+                "dataInicio": "string", // Formato MM/yyyy
+                "dataFim": "string", // Formato MM/yyyy
+                "descricao": "string"
+            }
+        ],
+        "formations": [
+            {
+                "nomeInstituicao": "string",
+                "descricaoCurso": "string",
+                "dataInicio": "string", // Formato MM/yyyy
+                "dataFim": "string", // Formato MM/yyyy
+                "nivel": "string" // Ex: Ensino técnico, Superior, Pós-graduação, etc.
+            }
+        ],
+        "courses": [
+            {
+                "nomeInstituicao": "string",
+                "descricaoCurso": "string",
+                "dataInicio": "string", // Formato MM/yyyy
+                "dataFim": "string", // Formato MM/yyyy
+                "nivel": "string" // Ex: Curso técnico, Curso complementar, etc.
+            }
+        ]
+    }
+}</code></pre>
+                                </div>
+                            </section>
+                        </div>
+                        <button id="copy-btn" class="button is-info copy-btn mt-3">
+                            <i class="fas fa-copy"></i> Copiar Instruções
+                        </button>
+                    </div>
+                    <form id="form-json-resume" asp-controller="Candidato" asp-action="JsonResumeImport" method="post" class="row g-3">
+                        <div class="field">
+                            <div class="control">
+                                <textarea id="json-input" asp-for="@Model.Json" class="textarea json-textarea" placeholder="Cole ou digite seu JSON aqui..."></textarea>
+                            </div>
+                        </div>
+                        <div class="buttons is-centered mt-6">
+                            <button type="submit" id="import-btn" class="button is-success import-btn is-medium">
+                                <i class="fas fa-file-import"></i> Importar JSON
+                            </button>
+                            <a id="back-btn" asp-controller="Candidato" asp-action="IncluirCandidato" class="button is-light back-btn is-medium">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/js/views/candidato/json-resume-import.js"></script>

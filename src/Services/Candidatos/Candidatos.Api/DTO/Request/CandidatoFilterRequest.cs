@@ -1,5 +1,5 @@
 ﻿using Candidatos.Business.Enums;
-using Requests;
+using Zypher.Requests;
 
 namespace Candidatos.Api.DTO.Request;
 

@@ -1,6 +1,6 @@
 ﻿using Candidatos.Business.Enums;
-using Core.DomainObjects;
-using Exceptions;
+using Zypher.Domain.Core.DomainObjects;
+using Zypher.Domain.Exceptions;
 
 namespace Candidatos.Business.Models;
 
@@ -83,7 +83,7 @@ public class Candidato : Entity, IAggregateRoot
         Telefone = telefone?.Trim();
         Celular = celular?.Trim();
         CelularAlternativo = celularAlternativo?.Trim();
-        Core.ValueObjects.Email.SaoValidos(emails);
+        Zypher.Domain.Core.ValueObjects.Email.IsValids(emails);
         Email = emails?.Trim();
     }
     public void AtribuirDadosPessoais(DateTime? dataNascimento, int? idade, string? naturalidade, StatusCivil? statusCivil)

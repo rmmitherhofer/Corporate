@@ -1,5 +1,5 @@
 ﻿using Candidatos.Business.Models;
-using Responses;
+using Zypher.Responses;
 
 namespace Candidatos.Api.DTO.Responses;
 

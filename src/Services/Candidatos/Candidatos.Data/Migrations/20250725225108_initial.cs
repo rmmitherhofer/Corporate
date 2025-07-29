@@ -68,7 +68,7 @@ namespace Candidatos.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Empresa = table.Column<string>(type: "varchar(150)", nullable: false),
                     Cargo = table.Column<string>(type: "varchar(150)", nullable: false),
-                    Atividade = table.Column<string>(type: "varchar(2048)", nullable: true),
+                    Atividade = table.Column<string>(type: "varchar(MAX)", nullable: true),
                     RegimeContratacao = table.Column<int>(type: "int", nullable: false),
                     DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),

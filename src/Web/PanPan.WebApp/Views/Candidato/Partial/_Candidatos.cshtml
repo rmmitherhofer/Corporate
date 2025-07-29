@@ -69,7 +69,10 @@
                     <td>
                         <div class="buttons">
                             <a type="button" asp-controller="Candidato" asp-action="AlterarCandidato" asp-route-id="@candidato.Id" class="button is-success is-outlined"><i class="fa-solid fa-user-pen"></i></a>
-                            <a type="button" asp-controller="Candidato" asp-action="RemoverCandidato" asp-route-id="@candidato.Id" class="button is-danger is-outlined"><i class="fa-solid fa-user-xmark"></i></a>
+                            <a type="button" class="button is-danger is-outlined" onclick="confirmarExclusao('@candidato.Id')">
+                                <i class="fa-solid fa-user-xmark"></i>
+                            </a>
+
                         </div>
                     </td>
                 </tr>
@@ -78,5 +81,24 @@
     </table>
 </div>
 
+<div id="modal-excluir" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Confirmação</p>
+            <button class="delete" aria-label="close" onclick="fecharModal()"></button>
+        </header>
+        <section class="modal-card-body">
+            Tem certeza que deseja excluir este candidato?
+        </section>
+        <footer class="modal-card-foot">
+            <form id="form-exclusao" method="post">
+                <input type="hidden" name="id" id="input-id-exclusao" />
+                <button type="submit" class="button is-danger">Sim, excluir</button>
+                <button type="button" class="button" onclick="fecharModal()">Cancelar</button>
+            </form>
+        </footer>
+    </div>
+</div>
 
 <partial name="_Paginacao" model="Model" />

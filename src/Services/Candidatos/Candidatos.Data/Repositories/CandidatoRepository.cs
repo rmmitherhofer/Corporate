@@ -1,10 +1,10 @@
-﻿using Api.Core;
-using Candidatos.Business.Filters;
+﻿using Candidatos.Business.Filters;
 using Candidatos.Business.Interfaces.Repositories;
 using Candidatos.Business.Models;
 using Candidatos.Data.Extensions;
-using Api.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Zypher.Persistence.Abstractions.Data;
+using Zypher.Api.Data.Extensions;
 
 namespace Candidatos.Data.Repositories;
 
@@ -32,7 +32,7 @@ public class CandidatoRepository : ICandidatoRepository
 
         return (candidatos, pageCount, totalRecords);
     }
-    public async Task<IEnumerable<Candidato>> ObterTodos()
+    public async Task<IEnumerable<Candidato>> GetAll()
     {
         var candidatos = await _context.Candidatos
             .Include(c => c.Formacoes)
@@ -42,7 +42,7 @@ public class CandidatoRepository : ICandidatoRepository
         return candidatos;
     }
 
-    public async Task<Candidato?> ObterPorId(Guid id) => await _context.Candidatos
+    public async Task<Candidato?> GetById(Guid id) => await _context.Candidatos
             .Include(c => c.Formacoes)
             .Include(c => c.Experiencias)
             .Where(c => c.Id == id)
@@ -56,9 +56,9 @@ public class CandidatoRepository : ICandidatoRepository
 
     public async Task<Experiencia?> ObterExperienciaPorId(Guid id) => await _context.Experiencias.Where(c => c.Id == id).FirstOrDefaultAsync();
 
-    public void Adicionar(Candidato candidato) => _context.Candidatos.Add(candidato);
-    public void Atualizar(Candidato candidato) => _context.Candidatos.Update(candidato);
-    public void Remover(Candidato candidato) => _context.Candidatos.Remove(candidato);
+    public void Add(Candidato candidato) => _context.Candidatos.Add(candidato);
+    public void Update(Candidato candidato) => _context.Candidatos.Update(candidato);
+    public void Remove(Candidato candidato) => _context.Candidatos.Remove(candidato);
     public void Adicionar(Formacao formacao) => _context.Formacoes.Add(formacao);
     public void Atualizar(Formacao formacao) => _context.Formacoes.Update(formacao);
     public void Remover(Formacao formacao) => _context.Formacoes.Remove(formacao);

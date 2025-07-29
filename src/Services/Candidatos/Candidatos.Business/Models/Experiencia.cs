@@ -1,8 +1,7 @@
 ﻿using Candidatos.Business.Enums;
-using Core.DomainObjects;
-using Exceptions;
 using System.Text.Json.Serialization;
-using System.util;
+using Zypher.Domain.Core.DomainObjects;
+using Zypher.Domain.Exceptions;
 
 namespace Candidatos.Business.Models;
 

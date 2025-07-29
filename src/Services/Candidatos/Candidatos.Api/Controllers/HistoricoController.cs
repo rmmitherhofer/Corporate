@@ -1,7 +1,7 @@
-﻿using Api.Service.Controllers;
-using Candidatos.Business.Interfaces.Repositories;
+﻿using Candidatos.Business.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Notifications.Interfaces;
+using Zypher.Api.Foundation.Controllers;
+using Zypher.Notifications.Interfaces;
 
 namespace Candidatos.Api.Controllers;
 

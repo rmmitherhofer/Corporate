@@ -25,7 +25,7 @@ public class CandidatoViewModel : ViewModel
     public int QuantidadeFilhos { get; set; }
     public string? IdadeFilhos { get; set; }
 
-    public IEnumerable<FormacaoViewModel>? Formacoes { get; set; }
+    public List<FormacaoViewModel>? Formacoes { get; set; }
 
     public string? Idiomas { get; set; }
     public string? Conhecimentos { get; set; }
@@ -39,5 +39,12 @@ public class CandidatoViewModel : ViewModel
     public string? CNH { get; set; }
     public List<string>? Tags { get; set; }
     public EnderecoViewModel? Endereco { get; set; }
-    public IEnumerable<ExperienciaViewModel>? Experiencias { get; set; }
+    public List<ExperienciaViewModel>? Experiencias { get; set; }
+    public IFormFile File { get; set; }
+
+}
+
+public class JsonResumeImport
+{
+    public string Json { get; set; }
 }

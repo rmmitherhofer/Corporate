@@ -44,10 +44,10 @@ public static class FilterExtensions
             query = query.Where(c => c.Status == filter.Status.Value);
 
         if (filter.DataInicio.HasValue)
-            query = query.Where(c => c.DataCadastro >=  filter.DataInicio.Value);
+            query = query.Where(c => c.RegistrationDate >=  filter.DataInicio.Value);
 
         if (filter.DataFim.HasValue)
-            query = query.Where(c => c.DataCadastro <= filter.DataFim.Value);
+            query = query.Where(c => c.DateChanged <= filter.DataFim.Value);
 
         return query;
     }

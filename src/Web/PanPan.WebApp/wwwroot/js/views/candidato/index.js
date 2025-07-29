@@ -58,7 +58,24 @@ candidato.index = {
         });
     }
 }
+function confirmarExclusao(id) {
+    // Define o valor do input hidden
+    document.getElementById('input-id-exclusao').value = id;
+
+    // Define a action do form dinamicamente (opcional, se for usar via rota)
+    const form = document.getElementById('form-exclusao');
+    form.action = `/candidatos/${id}/remover`;
+
+    // Abre o modal
+    document.getElementById('modal-excluir').classList.add('is-active');
+}
+
+function fecharModal() {
+    document.getElementById('modal-excluir').classList.remove('is-active');
+}
 
 window.onload = function () {
     candidato.index.onClick();
+
+
 }

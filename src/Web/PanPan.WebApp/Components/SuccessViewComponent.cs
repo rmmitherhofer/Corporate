@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Notifications.Interfaces;
+using Zypher.Notifications.Interfaces;
 
 namespace PanPan.WebApp.Components;
 

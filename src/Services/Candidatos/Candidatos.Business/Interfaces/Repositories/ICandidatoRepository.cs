@@ -1,6 +1,6 @@
-﻿using Api.Core;
-using Candidatos.Business.Filters;
+﻿using Candidatos.Business.Filters;
 using Candidatos.Business.Models;
+using Zypher.Persistence.Abstractions.Data;
 
 namespace Candidatos.Business.Interfaces.Repositories;
 

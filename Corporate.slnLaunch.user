@@ -3,15 +3,11 @@
     "Name": "New Profile",
     "Projects": [
       {
-        "Path": "src\\Building Blocks\\Services\\ApiService\\Api.Service.csproj",
-        "Action": "Start"
-      },
-      {
-        "Path": "tests\\Unit Test\\UI\\PanPan.WebApp.Tests\\PanPan.WebApp.Tests.csproj",
-        "Action": "Start"
-      },
-      {
         "Path": "src\\Services\\Candidatos\\Candidatos.Api\\Candidatos.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\Web\\PanPan.WebApp\\PanPan.WebApp.csproj",
         "Action": "Start"
       }
     ]

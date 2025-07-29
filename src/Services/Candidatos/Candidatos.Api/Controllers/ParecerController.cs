@@ -1,8 +1,8 @@
-﻿using Api.Service.Controllers;
-using Candidatos.Business.Factories;
+﻿using Candidatos.Business.Factories;
 using Candidatos.Business.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Notifications.Interfaces;
+using Zypher.Api.Foundation.Controllers;
+using Zypher.Notifications.Interfaces;
 
 namespace Candidatos.Api.Controllers;
 
@@ -24,7 +24,7 @@ public class ParecerController : MainController
     [HttpGet("candidato/{id}")]
     public async Task<IActionResult> ObterParecerCandidato(Guid id)
     {
-        var candidato = await _candidatoRepository.ObterPorId(id);
+        var candidato = await _candidatoRepository.GetById(id);
 
         var pdf = _parecerPdfFactory.Gerar(candidato);
 

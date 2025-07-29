@@ -1,10 +1,9 @@
-﻿using Extensions;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.Routing;
+﻿using Microsoft.AspNetCore.Mvc.Razor;
 using PanPan.WebApp.Enums;
 using PanPan.WebApp.Models.ViewModels;
-using System;
 using System.Text;
+using Zypher.Enums;
+using Zypher.Json;
 
 namespace PanPan.WebApp.Extensions;
 
@@ -25,7 +24,7 @@ public static class RazorExtensions
         var type = typeof(RecrutadoPor);
 
         foreach (RecrutadoPor property in Enum.GetValues(type))        
-            dictionary.Add(property, property.Descricao());  
+            dictionary.Add(property, property.GetDescription());  
 
         foreach (var item in dictionary.OrderBy(x => x.Value) ) {
             var selecionado = "";
@@ -46,7 +45,7 @@ public static class RazorExtensions
         var type = typeof(StatusCivil);
 
         foreach (StatusCivil property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -60,6 +59,28 @@ public static class RazorExtensions
         return sb.ToString();
     }
 
+    public static string SelectOptionsGender(this RazorPage page, Sexo? selectedValue = null)
+    {
+        StringBuilder sb = new();
+        Dictionary<Sexo, string> dictionary = new();
+
+        var type = typeof(Sexo);
+
+        foreach (Sexo property in Enum.GetValues(type))
+            dictionary.Add(property, property.GetDescription());
+
+        foreach (var item in dictionary.OrderBy(x => x.Value))
+        {
+            var selected = "";
+
+            if (item.Key == selectedValue)
+                selected = "selected=\"selected\"";
+
+            sb.Append($"<option {selected} value='{item.Key}'>{item.Value}</option>");
+        }
+        return sb.ToString();
+    }
+
     public static string SelectOptionsTipoFormacao(this RazorPage page, TipoFormacao? valorSelecionado = null)
     {
         StringBuilder sb = new();
@@ -68,7 +89,7 @@ public static class RazorExtensions
         var type = typeof(TipoFormacao);
 
         foreach (TipoFormacao property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -90,7 +111,7 @@ public static class RazorExtensions
         var type = typeof(Ensino);
 
         foreach (Ensino property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary)
         {
@@ -112,7 +133,7 @@ public static class RazorExtensions
         var type = typeof(Curso);
 
         foreach (Curso property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -134,7 +155,7 @@ public static class RazorExtensions
         var type = typeof(StatusFormacao);
 
         foreach (StatusFormacao property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -156,7 +177,7 @@ public static class RazorExtensions
         var type = typeof(StatusExperiencia);
 
         foreach (StatusExperiencia property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -177,7 +198,7 @@ public static class RazorExtensions
         var type = typeof(StatusCandidato);
 
         foreach (StatusCandidato property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -198,7 +219,7 @@ public static class RazorExtensions
         var type = typeof(StatusRecrutamento);
 
         foreach (StatusRecrutamento property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -219,7 +240,7 @@ public static class RazorExtensions
         var type = typeof(RegimeContratacao);
 
         foreach (RegimeContratacao property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -241,7 +262,7 @@ public static class RazorExtensions
         var type = typeof(Domicilio);
 
         foreach (Domicilio property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -263,7 +284,7 @@ public static class RazorExtensions
         var type = typeof(PeriodoFormacao);
 
         foreach (PeriodoFormacao property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -285,7 +306,7 @@ public static class RazorExtensions
         var type = typeof(TipoDomicilio);
 
         foreach (TipoDomicilio property in Enum.GetValues(type))
-            dictionary.Add(property, property.Descricao());
+            dictionary.Add(property, property.GetDescription());
 
         foreach (var item in dictionary.OrderBy(x => x.Value))
         {
@@ -335,6 +356,6 @@ public static class RazorExtensions
         return sb.ToString();
     }
 
-    public static EstadosViewModel ObterEstados() 
-        => FilesExtensions.JsonToObject<EstadosViewModel>(BaseDirectory + "cidades-brasil.json");
+    public static EstadosViewModel? ObterEstados() 
+        => JsonFileExtensions.JsonToObject<EstadosViewModel>(BaseDirectory + "cidades-brasil.json");
 }
