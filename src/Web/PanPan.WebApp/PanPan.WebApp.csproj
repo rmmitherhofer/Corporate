@@ -7,28 +7,58 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="AutoMapper" Version="12.0.1" />
-	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-	  <PackageReference Include="NedMonitor" Version="1.0.7" />
-	  <PackageReference Include="NedMonitor.Http" Version="1.0.8" />
-	  <PackageReference Include="Zypher.Domain.Exceptions" Version="1.0.1" />
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="NedMonitor" Version="1.0.7" />
+		<PackageReference Include="NedMonitor.Http" Version="1.0.8" />
+		<PackageReference Include="Zypher.Domain.Exceptions" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Building Blocks\Core\Extensions\Extensions.csproj" />
+		<ProjectReference Include="..\..\Building Blocks\Core\Extensions\Extensions.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Update="Files\Json\names-by-gender.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Update="Files\Json\cidades-brasil.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+		<Content Update="Files\Json\names-by-gender.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Update="Files\Json\cidades-brasil.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\Response\NewFolder\NewFolder\" />
+		<Folder Include="Models\Response\NewFolder\NewFolder\" />
 	</ItemGroup>
+
+
+
+
+	<PropertyGroup>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.$(VersionDate)</FileVersion>
+		<InformationalVersion>1.0.0.$(VersionDate)</InformationalVersion>
+	</PropertyGroup>
+
+	<Target Name="SetVersionDate" BeforeTargets="GenerateAssemblyInfo">
+		<PropertyGroup>
+			<VersionDate>$([System.DateTime]::Now.ToString("yyyyMMddHHmm"))</VersionDate>
+		</PropertyGroup>
+	</Target>
+
+	<!--<PropertyGroup>
+		<EnvironmentName Condition="'$(Configuration)' == 'local'">dev</EnvironmentName>
+		<EnvironmentName Condition="'$(Configuration)' == 'dev'">dev</EnvironmentName>
+		<EnvironmentName Condition="'$(Configuration)' == 'hml'">hml</EnvironmentName>
+		<EnvironmentName Condition="'$(Configuration)' == 'prd'">prd</EnvironmentName>
+	</PropertyGroup>
+
+	<Target Name="ReplaceWebConfig" AfterTargets="Publish">
+		<Message Text="Substituindo web.config para $(EnvironmentName)" Importance="High" />
+		<Copy SourceFiles="web.$(EnvironmentName).config"
+			  DestinationFiles="$(PublishDir)web.config"
+			  SkipUnchangedFiles="true"
+			  OverwriteReadOnlyFiles="true" />
+	</Target>-->
 
 </Project>

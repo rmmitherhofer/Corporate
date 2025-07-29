@@ -112,7 +112,7 @@ public class CandidatoController : Controller
 
         return View(model);
     }
-    [HttpGet]
+    [HttpPost]
     [Route("{id}/remover")]
     public async Task<IActionResult> RemoverCandidato(Guid id)
     {
@@ -353,38 +353,41 @@ public class CandidatoController : Controller
         model.Formacoes ??= [];
         foreach (var item in resume.Experiences)
         {
+            var dataFim = DateHelper.TryParseToFirstDayOfMonth(item.EndDate);
             model.Experiencias.Add(new()
             {
                 Empresa = item.Company,
                 Cargo = item.Cargo,
                 Atividade = item.Description,
                 DataInicioString = DateHelper.TryParseToFirstDayOfMonth(item.StartDate)?.ToString("MM/yyyy"),
-                DataFimString = DateHelper.TryParseToFirstDayOfMonth(item.EndDate)?.ToString("MM/yyyy"),
+                DataFimString = (dataFim > DateTime.Now ? DateTime.Now : dataFim)?.ToString("MM/yyyy"),
             });
         }
 
         foreach (var item in resume.Formations)
         {
+            var dataFim = DateHelper.TryParseToFirstDayOfMonth(item.EndDate);
             model.Formacoes.Add(new()
             {
                 NomeInstituicao = item.InstitutionName,
                 Descricao = item.Description,
                 Tipo = TipoFormacao.Ensino,
                 DataInicioString = DateHelper.TryParseToFirstDayOfMonth(item.StartDate)?.ToString("MM/yyyy"),
-                DataFimString = DateHelper.TryParseToFirstDayOfMonth(item.EndDate)?.ToString("MM/yyyy"),
+                DataFimString = (dataFim > DateTime.Now ? DateTime.Now : dataFim)?.ToString("MM/yyyy"),
                 Ensino = CourseClassifier.ClassificarEnsino(item.InstitutionName, item.Description)
             });
         }
 
         foreach (var item in resume.Courses)
         {
+            var dataFim = DateHelper.TryParseToFirstDayOfMonth(item.EndDate);
             model.Formacoes.Add(new()
             {
                 NomeInstituicao = item.InstitutionName,
                 Descricao = item.Description,
                 Tipo = TipoFormacao.Curso,
                 DataInicioString = DateHelper.TryParseToFirstDayOfMonth(item.StartDate)?.ToString("MM/yyyy"),
-                DataFimString = DateHelper.TryParseToFirstDayOfMonth(item.EndDate)?.ToString("MM/yyyy"),
+                DataFimString = (dataFim > DateTime.Now ? DateTime.Now : dataFim)?.ToString("MM/yyyy"),
                 Curso = CourseClassifier.ClassificarCurso(item.InstitutionName, item.Description)
             });
         }

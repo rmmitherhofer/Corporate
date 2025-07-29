@@ -91,7 +91,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         #region Linha 3
         string[] titulosLinhaTres = { "CNH" };
-        string[] valoresLinhaTres = { string.IsNullOrEmpty(candidato.CNH) ? "Não possui" : candidato.CNH };
+        string[] valoresLinhaTres = { string.IsNullOrEmpty(candidato.CNH) ? "" : candidato.CNH };
         int[] colspanLinhaTres = { maxColunas };
         LinhaComTopBorder(ref table, titulosLinhaTres, valoresLinhaTres, colspanLinhaTres, _incluirBorda);
         #endregion
