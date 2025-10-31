@@ -13,7 +13,7 @@ namespace Candidatos.Business.Factories;
 
 public interface IParecerPdfFactory
 {
-    byte[] Gerar(Candidato candidato);
+    byte[] Gerar(Candidato candidato, string resp);
 }
 public class ParecerPdfFactory : IParecerPdfFactory
 {
@@ -34,7 +34,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
         _notification = notification;
     }
 
-    public byte[] Gerar(Candidato candidato)
+    public byte[] Gerar(Candidato candidato, string resp)
     {
         using MemoryStream stream = new();
 
@@ -47,7 +47,7 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         _template.CriarHeaderPaginaInicial(document);
 
-        Criar(document, candidato);
+        Criar(document, candidato, resp);
 
         _template.CriarFooterUltimaPagina(writer, document);
 
@@ -55,13 +55,13 @@ public class ParecerPdfFactory : IParecerPdfFactory
 
         return _template.AdicionarMarcaDAguaImagem(stream.ToArray());
     }
-    private void Criar(Document document, Candidato candidato)
+    private void Criar(Document document, Candidato candidato, string resp)
     {
         TabelaDadosPessoais(document, candidato);
         TabelaEscolaridade(document, candidato.Formacoes);
         TabelaCursosComplementarees(document, candidato.Formacoes);
         TabelaDadosProfissionais(document, candidato.Experiencias);
-        Conclusao(document, candidato);
+        Conclusao(document, candidato, resp);
     }
 
     private void TabelaDadosPessoais(Document document, Candidato candidato)
@@ -290,13 +290,13 @@ public class ParecerPdfFactory : IParecerPdfFactory
         }
     }
 
-    private void Conclusao(Document document, Candidato candidato)
+    private void Conclusao(Document document, Candidato candidato, string resp)
     {
-        Texto1(document, candidato);
+        Texto1(document, candidato, resp);
     }
 
 
-    private void Texto1(Document document, Candidato candidato)
+    private void Texto1(Document document, Candidato candidato, string resp)
     {
         bool ehMasculino = candidato.Sexo == Sexo.Masculino;
 
@@ -412,8 +412,18 @@ public class ParecerPdfFactory : IParecerPdfFactory
         Paragrafo(ref document, $"Em entrevista observam-se características com {candidato.RelatoEntrevistador}. Sendo assim, vejo que {(ehMasculino ? "o candidato" : "a candidata")} possui boas características para dar continuidade no processo.");
         Espacamento(ref document);
         Espacamento(ref document);
-        Assinatura(ref document, "Pamela Mitherhofer");
-        Assinatura(ref document, "Gerente de RH");
+
+        switch (resp)
+        {
+            case "L":
+                Assinatura(ref document, "Larissa Bomfim");
+                Assinatura(ref document, "Recrutadora");
+                break;
+            default:
+                Assinatura(ref document, "Pamela Mitherhofer");
+                Assinatura(ref document, "Gerente de RH");
+                break;
+        }
     }
     private void TituloTabelaSemBorda(ref PdfPTable table, string[] valores, int[] colspan)
     {

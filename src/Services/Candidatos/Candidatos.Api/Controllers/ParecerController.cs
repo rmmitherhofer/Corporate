@@ -22,11 +22,11 @@ public class ParecerController : MainController
     }
 
     [HttpGet("candidato/{id}")]
-    public async Task<IActionResult> ObterParecerCandidato(Guid id)
+    public async Task<IActionResult> ObterParecerCandidato(Guid id, [FromQuery] string resp)
     {
         var candidato = await _candidatoRepository.GetById(id);
 
-        var pdf = _parecerPdfFactory.Gerar(candidato);
+        var pdf = _parecerPdfFactory.Gerar(candidato, resp);
 
         return CustomResponse(pdf);
     }

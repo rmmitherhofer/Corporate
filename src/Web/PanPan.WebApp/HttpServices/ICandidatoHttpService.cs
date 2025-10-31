@@ -8,7 +8,7 @@ public interface ICandidatoHttpService
 {
     Task<CandidatosPaginatedResponse> ObterPaginado(CandidatosViewModel request);
     Task<CandidatoResponse> ObterPorId(Guid id);
-    Task<byte[]> GerarParecer(Guid id);
+    Task<byte[]> GerarParecer(Guid id, string resp);
 
     Task Adicionar(AddCandidatoRequest request);
     Task Alterar(Guid id, UpdateCandidatoRequest request);

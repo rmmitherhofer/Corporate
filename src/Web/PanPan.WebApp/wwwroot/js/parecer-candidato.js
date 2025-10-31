@@ -1,8 +1,15 @@
 ﻿function gerarParecer(id) {
     console.log("chegamos aqui");
 
+    let resp = $('#resp').val();
+
+    if (!resp || resp.trim() === "") {
+        alert("Por favor, insira o nome do recrutador antes de gerar o documento.");
+        return;
+    }
+
     $.ajax({
-        url: `/candidatos/${id}/gerar-parecer`,
+        url: `/candidatos/${id}/gerar-parecer?resp=${resp}`,
         contentType: "application/json",
         cache: false,
         type: 'POST',

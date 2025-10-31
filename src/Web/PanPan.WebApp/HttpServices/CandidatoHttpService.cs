@@ -27,11 +27,11 @@ public class CandidatoHttpService : HttpServiceBase, ICandidatoHttpService
 
         return await ValidarERetornar<CandidatoResponse>(response);
     }
-    public async Task<byte[]> GerarParecer(Guid id)
+    public async Task<byte[]> GerarParecer(Guid id, string resp)
     {
-        var uri = "api/v1/parecer/candidato/{id}";
+        var uri = "api/v1/parecer/candidato/{id}?resp={resp}";
 
-        var response = await GetAsync(uri.FormatRouteWithTemplate(id));
+        var response = await GetAsync(uri.FormatRouteWithTemplate(id, resp));
 
         return await ValidarERetornar<byte[]>(response);
     }

@@ -217,6 +217,21 @@
 </div>
 
 <div class="buttons">
+    <div class="field">
+        <label class="label">Escolha o recrutador</label>
+        <div class="control has-icons-left">
+            <div class="select is-rounded is-warning">
+                <select id="resp">
+                    <option value="">Selecione…</option>
+                    <option value="P">Pamela Mitherhofer</option>
+                    <option value="L">Larissa Bomfim</option>
+                </select>
+            </div>
+            <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+            </span>
+        </div>
+    </div>
     <button type="button" class="button is-primary" onclick="gerarParecer('@Model.Id')">
         <span class="icon">
             <i class="fa-solid fa-file-pdf"></i>
