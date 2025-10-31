@@ -55,20 +55,4 @@
 	  <ProjectReference Include="..\Candidatos.Data\Candidatos.Data.csproj" />
 	</ItemGroup>
 
-
-	<PropertyGroup>
-		<EnvironmentName Condition="'$(Configuration)' == 'local'">dev</EnvironmentName>
-		<EnvironmentName Condition="'$(Configuration)' == 'dev'">dev</EnvironmentName>
-		<EnvironmentName Condition="'$(Configuration)' == 'hml'">hml</EnvironmentName>
-		<EnvironmentName Condition="'$(Configuration)' == 'prd'">prd</EnvironmentName>
-	</PropertyGroup>
-
-	<Target Name="ReplaceWebConfig" AfterTargets="Publish">
-		<Message Text="Substituindo web.config para $(EnvironmentName)" Importance="High" />
-		<Copy SourceFiles="web.$(EnvironmentName).config"
-			  DestinationFiles="$(PublishDir)web.config"
-			  SkipUnchangedFiles="true"
-			  OverwriteReadOnlyFiles="true" />
-	</Target>
-
 </Project>

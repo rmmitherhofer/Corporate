@@ -6,8 +6,6 @@ using PanPan.WebApp.HttpServices;
 using PanPan.WebApp.Models.Request.Candidato;
 using PanPan.WebApp.Models.Response.NewFolder;
 using PanPan.WebApp.Models.ViewModels.Candidatos;
-using System.Reflection;
-using System.Text.Json;
 using Zypher.Json;
 using Zypher.Notifications.Interfaces;
 using Zypher.Notifications.Messages;
@@ -130,7 +128,7 @@ public class CandidatoController : Controller
         var resume = response.Resume;
 
         if (_notification.HasNotifications())
-            return View(model);        
+            return View(model);
 
         return View(nameof(ResumeImportPreview), ParseToViewModel(resume));
     }
@@ -297,9 +295,9 @@ public class CandidatoController : Controller
 
     [HttpPost]
     [Route("{id}/gerar-parecer")]
-    public async Task<IActionResult> GerarParecer(Guid id)
+    public async Task<IActionResult> GerarParecer(Guid id, [FromQuery] string resp)
     {
-        var pdf = await _candidatoHttpService.GerarParecer(id);
+        var pdf = await _candidatoHttpService.GerarParecer(id, resp);
 
         return new JsonResult(pdf);
     }
