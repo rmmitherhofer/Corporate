@@ -35,7 +35,7 @@
     "prd": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "local"
+        "ASPNETCORE_ENVIRONMENT": "prd"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7074;http://localhost:5079"

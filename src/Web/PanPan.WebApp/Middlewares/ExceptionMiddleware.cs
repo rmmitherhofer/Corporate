@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Http;
+using System.Net;
 using Zypher.Domain.Exceptions;
 using Zypher.Extensions.Core;
 using Zypher.Http.Exceptions;
@@ -74,12 +75,13 @@ public class ExceptionMiddleware
     {
         AddHeaderResponse(context);
 
+        context.Response.Headers["X-Original-Status-Code"] = context.Response.StatusCode.ToString();
+
         if (context.Request.IsAjaxRequest())
         {
             context.Response.WriteAsync(ex.InnerException?.Message ?? ex.Message);
             return;
         }
-
         context.Response.Redirect($"/error/{context.Response.StatusCode}");
     }
 

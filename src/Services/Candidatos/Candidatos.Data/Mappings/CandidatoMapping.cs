@@ -65,13 +65,13 @@ public class CandidatoMapping : IEntityTypeConfiguration<Candidato>
             .HasColumnType("varchar(150)");
 
         builder.Property(c => c.Conhecimentos)
-            .HasColumnType("varchar(1024)");
+            .HasColumnType("varchar(MAX)");
 
         builder.Property(c => c.RecrutadoPor)
             .IsRequired();
 
         builder.Property(c => c.RelatoEntrevistador)
-            .HasColumnType("varchar(1024)");
+            .HasColumnType("varchar(MAX)");
 
         builder.Property(c => c.Comentarios)
             .HasColumnType("varchar(MAX)");
